@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSI Terminale - Accueil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Menu vertical gauche */
+        .sidebar {
+            width: 280px;
+            background-color: #f8f9fa;
+            padding: 30px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 3px solid #22817E;
+        }
+
+        .sidebar h2 {
+            color: #316889;
+            font-size: 1.3em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #22817E;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .menu-item {
+            margin-bottom: 15px;
+        }
+
+        .menu-item a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            padding: 12px 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #22817E;
+            font-size: 0.95em;
+        }
+
+        .menu-item a:hover {
+            background-color: #22817E;
+            color: white;
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(34, 129, 126, 0.2);
+        }
+
+        .menu-item a::before {
+            content: "▸ ";
+            color: #316889;
+            font-weight: bold;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+            flex: 1;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            text-align: center;
+            border: 3px solid #22817E;
+        }
+
+        .header h1 {
+            color: #316889;
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 3px;
+        }
+
+        .header p {
+            color: #22817E;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        /* Sections de contenu */
+        .content-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            color: #316889;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #22817E;
+            padding-bottom: 10px;
+        }
+
+        .content-section p {
+            color: #333;
+            line-height: 1.8;
+            font-size: 1.05em;
+            margin-bottom: 15px;
+        }
+
+        /* Grille d'images */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .image-card {
+            background: linear-gradient(135deg, #22817E 0%, #1a6562 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .image-card .caption {
+            padding: 15px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu vertical -->
+    <nav class="sidebar">
+        <h2>📚 Menu NSI</h2>
+        <div class="menu-item">
+            <a href="cours_processus.html">Cours : Les Processus</a>
+        </div>
+        <div class="menu-item">
+            <a href="tp_processus.html">TP Pratique</a>
+        </div>
+        <div class="menu-item">
+            <a href="#ressources">Ressources</a>
+        </div>
+        <div class="menu-item">
+            <a href="#exercices">Exercices</a>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <div class="header">
+            <h1>🖥️ NSI TERMINALE</h1>
+            <p>Numérique et Sciences Informatiques</p>
+        </div>
+
+        <section class="content-section">
+            <h2>Bienvenue sur le site de NSI</h2>
+            <p>
+                Ce site regroupe l'ensemble des cours, travaux pratiques et ressources 
+                pour l'enseignement de spécialité Numérique et Sciences Informatiques 
+                en classe de Terminale.
+            </p>
+            <p>
+                Vous trouverez dans le menu latéral les différents chapitres du programme, 
+                des exercices corrigés, ainsi que des projets à réaliser tout au long de l'année.
+            </p>
+            <p>
+                Utilisez la navigation pour accéder aux différentes sections : cours théoriques, 
+                travaux pratiques, et ressources complémentaires pour approfondir vos connaissances.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2>Thèmes du programme</h2>
+            <div class="image-grid">
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=400&h=300&fit=crop" alt="Structures de données">
+                    <div class="caption">Structures de données</div>
+                </div>
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=300&fit=crop" alt="Bases de données">
+                    <div class="caption">Bases de données</div>
+                </div>
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=300&fit=crop" alt="Architectures">
+                    <div class="caption">Architectures matérielles</div>
+                </div>
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop" alt="Réseaux">
+                    <div class="caption">Réseaux & Protocoles</div>
+                </div>
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&h=300&fit=crop" alt="Algorithmique">
+                    <div class="caption">Algorithmique</div>
+                </div>
+                <div class="image-card">
+                    <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400&h=300&fit=crop" alt="Programmation">
+                    <div class="caption">Programmation Python</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">
+            <p>© 2026 - NSI Terminale | Cours et ressources pédagogiques</p>
+        </div>
+    </main>
+</body>
+</html>
