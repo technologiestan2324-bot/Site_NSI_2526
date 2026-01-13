@@ -1,1 +1,721 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini-Projet POO-Processus Version E - TNSI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #fa709a;
+        }
+
+        h1 {
+            color: #e74c3c;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .version {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .metadata {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.95em;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        .metadata span {
+            background: #f0f0f0;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-left: 5px solid #fa709a;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #fa709a;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .objectifs {
+            background: linear-gradient(135deg, #fa709a15, #fee14015);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border-left: 5px solid #fa709a;
+        }
+
+        .objectifs h3 {
+            margin-top: 0;
+        }
+
+        .objectifs ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .exercice {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .exercice-header {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: white;
+            padding: 12px 20px;
+            margin: -25px -25px 20px -25px;
+            border-radius: 6px 6px 0 0;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .question {
+            background: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #fa709a;
+        }
+
+        .question strong {
+            color: #e74c3c;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 2px solid #fa709a;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .note strong {
+            color: #856404;
+        }
+
+        .attention {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .attention strong {
+            color: #721c24;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info strong {
+            color: #0c5460;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .algo-box {
+            background: #fff5f5;
+            border: 2px solid #fa709a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .algo-box h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            .print-btn {
+                display: none;
+            }
+
+            .exercice, .question {
+                page-break-inside: avoid;
+            }
+
+            h2 {
+                page-break-after: avoid;
+            }
+
+            pre {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimer / PDF</button>
+
+    <div class="container">
+        <header>
+            <h1>Mini-Projet POO-Processus</h1>
+            <span class="version">VERSION 5</span>
+            <div class="metadata">
+                <span>📚 Terminale NSI</span>
+                <span>⏱️ Durée : 2h</span>
+                <span>👥 Binôme</span>
+            </div>
+        </header>
+
+        <div class="objectifs">
+            <h3>🎯 Objectifs du projet</h3>
+            <ul>
+                <li>Implémenter une classe Processus en Python</li>
+                <li>Développer l'algorithme SJF non préemptif</li>
+                <li>Développer l'algorithme SRTF préemptif</li>
+                <li>Développer l'algorithme FIFO</li>
+                <li>Développer l'algorithme Round Robin</li>
+                <li>Mesurer et comparer les performances</li>
+            </ul>
+        </div>
+
+        <h2>I. Classe Processus - Modélisation</h2>
+
+        <div class="exercice">
+            <div class="exercice-header">Exercice 1 : Structure de données objet</div>
+            
+            <div class="question">
+                <strong>Question 1.1 :</strong> Créez le fichier <code>processus.py</code> :
+            </div>
+
+<pre><code>class Processus:
+    def __init__(self, pid, arrivee, duree):
+        self.pid = pid
+        self.arrivee = arrivee
+        self.duree = duree
+        self.duree_restante = duree
+        self.debut = None
+        self.fin = None
+        
+    def temps_traitement(self):
+        if self.fin is not None:
+            return self.fin - self.arrivee
+        return None
+    
+    def temps_attente(self):
+        if self.fin is not None:
+            return self.temps_traitement() - self.duree
+        return None
+    
+    def __repr__(self):
+        return f"P{self.pid}(arr={self.arrivee}, dur={self.duree})"
+</code></pre>
+
+            <div class="question">
+                <strong>Question 1.2 :</strong> Créez ces instances de test :
+            </div>
+
+<pre><code>processus_test = [
+    Processus(1, 0, 8),
+    Processus(2, 2, 4),
+    Processus(3, 4, 9),
+    Processus(4, 6, 5)
+]
+</code></pre>
+
+            <div class="question">
+                <strong>Question 1.3 :</strong> Calculez manuellement le temps d'attente si ces processus s'exécutent en ordre FIFO. Vérifiez avec votre code.
+            </div>
+        </div>
+
+        <h2>II. SJF - Plus court d'abord</h2>
+
+        <div class="algo-box">
+            <h4>📌 SJF (Shortest Job First)</h4>
+            <p>
+                Stratégie non préemptive qui choisit le processus le plus court parmi ceux disponibles.
+                Minimise théoriquement le temps d'attente moyen mais risque de famine pour les longs processus.
+            </p>
+        </div>
+
+        <div class="exercice">
+            <div class="exercice-header">Exercice 2 : Algorithme SJF</div>
+            
+            <div class="question">
+                <strong>Question 2.1 :</strong> Dans <code>ordonnancement.py</code>, codez SJF :
+            </div>
+
+<pre><code>def sjf(processus_liste):
+    processus = [p for p in processus_liste]
+    temps_actuel = 0
+    termines = []
+    
+    while processus:
+        disponibles = [p for p in processus if p.arrivee <= temps_actuel]
+        
+        if not disponibles:
+            temps_actuel = min(p.arrivee for p in processus)
+            continue
+        
+        p = min(disponibles, key=lambda x: x.duree)
+        
+        p.debut = temps_actuel
+        temps_actuel += p.duree
+        p.fin = temps_actuel
+        
+        termines.append(p)
+        processus.remove(p)
+    
+    return termines
+</code></pre>
+
+            <div class="question">
+                <strong>Question 2.2 :</strong> Testez SJF avec ce jeu de données :
+            </div>
+
+<pre><code>processus = [
+    Processus(1, 0, 13),
+    Processus(2, 2, 4),
+    Processus(3, 3, 9),
+    Processus(4, 5, 2),
+    Processus(5, 7, 6)
+]
+</code></pre>
+
+            <div class="question">
+                <strong>Question 2.3 :</strong> Dans quel ordre les processus sont-ils exécutés ? Tracez le diagramme de Gantt.
+            </div>
+
+            <div class="question">
+                <strong>Question 2.4 :</strong> Pourquoi P1 (le plus long) termine-t-il en premier malgré SJF ?
+            </div>
+        </div>
+
+        <h2>III. SRTF - Temps restant le plus court</h2>
+
+        <div class="exercice">
+            <div class="exercice-header">Exercice 3 : SRTF préemptif</div>
+            
+            <div class="question">
+                <strong>Question 3.1 :</strong> Implémentez SRTF :
+            </div>
+
+<pre><code>def srtf(processus_liste):
+    processus = []
+    for p in processus_liste:
+        nouveau = Processus(p.pid, p.arrivee, p.duree)
+        processus.append(nouveau)
+    
+    temps_actuel = 0
+    termines = []
+    non_termines = sorted(processus, key=lambda p: p.arrivee)
+    
+    while non_termines:
+        disponibles = [p for p in non_termines if p.arrivee <= temps_actuel]
+        
+        if not disponibles:
+            temps_actuel = min(p.arrivee for p in non_termines)
+            continue
+        
+        p = min(disponibles, key=lambda x: x.duree_restante)
+        
+        if p.debut is None:
+            p.debut = temps_actuel
+        
+        prochain_arrivee = float('inf')
+        for proc in non_termines:
+            if proc.arrivee > temps_actuel:
+                prochain_arrivee = min(prochain_arrivee, proc.arrivee)
+        
+        temps_exec = min(p.duree_restante, prochain_arrivee - temps_actuel)
+        
+        temps_actuel += temps_exec
+        p.duree_restante -= temps_exec
+        
+        if p.duree_restante == 0:
+            p.fin = temps_actuel
+            termines.append(p)
+            non_termines.remove(p)
+    
+    return sorted(termines, key=lambda p: p.pid)
+</code></pre>
+
+            <div class="question">
+                <strong>Question 3.2 :</strong> Testez SRTF avec :
+            </div>
+
+<pre><code>processus = [
+    Processus(1, 0, 12),
+    Processus(2, 1, 5),
+    Processus(3, 3, 8),
+    Processus(4, 4, 3),
+    Processus(5, 6, 7)
+]
+</code></pre>
+
+            <div class="question">
+                <strong>Question 3.3 :</strong> Listez tous les changements de processus (préemptions). À quels moments se produisent-ils ?
+            </div>
+
+            <div class="question">
+                <strong>Question 3.4 :</strong> Comparez SJF et SRTF sur les mêmes données. Lequel a le meilleur temps d'attente moyen ?
+            </div>
+        </div>
+
+        <h2>IV. FIFO - Premier arrivé, premier servi</h2>
+
+        <div class="algo-box">
+            <h4>📌 FIFO (First In First Out)</h4>
+            <p>
+                L'algorithme le plus simple : ordre chronologique d'arrivée.
+                Équitable mais peut causer de longs délais (effet de convoi) si un processus long arrive en premier.
+            </p>
+        </div>
+
+        <div class="exercice">
+            <div class="exercice-header">Exercice 4 : FIFO basique</div>
+            
+            <div class="question">
+                <strong>Question 4.1 :</strong> Codez FIFO :
+            </div>
+
+<pre><code>def fifo(processus_liste):
+    processus = sorted(processus_liste, key=lambda p: p.arrivee)
+    temps_actuel = 0
+    
+    for p in processus:
+        if temps_actuel < p.arrivee:
+            temps_actuel = p.arrivee
+        
+        p.debut = temps_actuel
+        temps_actuel += p.duree
+        p.fin = temps_actuel
+    
+    return processus
+</code></pre>
+
+            <div class="question">
+                <strong>Question 4.2 :</strong> Testez avec :
+            </div>
+
+<pre><code>processus = [
+    Processus(1, 0, 18),
+    Processus(2, 1, 4),
+    Processus(3, 3, 6),
+    Processus(4, 5, 3),
+    Processus(5, 7, 5)
+]
+</code></pre>
+
+            <div class="question">
+                <strong>Question 4.3 :</strong> Quel processus souffre le plus avec FIFO ? Expliquez pourquoi.
+            </div>
+
+            <div class="question">
+                <strong>Question 4.4 :</strong> Citez un avantage de FIFO par rapport aux algorithmes plus complexes.
+            </div>
+        </div>
+
+        <h2>V. Round Robin - Tourniquet</h2>
+
+        <div class="exercice">
+            <div class="exercice-header">Exercice 5 : Round Robin équitable</div>
+            
+            <div class="question">
+                <strong>Question 5.1 :</strong> Implémentez Round Robin :
+            </div>
+
+<pre><code>def round_robin(processus_liste, quantum):
+    processus = []
+    for p in processus_liste:
+        nouveau = Processus(p.pid, p.arrivee, p.duree)
+        processus.append(nouveau)
+    
+    temps_actuel = 0
+    file_attente = []
+    termines = []
+    i = 0
+    
+    processus = sorted(processus, key=lambda p: p.arrivee)
+    
+    while len(termines) < len(processus):
+        while i < len(processus) and processus[i].arrivee <= temps_actuel:
+            file_attente.append(processus[i])
+            i += 1
+        
+        if not file_attente:
+            temps_actuel = processus[i].arrivee
+            continue
+        
+        p = file_attente.pop(0)
+        
+        if p.debut is None:
+            p.debut = temps_actuel
+        
+        temps_exec = min(quantum, p.duree_restante)
+        temps_actuel += temps_exec
+        p.duree_restante -= temps_exec
+        
+        while i < len(processus) and processus[i].arrivee <= temps_actuel:
+            file_attente.append(processus[i])
+            i += 1
+        
+        if p.duree_restante == 0:
+            p.fin = temps_actuel
+            termines.append(p)
+        else:
+            file_attente.append(p)
+    
+    return sorted(termines, key=lambda p: p.pid)
+</code></pre>
+
+            <div class="question">
+                <strong>Question 5.2 :</strong> Testez avec quantum=2 :
+            </div>
+
+<pre><code>processus = [
+    Processus(1, 0, 12),
+    Processus(2, 1, 9),
+    Processus(3, 3, 6),
+    Processus(4, 5, 5)
+]
+</code></pre>
+
+            <div class="question">
+                <strong>Question 5.3 :</strong> Testez avec quantum=6. Comment cela affecte-t-il le nombre de changements de contexte ?
+            </div>
+
+            <div class="question">
+                <strong>Question 5.4 :</strong> Quel quantum offre le meilleur compromis entre réactivité et efficacité ?
+            </div>
+        </div>
+
+        <h2>VI. Comparaison et conclusion</h2>
+
+        <div class="exercice">
+            <div class="exercice-header">Exercice 6 : Analyse finale</div>
+            
+            <div class="question">
+                <strong>Question 6.1 :</strong> Créez la fonction d'affichage :
+            </div>
+
+<pre><code>def afficher_resultats(processus, titre="Résultats"):
+    print("\n" + "="*80)
+    print(f"{titre:^80}")
+    print("="*80)
+    print(f"{'PID':<5} {'Arr':<6} {'Dur':<6} {'Début':<8} {'Fin':<8} {'Attente':<10} {'Traitement':<10}")
+    print("="*80)
+    
+    total_attente = 0
+    total_traitement = 0
+    
+    for p in sorted(processus, key=lambda x: x.pid):
+        attente = p.temps_attente()
+        traitement = p.temps_traitement()
+        total_attente += attente
+        total_traitement += traitement
+        
+        print(f"{p.pid:<5} {p.arrivee:<6} {p.duree:<6} {p.debut:<8} {p.fin:<8} {attente:<10} {traitement:<10}")
+    
+    print("="*80)
+    print(f"Temps d'attente moyen : {total_attente / len(processus):.2f}")
+    print(f"Temps de traitement moyen : {total_traitement / len(processus):.2f}\n")
+</code></pre>
+
+            <div class="question">
+                <strong>Question 6.2 :</strong> Jeu de test final pour comparaison :
+            </div>
+
+<pre><code>processus_final = [
+    Processus(1, 0, 17),
+    Processus(2, 2, 7),
+    Processus(3, 4, 12),
+    Processus(4, 6, 4),
+    Processus(5, 8, 9)
+]
+</code></pre>
+
+            <div class="question">
+                <strong>Question 6.3 :</strong> Complétez ce tableau de synthèse :
+            </div>
+
+            <table>
+                <tr>
+                    <th>Algorithme</th>
+                    <th>Temps attente moyen</th>
+                    <th>Meilleur pour</th>
+                    <th>Pire pour</th>
+                </tr>
+                <tr><td>SJF</td><td></td><td></td><td></td></tr>
+                <tr><td>SRTF</td><td></td><td></td><td></td></tr>
+                <tr><td>FIFO</td><td></td><td></td><td></td></tr>
+                <tr><td>Round Robin (q=2)</td><td></td><td></td><td></td></tr>
+            </table>
+
+            <div class="question">
+                <strong>Question 6.4 :</strong> Rédigez une conclusion (10 lignes minimum) expliquant :
+                <ul>
+                    <li>Quel algorithme vous recommandez pour un système temps-partagé (multi-utilisateurs)</li>
+                    <li>Les compromis entre performance et équité</li>
+                    <li>L'importance du choix du quantum dans Round Robin</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>📝 Livrables</h2>
+
+        <div class="info">
+            <strong>💾 À rendre (un seul rendu par binôme) :</strong>
+            <ul>
+                <li><code>processus.py</code> : classe Processus documentée</li>
+                <li><code>ordonnancement.py</code> : les 4 algorithmes avec commentaires</li>
+                <li><code>tests.py</code> : tous vos tests et comparaisons</li>
+                <li><code>analyse.pdf</code> : réponses détaillées, diagrammes de Gantt, tableaux remplis et conclusion argumentée</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <strong>💡 Conseil :</strong> Pour le rendu final, ajoutez des captures d'écran de vos résultats et assurez-vous que tous vos diagrammes de Gantt sont clairs et lisibles.
+        </div>
+    </div>
+</body>
+</html>
