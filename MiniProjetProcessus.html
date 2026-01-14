@@ -1,1 +1,486 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Projet - Consignes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .no-print {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pdf-button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s;
+        }
+
+        .pdf-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .dates-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+            background: #f8fafc;
+            border-bottom: 3px solid #e2e8f0;
+        }
+
+        .date-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 6px solid #3b82f6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .date-card.presentation {
+            border-left-color: #8b5cf6;
+        }
+
+        .date-card h3 {
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .date-card .date {
+            color: #3b82f6;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .date-card.presentation .date {
+            color: #8b5cf6;
+        }
+
+        .date-card .day {
+            color: #64748b;
+            font-size: 0.95em;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            page-break-inside: avoid;
+        }
+
+        .section h2 {
+            color: #1e293b;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3b82f6;
+        }
+
+        .section h3 {
+            color: #334155;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .section p, .section li {
+            color: #334155;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .section ul {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        .section li strong {
+            color: #1e293b;
+        }
+
+        .highlight-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: #1e40af;
+        }
+
+        .checklist {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #3b82f6;
+        }
+
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            .checklist-item input[type="checkbox"] {
+                -webkit-appearance: checkbox;
+                appearance: checkbox;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dates-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print">
+        <button class="pdf-button" onclick="window.print()">📄 Télécharger en PDF / Imprimer</button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>📚 Mini Projet</h1>
+            <p>Consignes et échéancier détaillé</p>
+        </div>
+
+        <div class="dates-section">
+            <div class="date-card">
+                <h3>📤 Date de remise</h3>
+                <div class="date">Mardi 3 février 2026</div>
+                <div class="day">Avant 23h59</div>
+            </div>
+            <div class="date-card presentation">
+                <h3>🎤 Date de présentation</h3>
+                <div class="date">Jeudi 5 février 2026</div>
+                <div class="day">En classe</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>📋 Description du projet</h2>
+                <p>Le mini projet consiste à développer une solution répondant à un problème identifié ou à une opportunité dans votre domaine d'études. Vous devrez démontrer votre capacité à analyser, concevoir et présenter une solution cohérente en programmation Python.</p>
+            </div>
+
+            <div class="section">
+                <h2>📝 Livrables attendus</h2>
+                
+                <h3>1. Pages Notion (à remettre le 3 février)</h3>
+                <div class="highlight-box">
+                    <strong>⚠️ IMPORTANT : Mettre le lien de votre/vos pages Notion sur OneNote</strong>
+                </div>
+                <ul>
+                    <li><strong>Toutes les questions doivent avoir des réponses complètes</strong></li>
+                    <li>Les réponses doivent être dans l'ordre des questions</li>
+                    <li>Chaque programme doit être visible directement sur Notion</li>
+                    <li><strong>Commenter CHAQUE ligne des programmes proposés</strong></li>
+                    <li>Organisation claire avec sections et sous-sections</li>
+                </ul>
+
+                <h3>2. Fichiers Python (.py)</h3>
+                <ul>
+                    <li><strong>Ne PAS mettre tous les programmes dans un seul fichier</strong></li>
+                    <li>Créer des fichiers séparés pour chaque question</li>
+                    <li>Nommer clairement les fichiers (ex: question1.py, question2_partie_a.py)</li>
+                    <li>Relier les fichiers entre eux selon les dépendances</li>
+                    <li>Ajouter les fichiers dans l'ordre des questions</li>
+                    <li><strong>Bien commenter chaque ligne de code</strong></li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Exemple de structure de fichiers :</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>📄 question1_introduction.py</li>
+                        <li>📄 question2_calculs.py</li>
+                        <li>📄 question3_traitement.py</li>
+                        <li>📄 question4_analyse.py</li>
+                        <li>📄 utils.py (fonctions communes si nécessaire)</li>
+                    </ul>
+                </div>
+
+                <h3>3. Présentation orale (le 5 février)</h3>
+                <ul>
+                    <li>Durée : 10-15 minutes</li>
+                    <li>Support : PowerPoint, Google Slides ou équivalent</li>
+                    <li><strong>Programmation EN DIRECT pendant la présentation</strong></li>
+                    <li><strong>Avoir Thonny ouvert avec TOUS vos fichiers</strong></li>
+                    <li>Démonstration du fonctionnement des programmes</li>
+                    <li>Période de questions : 5 minutes</li>
+                    <li>Tous les membres de l'équipe doivent présenter</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Objectifs d'apprentissage</h2>
+                <ul>
+                    <li>Identifier et analyser un problème ou une opportunité</li>
+                    <li>Concevoir une solution appropriée en Python</li>
+                    <li>Documenter votre code de manière professionnelle</li>
+                    <li>Présenter efficacement vos résultats avec démonstration en direct</li>
+                    <li>Démontrer une compréhension approfondie des concepts de programmation</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>✅ Critères d'évaluation</h2>
+                
+                <h3>Pages Notion (40%)</h3>
+                <ul>
+                    <li>Lien accessible sur OneNote (5%)</li>
+                    <li>Réponses complètes à toutes les questions dans l'ordre (15%)</li>
+                    <li>Programmes visibles sur Notion (5%)</li>
+                    <li>Commentaires détaillés sur chaque ligne de code (10%)</li>
+                    <li>Organisation et clarté de la présentation (5%)</li>
+                </ul>
+
+                <h3>Fichiers Python (30%)</h3>
+                <ul>
+                    <li>Fichiers séparés et bien nommés (10%)</li>
+                    <li>Fichiers reliés correctement entre eux (5%)</li>
+                    <li>Commentaires complets sur chaque ligne (10%)</li>
+                    <li>Code fonctionnel et sans erreurs (5%)</li>
+                </ul>
+
+                <h3>Présentation orale + Programmation (30%)</h3>
+                <ul>
+                    <li>Support de présentation (5%)</li>
+                    <li>Clarté et organisation de la présentation (5%)</li>
+                    <li>Programmation en direct (10%)</li>
+                    <li>Thonny ouvert avec tous les fichiers (5%)</li>
+                    <li>Réponses aux questions (5%)</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>📅 Échéancier suggéré</h2>
+                <div class="checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task1">
+                        <label for="task1">Semaine 1 : Analyse des questions et planification</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task2">
+                        <label for="task2">Semaine 2 : Programmation des fichiers Python (séparés)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task3">
+                        <label for="task3">Semaine 3 : Commenter chaque ligne + Relier les fichiers</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task4">
+                        <label for="task4">Semaine 4 : Créer les pages Notion avec réponses</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task5">
+                        <label for="task5">29-31 janvier : Ajouter programmes sur Notion + Tester tous les fichiers</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task6">
+                        <label for="task6">1-2 février : Vérification finale + Mettre lien sur OneNote</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task7">
+                        <label for="task7">3 février : Remise du lien Notion</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task8">
+                        <label for="task8">4 février : Préparation présentation + Test Thonny</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="task9">
+                        <label for="task9">5 février : Présentation + Programmation en direct</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>⚠️ Points importants</h2>
+                <div class="highlight-box">
+                    <ul>
+                        <li><strong>OBLIGATOIRE : Mettre le lien Notion sur OneNote avant le 3 février</strong></li>
+                        <li><strong>Chaque ligne de code DOIT être commentée</strong></li>
+                        <li><strong>Fichiers Python séparés (pas tout dans un fichier) - C'EST NOTÉ</strong></li>
+                        <li><strong>Avoir Thonny ouvert avec TOUS les fichiers le jour de la présentation</strong></li>
+                        <li>Les programmes doivent être visibles sur vos pages Notion</li>
+                        <li>Les fichiers .py doivent être nommés dans l'ordre des questions</li>
+                        <li>Relier les fichiers entre eux selon les dépendances</li>
+                        <li>Les retards seront pénalisés de 10% par jour</li>
+                        <li>Tout plagiat entraînera la note de 0</li>
+                        <li>Testez TOUS vos programmes avant la présentation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💡 Checklist avant la remise</h2>
+                <div class="checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check1">
+                        <label for="check1">✓ Lien Notion mis sur OneNote</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check2">
+                        <label for="check2">✓ Toutes les questions ont des réponses complètes</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check3">
+                        <label for="check3">✓ Réponses dans l'ordre des questions sur Notion</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check4">
+                        <label for="check4">✓ Programmes visibles sur les pages Notion</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check5">
+                        <label for="check5">✓ CHAQUE ligne de code est commentée</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check6">
+                        <label for="check6">✓ Fichiers Python séparés (pas tout dans un fichier)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check7">
+                        <label for="check7">✓ Fichiers .py bien nommés dans l'ordre</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check8">
+                        <label for="check8">✓ Fichiers reliés entre eux correctement</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check9">
+                        <label for="check9">✓ Tous les programmes testés et fonctionnels</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check10">
+                        <label for="check10">✓ Support de présentation prêt</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check11">
+                        <label for="check11">✓ Thonny configuré avec tous les fichiers</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check12">
+                        <label for="check12">✓ Pratiqué la programmation en direct</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💻 Ressources disponibles</h2>
+                <ul>
+                    <li>Heures de consultation : À déterminer avec l'enseignant</li>
+                    <li>Documentation Python officielle</li>
+                    <li>Tutoriels Thonny et guides de programmation</li>
+                    <li>Support technique pour Notion</li>
+                    <li>Exemples de projets antérieurs (disponibles sur demande)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Bonne chance avec votre mini projet! 🚀</p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">N'hésitez pas à poser des questions en cas de doute</p>
+        </div>
+    </div>
+</body>
+</html>
