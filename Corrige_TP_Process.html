@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrigé Version A - Mini-Projet POO-Processus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .version-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-left: 5px solid #667eea;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #667eea;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 2px solid #667eea;
+        }
+
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .reponse {
+            background: #e8f4f8;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .reponse strong {
+            color: #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .gantt {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        ul {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimer</button>
+
+    <div class="container">
+        <h1>📚 Corrigé Mini-Projet POO-Processus</h1>
+        <div style="text-align: center;">
+            <span class="version-badge">VERSION A</span>
+        </div>
+
+        <h2>Exercice 1 : La classe Processus</h2>
+
+        <h3>Question 1.1 : Code de la classe</h3>
+<pre><code># Fichier: processus.py
+
+class Processus:
+    """Classe représentant un processus avec ses caractéristiques"""
+    
+    def __init__(self, pid, arrivee, duree):
+        """
+        Initialise un processus
+        pid: identifiant unique
+        arrivee: temps d'arrivée
+        duree: durée d'exécution totale
+        """
+        self.pid = pid
+        self.arrivee = arrivee
+        self.duree = duree
+        self.duree_restante = duree  # Pour algorithmes préemptifs
+        self.debut = None  # Temps de début d'exécution
+        self.fin = None    # Temps de fin d'exécution
+        
+    def temps_traitement(self):
+        """Calcule le temps de traitement (turnaround time)"""
+        if self.fin is not None:
+            return self.fin - self.arrivee
+        return None
+    
+    def temps_attente(self):
+        """Calcule le temps d'attente"""
+        if self.fin is not None:
+            return self.temps_traitement() - self.duree
+        return None
+    
+    def __repr__(self):
+        """Représentation textuelle du processus"""
+        return f"P{self.pid}(arr={self.arrivee}, dur={self.duree})"
+</code></pre>
+
+        <h3>Question 1.3 : Réponse</h3>
+        <div class="reponse">
+            <strong>Réponse :</strong> <code>duree</code> représente la durée totale nécessaire pour exécuter complètement le processus (elle ne change jamais). <code>duree_restante</code> représente le temps d'exécution qu'il reste au processus, elle diminue au fur et à mesure de l'exécution. Cette distinction est cruciale pour les algorithmes préemptifs (Round Robin, SRTF) où un processus peut être interrompu puis repris plus tard. Pour les algorithmes non préemptifs (FIFO, SJF), les deux valeurs restent identiques jusqu'à la fin de l'exécution.
+        </div>
+
+        <h2>Exercice 2 : Round Robin</h2>
+
+        <h3>Question 2.1 : Code Round Robin</h3>
+<pre><code># Fichier: ordonnancement.py
+
+from processus import Processus
+
+def round_robin(processus_liste, quantum):
+    """
+    Algorithme Round Robin avec quantum variable
+    Chaque processus reçoit un quantum de temps
+    """
+    # Copie des processus pour ne pas modifier l'original
+    processus = []
+    for p in processus_liste:
+        nouveau = Processus(p.pid, p.arrivee, p.duree)
+        processus.append(nouveau)
+    
+    temps_actuel = 0
+    file_attente = []  # File FIFO des processus prêts
+    termines = []
+    i = 0  # Index pour parcourir les processus
+    
+    # Trier par arrivée
+    processus = sorted(processus, key=lambda p: p.arrivee)
+    
+    while len(termines) < len(processus):
+        # Ajouter les processus qui viennent d'arriver
+        while i < len(processus) and processus[i].arrivee <= temps_actuel:
+            file_attente.append(processus[i])
+            i += 1
+        
+        # Si aucun processus n'est prêt
+        if not file_attente:
+            temps_actuel = processus[i].arrivee
+            continue
+        
+        # Prendre le premier de la file
+        p = file_attente.pop(0)
+        
+        # Définir le début si première exécution
+        if p.debut is None:
+            p.debut = temps_actuel
+        
+        # Exécuter pendant min(quantum, durée restante)
+        temps_exec = min(quantum, p.duree_restante)
+        temps_actuel += temps_exec
+        p.duree_restante -= temps_exec
+        
+        # Ajouter les nouveaux arrivants pendant l'exécution
+        while i < len(processus) and processus[i].arrivee <= temps_actuel:
+            file_attente.append(processus[i])
+            i += 1
+        
+        # Vérifier si terminé
+        if p.duree_restante == 0:
+            p.fin = temps_actuel
+            termines.append(p)
+        else:
+            # Remettre en fin de file
+            file_attente.append(p)
+    
+    return sorted(termines, key=lambda p: p.pid)
+</code></pre>
+
+        <h3>Question 2.2 : Résultats avec quantum=3</h3>
+<pre><code># Test
+processus = [
+    Processus(1, 0, 9),
+    Processus(2, 2, 5),
+    Processus(3, 4, 3),
+    Processus(4, 6, 7)
+]
+
+resultat = round_robin(processus, quantum=3)
+</code></pre>
+
+        <table>
+            <tr>
+                <th>PID</th>
+                <th>Arrivée</th>
+                <th>Durée</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Attente</th>
+                <th>Traitement</th>
+            </tr>
+            <tr><td>1</td><td>0</td><td>9</td><td>0</td><td>21</td><td>12</td><td>21</td></tr>
+            <tr><td>2</td><td>2</td><td>5</td><td>3</td><td>15</td><td>10</td><td>13</td></tr>
+            <tr><td>3</td><td>4</td><td>3</td><td>6</td><td>9</td><td>2</td><td>5</td></tr>
+            <tr><td>4</td><td>6</td><td>7</td><td>9</td><td>24</td><td>11</td><td>18</td></tr>
+        </table>
+
+        <p><strong>Temps d'attente moyen :</strong> (12 + 10 + 2 + 11) / 4 = 8.75</p>
+
+        <h3>Question 2.4 : Diagramme de Gantt (quantum=3)</h3>
+        <div class="gantt">
+<pre>
+Temps:  0   3   6   9   12  15  18  21  24
+       |---|---|---|---|---|---|---|---|
+P1     |###|   |   |###|   |   |###|   |
+P2     |   |###|   |   |##|   |   |   |
+P3     |   |   |###|   |   |   |   |   |
+P4     |   |   |   |###|   |###|   |###|
+
+Légende : ### = Exécution
+
+Ordre d'exécution : P1(3) → P2(3) → P3(3) → P1(3) → P4(3) → P2(2) → P1(3) → P4(3) → P4(1)
+</pre>
+        </div>
+
+        <h3>Question 2.3 : Impact du quantum</h3>
+        <div class="reponse">
+            <strong>Quantum = 1 :</strong> Temps d'attente moyen ≈ 9.5. Très nombreux changements de contexte (overhead important), mais très équitable.<br><br>
+            <strong>Quantum = 5 :</strong> Temps d'attente moyen ≈ 8.25. Moins de changements de contexte, proche d'un algorithme non préemptif pour les processus courts.<br><br>
+            <strong>Conclusion :</strong> Un quantum trop petit augmente l'overhead, un quantum trop grand réduit l'équité. Le quantum optimal dépend du contexte (quantum=2 ou 3 souvent recommandé).
+        </div>
+
+        <h2>Exercice 3 : SRTF</h2>
+
+        <h3>Question 3.1 : Code SRTF</h3>
+<pre><code>def srtf(processus_liste):
+    """
+    SRTF (Shortest Remaining Time First) - Préemptif
+    Sélectionne toujours le processus avec le temps restant le plus court
+    """
+    processus = []
+    for p in processus_liste:
+        nouveau = Processus(p.pid, p.arrivee, p.duree)
+        processus.append(nouveau)
+    
+    temps_actuel = 0
+    termines = []
+    non_termines = sorted(processus, key=lambda p: p.arrivee)
+    
+    while non_termines:
+        # Processus disponibles
+        disponibles = [p for p in non_termines if p.arrivee <= temps_actuel]
+        
+        if not disponibles:
+            temps_actuel = min(p.arrivee for p in non_termines)
+            continue
+        
+        # Choisir celui avec le temps restant le plus court
+        p = min(disponibles, key=lambda x: x.duree_restante)
+        
+        if p.debut is None:
+            p.debut = temps_actuel
+        
+        # Trouver le prochain événement (arrivée)
+        prochain_arrivee = float('inf')
+        for proc in non_termines:
+            if proc.arrivee > temps_actuel:
+                prochain_arrivee = min(prochain_arrivee, proc.arrivee)
+        
+        # Exécuter jusqu'au prochain événement ou fin
+        temps_exec = min(p.duree_restante, prochain_arrivee - temps_actuel)
+        
+        temps_actuel += temps_exec
+        p.duree_restante -= temps_exec
+        
+        # Vérifier si terminé
+        if p.duree_restante == 0:
+            p.fin = temps_actuel
+            termines.append(p)
+            non_termines.remove(p)
+    
+    return sorted(termines, key=lambda p: p.pid)
+</code></pre>
+
+        <h3>Question 3.2 : Résultats SRTF</h3>
+<pre><code># Test
+processus = [
+    Processus(1, 0, 8),
+    Processus(2, 1, 2),
+    Processus(3, 3, 4),
+    Processus(4, 5, 1),
+    Processus(5, 6, 3)
+]
+</code></pre>
+
+        <table>
+            <tr>
+                <th>PID</th>
+                <th>Arrivée</th>
+                <th>Durée</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Attente</th>
+                <th>Traitement</th>
+            </tr>
+            <tr><td>1</td><td>0</td><td>8</td><td>0</td><td>18</td><td>10</td><td>18</td></tr>
+            <tr><td>2</td><td>1</td><td>2</td><td>1</td><td>3</td><td>0</td><td>2</td></tr>
+            <tr><td>3</td><td>3</td><td>4</td><td>6</td><td>10</td><td>3</td><td>7</td></tr>
+            <tr><td>4</td><td>5</td><td>1</td><td>5</td><td>6</td><td>0</td><td>1</td></tr>
+            <tr><td>5</td><td>6</td><td>3</td><td>10</td><td>13</td><td>4</td><td>7</td></tr>
+        </table>
+
+        <p><strong>Temps d'attente moyen :</strong> (10 + 0 + 3 + 0 + 4) / 5 = 3.4</p>
+
+        <h3>Question 3.3 : Processus le plus interrompu</h3>
+        <div class="reponse">
+            <strong>Réponse :</strong> P1 est le plus interrompu car il a la plus longue durée (8). Il commence à t=0, mais est préempté par P2 (plus court) à t=1, puis par P4 (plus court) à t=5. Il ne reprend qu'après que tous les processus plus courts soient terminés. C'est une caractéristique de SRTF : les longs processus peuvent subir de nombreuses préemptions si des processus courts arrivent.
+        </div>
+
+        <h2>Exercice 4 : FIFO</h2>
+
+        <h3>Question 4.1 : Code FIFO</h3>
+<pre><code>def fifo(processus_liste):
+    """
+    FIFO (First In First Out) - Premier arrivé, premier servi
+    Non préemptif, ordre chronologique
+    """
+    processus = sorted(processus_liste, key=lambda p: p.arrivee)
+    temps_actuel = 0
+    
+    for p in processus:
+        # Si le CPU est libre avant l'arrivée
+        if temps_actuel < p.arrivee:
+            temps_actuel = p.arrivee
+        
+        p.debut = temps_actuel
+        temps_actuel += p.duree
+        p.fin = temps_actuel
+    
+    return processus
+</code></pre>
+
+        <h3>Question 4.3 : Principal problème de FIFO</h3>
+        <div class="reponse">
+            <strong>Réponse :</strong> Le principal problème est l'<strong>effet de convoi</strong> (convoy effect). Si un processus long (comme P1 avec durée 12) arrive en premier, tous les autres processus courts doivent attendre qu'il se termine, même s'ils pourraient s'exécuter rapidement. Cela augmente considérablement le temps d'attente moyen. Dans l'exemple, P2, P3 et P4 attendent tous pendant l'exécution complète de P1.
+        </div>
+
+        <h2>Exercice 5 : SJF</h2>
+
+        <h3>Question 5.1 : Code SJF</h3>
+<pre><code>def sjf(processus_liste):
+    """
+    SJF (Shortest Job First) - Non préemptif
+    Sélectionne le processus le plus court parmi ceux disponibles
+    """
+    processus = [p for p in processus_liste]
+    temps_actuel = 0
+    termines = []
+    
+    while processus:
+        # Processus déjà arrivés
+        disponibles = [p for p in processus if p.arrivee <= temps_actuel]
+        
+        if not disponibles:
+            # Avancer au prochain arrivant
+            temps_actuel = min(p.arrivee for p in processus)
+            continue
+        
+        # Choisir le plus court
+        p = min(disponibles, key=lambda x: x.duree)
+        
+        p.debut = temps_actuel
+        temps_actuel += p.duree
+        p.fin = temps_actuel
+        
+        termines.append(p)
+        processus.remove(p)
+    
+    return termines
+</code></pre>
+
+        <h3>Question 5.3 : Cas optimal pour SJF</h3>
+        <div class="reponse">
+            <strong>Réponse :</strong> SJF donne des résultats optimaux (temps d'attente moyen minimal) lorsque :
+            <ul>
+                <li>Les durées d'exécution sont connues à l'avance (ce qui est rarement le cas en pratique)</li>
+                <li>Il y a une grande variance dans les durées (processus très courts et très longs)</li>
+                <li>Les processus arrivent tous au même moment ou dans un court intervalle</li>
+            </ul>
+            SJF minimise mathématiquement le temps d'attente moyen, mais peut causer la famine des processus longs.
+        </div>
+
+        <h2>Exercice 6 : Comparaison finale</h2>
+
+        <h3>Question 6.2 : Résultats sur processus_final</h3>
+<pre><code>processus_final = [
+    Processus(1, 0, 10),
+    Processus(2, 1, 3),
+    Processus(3, 3, 7),
+    Processus(4, 5, 5),
+    Processus(5, 7, 2)
+]
+</code></pre>
+
+        <table>
+            <tr>
+                <th>Algorithme</th>
+                <th>Temps attente moyen</th>
+                <th>Temps traitement moyen</th>
+                <th>Classement</th>
+            </tr>
+            <tr>
+                <td>Round Robin (q=3)</td>
+                <td>9.6</td>
+                <td>15.0</td>
+                <td>3ème</td>
+            </tr>
+            <tr>
+                <td>SRTF</td>
+                <td>3.8</td>
+                <td>9.2</td>
+                <td>1er (meilleur)</td>
+            </tr>
+            <tr>
+                <td>FIFO</td>
+                <td>11.2</td>
+                <td>16.6</td>
+                <td>4ème (pire)</td>
+            </tr>
+            <tr>
+                <td>SJF</td>
+                <td>5.4</td>
+                <td>10.8</td>
+                <td>2ème</td>
+            </tr>
+        </table>
+
+        <h3>Question 6.4 : Recommandation pour système interactif</h3>
+        <div class="reponse">
+            <strong>Réponse :</strong> Pour un système interactif (ordinateur personnel), je recommande <strong>Round Robin</strong> avec un quantum approprié (2-4 ms). Raisons :
+            <ul>
+                <li><strong>Équité :</strong> Tous les processus reçoivent régulièrement du temps CPU, aucun n'est ignoré</li>
+                <li><strong>Réactivité :</strong> Les applications interactives (navigateur, éditeur) ne bloquent pas longtemps</li>
+                <li><strong>Pas de famine :</strong> Contrairement à SJF/SRTF, les processus longs ne sont pas défavorisés</li>
+                <li><strong>Prévisibilité :</strong> Temps de réponse maximum calculable</li>
+            </ul>
+            Bien que SRTF ait le meilleur temps d'attente moyen, il peut causer la famine et nécessite de connaître les durées à l'avance (impossible en pratique). Round Robin est le meilleur compromis entre performance et équité pour un usage interactif.
+        </div>
+
+        <h2>📝 Fonction d'affichage complète</h2>
+
+<pre><code>def afficher_resultats(processus, titre="Résultats"):
+    """Affiche les résultats de l'ordonnancement de manière formatée"""
+    print("\n" + "="*80)
+    print(f"{titre:^80}")
+    print("="*80)
+    print(f"{'PID':<5} {'Arr':<6} {'Dur':<6} {'Début':<8} {'Fin':<8} {'Attente':<10} {'Traitement':<10}")
+    print("="*80)
+    
+    total_attente = 0
+    total_traitement = 0
+    
+    for p in sorted(processus, key=lambda x: x.pid):
+        attente = p.temps_attente()
+        traitement = p.temps_traitement()
+        total_attente += attente
+        total_traitement += traitement
+        
+        print(f"{p.pid:<5} {p.arrivee:<6} {p.duree:<6} {p.debut:<8} {p.fin:<8} {attente:<10} {traitement:<10}")
+    
+    print("="*80)
+    print(f"Temps d'attente moyen : {total_attente / len(processus):.2f}")
+    print(f"Temps de traitement moyen : {total_traitement / len(processus):.2f}\n")
+</code></pre>
+
+        <h2>📊 Points clés à retenir</h2>
+
+        <div class="reponse">
+            <strong>Concepts importants :</strong>
+            <ul>
+                <li><strong>Préemptif vs non préemptif :</strong> Un algorithme préemptif peut interrompre un processus en cours</li>
+                <li><strong>Temps d'attente :</strong> Temps total - durée d'exécution</li>
+                <li><strong>Temps de traitement :</strong> Temps entre arrivée et fin</li>
+                <li><strong>FIFO :</strong> Simple mais effet de convoi</li>
+                <li><strong>SJF :</strong> Optimal pour temps d'attente mais risque de famine</li>
+                <li><strong>Round Robin :</strong> Équitable, bon pour systèmes interactifs</li>
+                <li><strong>SRTF :</strong> Version préemptive de SJF, encore plus optimal mais plus complexe</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
