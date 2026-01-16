@@ -594,7 +594,7 @@
 <body>
     <!-- Slide 1 - Titre -->
     <div class="slide slide-1">
-        <h1>🌐 Protocoles de Routage Dynamiques</h1>
+        <h1>Protocoles de Routage Dynamiques</h1>
         <h2>RIP et OSPF</h2>
         <p>Cours NSI Terminale - Préparation BAC 2025</p>
         <div class="slide-number">1/14</div>
@@ -620,16 +620,16 @@
         <div class="content-box">
             <p><strong>Définition :</strong> Un protocole de routage définit le <span class="highlight">format des paquets réseau</span> et les <span class="highlight">procédures</span> qui permettent à deux routeurs d'échanger des informations sur les tables de routage.</p>
             <br>
-            <p>💡 <strong>Fonctionnement :</strong> Les routeurs émettent et reçoivent entre eux des informations sur les routes, ce qui leur permet de <span class="highlight">mettre à jour leur propre table de routage de façon dynamique</span>.</p>
+            <p> <strong>Fonctionnement :</strong> Les routeurs émettent et reçoivent entre eux des informations sur les routes, ce qui leur permet de <span class="highlight">mettre à jour leur propre table de routage de façon dynamique</span>.</p>
             <br>
-            <p>📊 Une colonne supplémentaire <strong>"coût"</strong> apparaît dans les tables de routage et permet aux routeurs de calculer la <span class="highlight">route la plus optimale</span> en fonction de l'algorithme utilisé.</p>
+            <p>Une colonne supplémentaire <strong>"coût"</strong> apparaît dans les tables de routage et permet aux routeurs de calculer la <span class="highlight">route la plus optimale</span> en fonction de l'algorithme utilisé.</p>
         </div>
         <div class="slide-number">3/14</div>
     </div>
 
     <!-- Slide 4 - RIP Introduction -->
     <div class="slide slide-4">
-        <h1>📡 RIP - Routing Information Protocol</h1>
+        <h1> RIP - Routing Information Protocol</h1>
         <div class="card">
             <h3>Principe de la métrique "coût"</h3>
             <p>Un routeur utilisant le protocole RIP a pour notion de <strong>"coût"</strong> le <span class="highlight">nombre de routeurs à traverser</span> entre lui et la destination finale du paquet.</p>
@@ -651,7 +651,7 @@
 
     <!-- Slide 5 - RIP Réseau -->
     <div class="slide slide-5">
-        <h1>🗺️ Réseau d'exemple - Protocole RIP</h1>
+        <h1> Réseau d'exemple - Protocole RIP</h1>
         <div class="network-visual">
             <div class="image-placeholder">
                  <img src="exemple_1.JPG" alt="schéma de réseau avec les routeurs A, B, C, D, E, F, G">
@@ -675,7 +675,7 @@
 
     <!-- Slide 6 - Tables RIP -->
     <div class="slide slide-6">
-        <h1>📊 Tables de Routage RIP - Routeurs D et C</h1>
+        <h1>Tables de Routage RIP - Routeurs D et C</h1>
         <div class="tables-container">
             <div class="table-wrapper">
                 <div class="table-title">Routeur D</div>
@@ -772,7 +772,7 @@
 
     <!-- Slide 7 - Application RIP -->
     <div class="slide slide-7">
-        <h1>🎯 Application : Trajet D → A avec RIP</h1>
+        <h1> Application : Trajet D → A avec RIP</h1>
         <div class="application-box">
             <div class="question">
                 <strong>Question :</strong> Le routeur D doit envoyer un paquet au routeur A. Quel chemin va être choisi ?
@@ -794,7 +794,7 @@
             </div>
             
             <div class="result">
-                📍 Trajet final : D → C → F → A
+                 Trajet final : D → C → F → A
             </div>
             
             <p style="margin-top: 25px; font-size: 1.15em; font-style: italic; color: #666;">
@@ -806,7 +806,7 @@
 
     <!-- Slide 8 - OSPF Introduction -->
     <div class="slide slide-8">
-        <h1>🚀 OSPF - Open Shortest Path First</h1>
+        <h1> OSPF - Open Shortest Path First</h1>
         <div class="card">
             <h3>Principe de la métrique "coût"</h3>
             <p>Dans le protocole OSPF, la notion de <strong>"coût"</strong> est liée au <span class="highlight">débit des connexions</span> :</p>
@@ -822,7 +822,7 @@
 
     <!-- Slide 9 - OSPF Formule -->
     <div class="slide slide-9">
-        <h1>📐 Formule de Calcul du Coût OSPF</h1>
+        <h1> Formule de Calcul du Coût OSPF</h1>
         <div class="formula-box">
             <div class="formula-large">
                 coût = 10⁸ / d
@@ -844,10 +844,10 @@
 
     <!-- Slide 10 - Graphes OSPF -->
     <div class="slide slide-10">
-        <h1>🗺️ Réseau OSPF - Graphes avec Débits et Coûts</h1>
+        <h1> Réseau OSPF - Graphes avec Débits et Coûts</h1>
         <div class="graphs-container">
             <div class="graph-box">
-                <div class="graph-title">📡 Graphe avec les Débits</div>
+                <div class="graph-title"> Graphe avec les Débits</div>
                 <div class="image-placeholder" style="min-height: 300px;">
                      <img src="exemple_2_1.JPG" alt="Graphe montrant les débits en Mb/s">
                     <br><br>
@@ -856,7 +856,7 @@
             </div>
             
             <div class="graph-box">
-                <div class="graph-title">📊 Graphe avec les Coûts OSPF</div>
+                <div class="graph-title">Graphe avec les Coûts OSPF</div>
                 <div class="image-placeholder" style="min-height: 300px;">
                     <img src="exemple_2_2.JPG" alt="Graphe montrant les coûts calculés">
                     <br><br>
@@ -869,7 +869,7 @@
 
     <!-- Slide 11 - Tables OSPF -->
     <div class="slide slide-11">
-        <h1>📊 Tables de Routage OSPF - Routeurs D, C, E, F</h1>
+        <h1> Tables de Routage OSPF - Routeurs D, C, E, F</h1>
         <div class="tables-grid">
             <div class="table-wrapper">
                 <div class="table-title">Routeur D</div>
@@ -1056,7 +1056,7 @@
 
     <!-- Slide 12 - Application OSPF -->
     <div class="slide slide-12">
-        <h1>🎯 Application : Trajet D → A avec OSPF</h1>
+        <h1>Application : Trajet D → A avec OSPF</h1>
         <div class="application-box">
             <div class="question">
                 <strong>Question :</strong> Le routeur D doit envoyer un paquet au routeur A. Quel chemin va être choisi ?
@@ -1083,7 +1083,7 @@
             </div>
             
             <div class="result">
-                📍 Trajet final : D → C → F → E → A
+                 Trajet final : D → C → F → E → A
             </div>
             
             <p style="margin-top: 25px; font-size: 1.15em; background: #e8f5e9; padding: 20px; border-radius: 10px;">
@@ -1096,7 +1096,7 @@
 
     <!-- Slide 13 - Comparaison -->
     <div class="slide slide-13">
-        <h1>⚖️ Comparaison RIP vs OSPF</h1>
+        <h1> Comparaison RIP vs OSPF</h1>
         <div class="comparison">
             <div class="protocol-card rip">
                 <h2>RIP</h2>
@@ -1128,7 +1128,7 @@
 
     <!-- Slide 14 - Conclusion -->
     <div class="slide slide-14">
-        <h1>🎯 Points Clés à Retenir</h1>
+        <h1> Points Clés à Retenir</h1>
         <div class="key-points">
             <ul>
                 <li>✅ <strong>RIP :</strong> Métrique = nombre de sauts (max 15), chemin le plus court</li>
@@ -1140,7 +1140,7 @@
             </ul>
         </div>
         <p style="margin-top: 50px; font-size: 1.5em;">
-            📚 Prochaine étape : Exercices pratiques !
+             Prochaine étape : Exercices pratiques !
         </p>
         <div class="slide-number">14/14</div>
     </div>
