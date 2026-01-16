@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocoles de Routage RIP et OSPF</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+            scroll-snap-align: start;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9em;
+        }
+
+        /* Slide 1 - Titre */
+        .slide-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .slide-1 h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .slide-1 h2 {
+            font-size: 2em;
+            opacity: 0.9;
+            animation: fadeInUp 1.3s ease;
+        }
+
+        .slide-1 p {
+            margin-top: 40px;
+            font-size: 1.2em;
+            opacity: 0.8;
+            animation: fadeInUp 1.6s ease;
+        }
+
+        /* Slide 2 - Sommaire */
+        .slide-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .slide-2 h1 {
+            font-size: 3em;
+            margin-bottom: 50px;
+        }
+
+        .slide-2 ul {
+            list-style: none;
+            font-size: 1.8em;
+            line-height: 2.5;
+        }
+
+        .slide-2 li {
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.2);
+            margin: 15px 0;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .slide-2 li:hover {
+            transform: translateX(20px);
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Slide 3 - Introduction routage */
+        .slide-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .slide-3 h1 {
+            font-size: 3em;
+            margin-bottom: 40px;
+        }
+
+        .content-box {
+            background: rgba(255,255,255,0.15);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 900px;
+            font-size: 1.4em;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        /* Slide 4 - RIP Présentation */
+        .slide-4 {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #333;
+        }
+
+        .slide-4 h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            color: #d63031;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 800px;
+            margin: 20px 0;
+        }
+
+        .card h3 {
+            color: #d63031;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .card ul {
+            list-style: none;
+            font-size: 1.3em;
+            line-height: 2;
+        }
+
+        .card li::before {
+            content: "✓ ";
+            color: #00b894;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Slide 5 - RIP Fonctionnement */
+        .slide-5 {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            color: white;
+        }
+
+        .slide-5 h1 {
+            font-size: 3em;
+            margin-bottom: 40px;
+        }
+
+        .diagram {
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 1000px;
+        }
+
+        .router-box {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .arrow {
+            display: inline-block;
+            font-size: 2em;
+            margin: 0 20px;
+            color: #ffd700;
+        }
+
+        /* Slide 6 - Exemple RIP */
+        .slide-6 {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .slide-6 h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #0984e3;
+        }
+
+        .example-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 20px auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.4em;
+        }
+
+        td {
+            padding: 15px 20px;
+            font-size: 1.2em;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Slide 7 - OSPF Présentation */
+        .slide-7 {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #333;
+        }
+
+        .slide-7 h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            color: #e17055;
+        }
+
+        /* Slide 8 - OSPF Fonctionnement */
+        .slide-8 {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+
+        .slide-8 h1 {
+            font-size: 3em;
+            margin-bottom: 40px;
+            color: #d63031;
+        }
+
+        .steps {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 900px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #e17055;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-size: 1.3em;
+        }
+
+        /* Slide 9 - Exemple OSPF */
+        .slide-9 {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #333;
+        }
+
+        .slide-9 h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #00b894;
+        }
+
+        .network-diagram {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 1000px;
+        }
+
+        .network-node {
+            display: inline-block;
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .cost-label {
+            color: #d63031;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Slide 10 - Comparaison */
+        .slide-10 {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            color: #333;
+        }
+
+        .slide-10 h1 {
+            font-size: 3em;
+            margin-bottom: 40px;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1100px;
+        }
+
+        .protocol-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .protocol-card h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .protocol-card.rip h2 {
+            color: #d63031;
+        }
+
+        .protocol-card.ospf h2 {
+            color: #e17055;
+        }
+
+        .protocol-card ul {
+            list-style: none;
+            font-size: 1.2em;
+            line-height: 2;
+        }
+
+        .protocol-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Slide 11 - Conclusion */
+        .slide-11 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .slide-11 h1 {
+            font-size: 3.5em;
+            margin-bottom: 40px;
+        }
+
+        .key-points {
+            background: rgba(255,255,255,0.15);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 900px;
+        }
+
+        .key-points li {
+            font-size: 1.5em;
+            line-height: 2.2;
+            margin: 15px 0;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            border: 2px solid white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+            }
+            .slide h1 {
+                font-size: 2em !important;
+            }
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1 - Titre -->
+    <div class="slide slide-1">
+        <h1>🌐 Protocoles de Routage</h1>
+        <h2>RIP et OSPF</h2>
+        <p>Cours NSI Terminale - Préparation BAC 2025</p>
+        <div class="slide-number">1/11</div>
+    </div>
+
+    <!-- Slide 2 - Sommaire -->
+    <div class="slide slide-2">
+        <h1>📋 Sommaire</h1>
+        <ul>
+            <li>1️⃣ Introduction au routage</li>
+            <li>2️⃣ Protocole RIP</li>
+            <li>3️⃣ Protocole OSPF</li>
+            <li>4️⃣ Comparaison RIP vs OSPF</li>
+            <li>5️⃣ Applications pratiques</li>
+        </ul>
+        <div class="slide-number">2/11</div>
+    </div>
+
+    <!-- Slide 3 - Introduction -->
+    <div class="slide slide-3">
+        <h1>🔄 Qu'est-ce que le routage ?</h1>
+        <div class="content-box">
+            <p><strong>Le routage</strong> est le processus permettant de déterminer le <span class="highlight">meilleur chemin</span> pour transmettre des données d'une source vers une destination à travers un réseau.</p>
+            <br>
+            <p>Les <span class="highlight">protocoles de routage</span> permettent aux routeurs d'échanger des informations sur la topologie du réseau et de construire leurs <span class="highlight">tables de routage</span>.</p>
+            <br>
+            <p>💡 Deux grandes familles : <strong>vecteur de distance</strong> (RIP) et <strong>état de liens</strong> (OSPF)</p>
+        </div>
+        <div class="slide-number">3/11</div>
+    </div>
+
+    <!-- Slide 4 - RIP Présentation -->
+    <div class="slide slide-4">
+        <h1>📡 RIP - Routing Information Protocol</h1>
+        <div class="card">
+            <h3>Caractéristiques principales</h3>
+            <ul>
+                <li>Protocole à <strong>vecteur de distance</strong></li>
+                <li>Métrique : <strong>nombre de sauts</strong> (hops)</li>
+                <li>Maximum : <strong>15 sauts</strong> (16 = inaccessible)</li>
+                <li>Mise à jour toutes les <strong>30 secondes</strong></li>
+                <li>Simple mais limité aux petits réseaux</li>
+                <li>Convergence lente</li>
+            </ul>
+        </div>
+        <div class="slide-number">4/11</div>
+    </div>
+
+    <!-- Slide 5 - RIP Fonctionnement -->
+    <div class="slide slide-5">
+        <h1>⚙️ Fonctionnement de RIP</h1>
+        <div class="diagram">
+            <p style="font-size: 1.4em; margin-bottom: 30px;">Échange d'informations entre routeurs :</p>
+            <div style="text-align: center; margin: 30px 0;">
+                <div class="router-box">Routeur A</div>
+                <span class="arrow">→</span>
+                <div class="router-box">Routeur B</div>
+                <span class="arrow">→</span>
+                <div class="router-box">Routeur C</div>
+            </div>
+            <p style="font-size: 1.3em; margin-top: 40px;">
+                <strong>Principe :</strong> Chaque routeur partage sa table de routage complète avec ses voisins directs.
+            </p>
+            <p style="font-size: 1.2em; margin-top: 20px;">
+                Le routeur choisit toujours le chemin avec le <strong>nombre de sauts minimum</strong>.
+            </p>
+        </div>
+        <div class="slide-number">5/11</div>
+    </div>
+
+    <!-- Slide 6 - Exemple RIP -->
+    <div class="slide slide-6">
+        <h1>📊 Exemple : Table de routage RIP</h1>
+        <div class="example-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Réseau Destination</th>
+                        <th>Passerelle</th>
+                        <th>Distance (sauts)</th>
+                        <th>Interface</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>192.168.1.0/24</td>
+                        <td>Direct</td>
+                        <td>0</td>
+                        <td>eth0</td>
+                    </tr>
+                    <tr>
+                        <td>192.168.2.0/24</td>
+                        <td>192.168.1.2</td>
+                        <td>1</td>
+                        <td>eth0</td>
+                    </tr>
+                    <tr>
+                        <td>192.168.3.0/24</td>
+                        <td>192.168.1.2</td>
+                        <td>2</td>
+                        <td>eth0</td>
+                    </tr>
+                    <tr>
+                        <td>10.0.0.0/8</td>
+                        <td>192.168.1.5</td>
+                        <td>3</td>
+                        <td>eth0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="slide-number">6/11</div>
+    </div>
+
+    <!-- Slide 7 - OSPF Présentation -->
+    <div class="slide slide-7">
+        <h1>🚀 OSPF - Open Shortest Path First</h1>
+        <div class="card">
+            <h3>Caractéristiques principales</h3>
+            <ul>
+                <li>Protocole à <strong>état de liens</strong></li>
+                <li>Métrique : <strong>coût</strong> (basé sur la bande passante)</li>
+                <li>Pas de limite de sauts</li>
+                <li>Convergence <strong>rapide</strong></li>
+                <li>Utilise l'algorithme de <strong>Dijkstra</strong></li>
+                <li>Adapté aux grands réseaux</li>
+                <li>Hiérarchie par <strong>zones</strong> (areas)</li>
+            </ul>
+        </div>
+        <div class="slide-number">7/11</div>
+    </div>
+
+    <!-- Slide 8 - OSPF Fonctionnement -->
+    <div class="slide slide-8">
+        <h1>⚙️ Fonctionnement d'OSPF</h1>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-text">Découverte des voisins via paquets <strong>Hello</strong></div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-text">Échange d'informations d'<strong>état de liens</strong> (LSA - Link State Advertisement)</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-text">Construction d'une <strong>base de données topologique</strong> complète du réseau</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-text">Calcul du <strong>plus court chemin</strong> avec l'algorithme de Dijkstra</div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-text">Création de la <strong>table de routage</strong> optimale</div>
+            </div>
+        </div>
+        <div class="slide-number">8/11</div>
+    </div>
+
+    <!-- Slide 9 - Exemple OSPF -->
+    <div class="slide slide-9">
+        <h1>📊 Exemple : Calcul de coût OSPF</h1>
+        <div class="network-diagram">
+            <p style="font-size: 1.3em; margin-bottom: 30px; color: #333;">
+                <strong>Réseau exemple :</strong> Routeur A vers Routeur D
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+                <div>
+                    <span class="network-node">A</span>
+                    <span style="margin: 0 15px;">—<span class="cost-label">[10]</span>—</span>
+                    <span class="network-node">B</span>
+                    <span style="margin: 0 15px;">—<span class="cost-label">[10]</span>—</span>
+                    <span class="network-node">D</span>
+                </div>
+                <div style="margin-top: 40px;">
+                    <span class="network-node">A</span>
+                    <span style="margin: 0 15px;">—<span class="cost-label">[5]</span>—</span>
+                    <span class="network-node">C</span>
+                    <span style="margin: 0 15px;">—<span class="cost-label">[5]</span>—</span>
+                    <span class="network-node">D</span>
+                </div>
+            </div>
+            <p style="font-size: 1.2em; margin-top: 40px; color: #333;">
+                <strong>Chemin 1 :</strong> A → B → D = Coût 20<br>
+                <strong>Chemin 2 :</strong> A → C → D = Coût 10 ✅ <span style="color: #00b894;">(Meilleur chemin)</span>
+            </p>
+        </div>
+        <div class="slide-number">9/11</div>
+    </div>
+
+    <!-- Slide 10 - Comparaison -->
+    <div class="slide slide-10">
+        <h1>⚖️ RIP vs OSPF</h1>
+        <div class="comparison">
+            <div class="protocol-card rip">
+                <h2>RIP</h2>
+                <ul>
+                    <li><strong>Type :</strong> Vecteur distance</li>
+                    <li><strong>Métrique :</strong> Sauts (max 15)</li>
+                    <li><strong>Convergence :</strong> Lente</li>
+                    <li><strong>Complexité :</strong> Simple</li>
+                    <li><strong>Bande passante :</strong> Élevée</li>
+                    <li><strong>Usage :</strong> Petits réseaux</li>
+                    <li><strong>Avantage :</strong> Facile à configurer</li>
+                </ul>
+            </div>
+            <div class="protocol-card ospf">
+                <h2>OSPF</h2>
+                <ul>
+                    <li><strong>Type :</strong> État de liens</li>
+                    <li><strong>Métrique :</strong> Coût (bande passante)</li>
+                    <li><strong>Convergence :</strong> Rapide</li>
+                    <li><strong>Complexité :</strong> Avancée</li>
+                    <li><strong>Bande passante :</strong> Optimisée</li>
+                    <li><strong>Usage :</strong> Grands réseaux</li>
+                    <li><strong>Avantage :</strong> Performance optimale</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-number">10/11</div>
+    </div>
+
+    <!-- Slide 11 - Conclusion -->
+    <div class="slide slide-11">
+        <h1>🎯 Points clés à retenir</h1>
+        <div class="key-points">
+            <ul>
+                <li>✅ RIP : simple, limité à 15 sauts, adapté aux petits réseaux</li>
+                <li>✅ OSPF : performant, utilise Dijkstra, pour grands réseaux</li>
+                <li>✅ RIP compte les sauts, OSPF calcule le coût optimal</li>
+                <li>✅ OSPF converge plus vite et est plus efficace</li>
+                <li>✅ Le choix dépend de la taille et complexité du réseau</li>
+            </ul>
+        </div>
+        <p style="margin-top: 50px; font-size: 1.5em;">
+            📚 Prochaine étape : Exercices type BAC !
+        </p>
+        <div class="slide-number">11/11</div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <button class="nav-btn" onclick="previousSlide()">← Précédent</button>
+        <button class="nav-btn" onclick="nextSlide()">Suivant →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(n) {
+            slides[currentSlide].style.display = 'none';
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Navigation au clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Initialisation
+        slides.forEach((slide, index) => {
+            if (index !== 0) slide.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
