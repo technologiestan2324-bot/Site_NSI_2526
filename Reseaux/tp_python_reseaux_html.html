@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP Python - Réseaux NSI Terminale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .info-bar {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #333;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+
+        .conseil-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .conseil-box h3 {
+            color: #155724;
+            margin-top: 0;
+        }
+
+        .conseil-box ul {
+            margin-left: 20px;
+        }
+
+        .conseil-box li {
+            margin: 10px 0;
+            color: #155724;
+        }
+
+        .objectifs {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196f3;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .objectifs h3 {
+            color: #0d47a1;
+            margin-top: 0;
+        }
+
+        .objectifs ul {
+            margin-left: 20px;
+        }
+
+        .objectifs li {
+            margin: 10px 0;
+            color: #0d47a1;
+        }
+
+        .exercice {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #dee2e6;
+        }
+
+        .exercice-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: -30px -30px 25px -30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exercice-title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .exercice-points {
+            background: rgba(255,255,255,0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #764ba2;
+        }
+
+        .question-title {
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        pre code {
+            background: none;
+            color: #f8f8f2;
+            padding: 0;
+        }
+
+        .exemple {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .exemple strong {
+            color: #856404;
+        }
+
+        .indication {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .indication strong {
+            color: #0c5460;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .bareme-total {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 30px 0;
+        }
+
+        .annexe {
+            background: #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .annexe h3 {
+            color: #495057;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .algorithme {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .print-btn {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .info-bar {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TP PYTHON - RÉSEAUX</h1>
+            <div class="subtitle">NSI Terminale - Protocoles de Routage RIP et OSPF</div>
+        </div>
+
+        <div class="info-bar">
+            <div class="info-item">
+                <div class="info-label">Durée</div>
+                <div class="info-value">2 heures</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Barème</div>
+                <div class="info-value">30 points</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Matériel</div>
+                <div class="info-value">Ordinateurs</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Logiciel</div>
+                <div class="info-value">Thonny</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- CONSEILS -->
+            <div class="section">
+                <div class="conseil-box">
+                    <h3>CONSEILS ET MÉTHODOLOGIE</h3>
+                    
+                    <h4>Gestion du temps :</h4>
+                    <ul>
+                        <li><strong>Exercice 1 :</strong> 30 minutes (fonctions simples)</li>
+                        <li><strong>Exercice 2 :</strong> 40 minutes (classe de base)</li>
+                        <li><strong>Exercice 3 :</strong> 30 minutes (algorithme RIP)</li>
+                        <li><strong>Exercice 4 :</strong> 30 minutes (Dijkstra - le plus difficile)</li>
+                        <li><strong>Exercice 5 :</strong> 20 minutes (application)</li>
+                    </ul>
+
+                    <h4>Méthodologie :</h4>
+                    <ul>
+                        <li>Lire tout le TP avant de commencer</li>
+                        <li>Tester chaque fonction au fur et à mesure</li>
+                        <li>Utiliser des <code>print()</code> pour déboguer</li>
+                        <li>Commencer par les exercices les plus simples</li>
+                    </ul>
+
+                    <h4>Priorités si manque de temps :</h4>
+                    <ul>
+                        <li><strong>Essentiels :</strong> Exercices 1, 2, 3 (18 points)</li>
+                        <li><strong>Valorisant :</strong> Exercice 4 (le plus difficile mais important)</li>
+                        <li><strong>Application :</strong> Exercice 5 (demande surtout d'appliquer l'exercice 4)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- OBJECTIFS -->
+            <div class="section">
+                <div class="objectifs">
+                    <h3>OBJECTIFS DU TP</h3>
+                    <ul>
+                        <li>Manipuler des adresses IP et des masques de sous-réseau</li>
+                        <li>Simuler le protocole de routage RIP en Python</li>
+                        <li>Implémenter l'algorithme de Dijkstra pour OSPF</li>
+                        <li>Créer des classes pour modéliser un réseau</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- EXERCICE 1 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <div class="exercice-title">EXERCICE 1 : Manipulation d'adresses IP</div>
+                    <div class="exercice-points">30 min - 5 points</div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">1.1 Fonction de validation d'adresse IP (1,5 point)</div>
+                    <p>Écrire une fonction <code>valider_ip(ip)</code> qui prend en paramètre une chaîne de caractères représentant une adresse IP et renvoie <code>True</code> si l'adresse est valide, <code>False</code> sinon.</p>
+                    
+                    <p><strong>Critères de validation :</strong></p>
+                    <ul>
+                        <li>4 octets séparés par des points</li>
+                        <li>Chaque octet est un nombre entre 0 et 255</li>
+                    </ul>
+
+                    <div class="exemple">
+                        <strong>Exemples :</strong>
+<pre><code>valider_ip("192.168.1.1")  # True
+valider_ip("192.168.1.256")  # False
+valider_ip("192.168.1")  # False</code></pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">1.2 Fonction même réseau (1,5 point)</div>
+                    <p>Écrire une fonction <code>meme_reseau(ip1, ip2, masque)</code> qui détermine si deux adresses IP appartiennent au même réseau.</p>
+                    
+                    <div class="indication">
+                        <strong>Indications :</strong>
+                        <ul>
+                            <li>Pour un masque 255.255.255.0, comparer les 3 premiers octets</li>
+                            <li>Pour un masque 255.255.0.0, comparer les 2 premiers octets</li>
+                        </ul>
+                    </div>
+
+                    <div class="exemple">
+                        <strong>Exemples :</strong>
+<pre><code>meme_reseau("192.168.1.10", "192.168.1.20", "255.255.255.0")  # True
+meme_reseau("192.168.1.10", "192.168.2.10", "255.255.255.0")  # False</code></pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">1.3 Calcul du nombre d'hôtes (2 points)</div>
+                    <p>Écrire une fonction <code>nombre_hotes(masque)</code> qui calcule le nombre d'adresses IP utilisables dans un réseau.</p>
+                    
+                    <p><strong>Formule :</strong> 2<sup>n</sup> - 2, où n est le nombre de bits à 0 dans le masque</p>
+
+                    <div class="exemple">
+                        <strong>Exemples :</strong>
+<pre><code>nombre_hotes("255.255.255.0")  # 254 (2^8 - 2)
+nombre_hotes("255.255.0.0")  # 65534 (2^16 - 2)</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCICE 2 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <div class="exercice-title">EXERCICE 2 : Classe Routeur RIP</div>
+                    <div class="exercice-points">40 min - 7 points</div>
+                </div>
+
+                <p><strong>Contexte :</strong> Créer une classe <code>RouteurRIP</code> pour simuler le protocole RIP.</p>
+
+                <div class="question">
+                    <div class="question-title">2.1 Création de la classe (2 points)</div>
+                    <p>Créer une classe <code>RouteurRIP</code> avec :</p>
+                    <ul>
+                        <li><strong>Attribut <code>nom</code> :</strong> nom du routeur (str)</li>
+                        <li><strong>Attribut <code>voisins</code> :</strong> dictionnaire {nom_voisin: distance}</li>
+                        <li><strong>Attribut <code>table_routage</code> :</strong> dictionnaire {destination: (passerelle, distance)}</li>
+                    </ul>
+
+                    <div class="exemple">
+                        <strong>Constructeur :</strong>
+<pre><code>def __init__(self, nom):
+    self.nom = nom
+    self.voisins = {}
+    self.table_routage = {}</code></pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">2.2 Méthode ajouter_voisin (1 point)</div>
+                    <p>Ajouter une méthode <code>ajouter_voisin(self, nom_voisin, distance=1)</code> qui ajoute un voisin direct.</p>
+
+                    <div class="exemple">
+                        <strong>Exemple d'utilisation :</strong>
+<pre><code>r1 = RouteurRIP("R1")
+r1.ajouter_voisin("R2", 1)</code></pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">2.3 Méthode initialiser_table (1,5 point)</div>
+                    <p>Créer une méthode <code>initialiser_table(self)</code> qui initialise la table de routage avec :</p>
+                    <ul>
+                        <li>Le routeur lui-même : distance 0, passerelle "Direct"</li>
+                        <li>Ses voisins directs : distance donnée, passerelle = nom du voisin</li>
+                    </ul>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">2.4 Méthode afficher_table (1 point)</div>
+                    <p>Créer une méthode <code>afficher_table(self)</code> qui affiche la table sous ce format :</p>
+
+                    <div class="exemple">
+<pre><code>=== Table de routage de R1 ===
+Destination    Passerelle    Distance
+R1             Direct        0
+R2             R2            1
+R3             R2            2</code></pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">2.5 Test du routeur (1,5 point)</div>
+                    <p>Tester votre classe avec le réseau suivant :</p>
+<pre><code>R1 ----- R2 ----- R3</code></pre>
+                    <p>Créer les 3 routeurs, ajouter les voisins et afficher les tables.</p>
+                </div>
+            </div>
+
+            <!-- EXERCICE 3 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <div class="exercice-title">EXERCICE 3 : Protocole RIP - Mise à jour des tables</div>
+                    <div class="exercice-points">30 min - 6 points</div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">3.1 Méthode recevoir_mise_a_jour (4 points)</div>
+                    <p>Ajouter à la classe <code>RouteurRIP</code> une méthode <code>recevoir_mise_a_jour(self, voisin, table_voisin)</code> qui :</p>
+                    
+                    <ol>
+                        <li>Parcourt la table de routage du voisin</li>
+                        <li>Pour chaque destination :
+                            <ul>
+                                <li>Calcule la distance via ce voisin : <code>distance_via_voisin = distance_dans_table_voisin + 1</code></li>
+                                <li>Si la destination n'existe pas dans sa table OU si la distance via voisin est plus courte :
+                                    <ul>
+                                        <li>Met à jour la table avec cette nouvelle route</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Retourne <code>True</code> si la table a été modifiée, <code>False</code> sinon</li>
+                    </ol>
+
+                    <div class="algorithme">
+                        <strong>Algorithme RIP :</strong>
+<pre>Pour chaque (destination, (passerelle, distance)) dans table_voisin :
+    distance_via_voisin = distance + distance_vers_voisin
+    
+    Si destination pas dans ma_table OU distance_via_voisin < ma_distance :
+        ma_table[destination] = (voisin, distance_via_voisin)
+        modification = True</pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">3.2 Simulation d'échange RIP (2 points)</div>
+                    <p>Avec le réseau :</p>
+<pre><code>R1 ----- R2 ----- R3 ----- R4</code></pre>
+
+                    <ol>
+                        <li>Initialiser les 4 routeurs avec leurs voisins</li>
+                        <li>Simuler les échanges de tables entre voisins</li>
+                        <li>Afficher les tables finales</li>
+                    </ol>
+
+                    <div class="exemple">
+                        <strong>Code de test attendu :</strong>
+<pre><code># Création
+r1 = RouteurRIP("R1")
+r2 = RouteurRIP("R2")
+r3 = RouteurRIP("R3")
+r4 = RouteurRIP("R4")
+
+# Connexions
+r1.ajouter_voisin("R2")
+r2.ajouter_voisin("R1")
+r2.ajouter_voisin("R3")
+r3.ajouter_voisin("R2")
+r3.ajouter_voisin("R4")
+r4.ajouter_voisin("R3")
+
+# Initialisation
+for r in [r1, r2, r3, r4]:
+    r.initialiser_table()
+
+# Échanges (plusieurs tours)
+# À vous de coder !</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCICE 4 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <div class="exercice-title">EXERCICE 4 : Algorithme de Dijkstra pour OSPF</div>
+                    <div class="exercice-points">30 min - 7 points</div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">4.1 Fonction dijkstra (5 points)</div>
+                    <p>Implémenter l'algorithme de Dijkstra qui calcule le plus court chemin dans un graphe pondéré.</p>
+
+                    <div class="exemple">
+                        <strong>Signature :</strong>
+<pre><code>def dijkstra(graphe, depart, arrivee):
+    """
+    Paramètres :
+        graphe : dict {sommet: {voisin: cout}}
+        depart : sommet de départ
+        arrivee : sommet d'arrivée
+    
+    Retour :
+        (distance_totale, chemin) où chemin est une liste de sommets
+    """</code></pre>
+                    </div>
+
+                    <div class="exemple">
+                        <strong>Exemple de graphe :</strong>
+<pre><code>graphe = {
+    'A': {'B': 10, 'C': 5},
+    'B': {'A': 10, 'D': 20, 'E': 5},
+    'C': {'A': 5, 'D': 10},
+    'D': {'B': 20, 'C': 10},
+    'E': {'B': 5}
+}</code></pre>
+                    </div>
+
+                    <div class="algorithme">
+                        <strong>Algorithme de Dijkstra (rappel) :</strong>
+<pre>1. Initialiser distances[depart] = 0, toutes les autres à l'infini
+2. Initialiser predecesseurs vide
+3. Créer ensemble non_visites avec tous les sommets
+4. Tant que non_visites non vide :
+   a. Choisir u = sommet non visité avec distance minimale
+   b. Retirer u de non_visites
+   c. Si u == arrivee : arrêter
+   d. Pour chaque voisin v de u :
+      - nouvelle_distance = distances[u] + poids(u, v)
+      - Si nouvelle_distance < distances[v] :
+        * distances[v] = nouvelle_distance
+        * predecesseurs[v] = u
+5. Reconstruire le chemin via predecesseurs
+6. Retourner (distance, chemin)</pre>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">4.2 Test de l'algorithme (2 points)</div>
+                    <p>Tester avec le graphe de l'exercice 4.1 :</p>
+
+                    <div class="exemple">
+<pre><code>distance, chemin = dijkstra(graphe, 'A', 'E')
+print(f"Distance : {distance}")
+print(f"Chemin : {' -> '.join(chemin)}")</code></pre>
+                    </div>
+
+                    <div class="exemple">
+                        <strong>Résultat attendu :</strong>
+<pre><code>Distance : 15
+Chemin : A -> B -> E</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCICE 5 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <div class="exercice-title">EXERCICE 5 : Application - Réseau d'entreprise</div>
+                    <div class="exercice-points">20 min - 5 points</div>
+                </div>
+
+                <p><strong>Contexte :</strong> Une entreprise a le réseau suivant avec les coûts OSPF :</p>
+
+<pre><code>        [10]        [5]
+    A ------- B ------- D
+    |         |
+  [5]|      [20]|
+    |         |
+    C ------- E
+       [10]</code></pre>
+
+                <div class="question">
+                    <div class="question-title">5.1 Représentation du graphe (1 point)</div>
+                    <p>Représenter ce réseau sous forme d'un dictionnaire Python pour Dijkstra.</p>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">5.2 Chemin optimal A vers D (1,5 point)</div>
+                    <p>Calculer le chemin optimal et son coût de A vers D.</p>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">5.3 Tous les chemins depuis A (1,5 point)</div>
+                    <p>Calculer tous les chemins de A vers tous les autres routeurs.</p>
+                </div>
+
+                <div class="question">
+                    <div class="question-title">5.4 Panne de liaison (1 point)</div>
+                    <p>Si la liaison B-E tombe en panne, quel sera le nouveau chemin de A vers E ?</p>
+                </div>
+            </div>
+
+            <!-- BAREME -->
+            <div class="bareme-total">
+                BARÈME TOTAL : 30 POINTS
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exercice</th>
+                        <th>Contenu</th>
+                        <th>Durée</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Manipulation IP</td>
+                        <td>30 min</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Classe RouteurRIP</td>
+                        <td>40 min</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Mise à jour RIP</td>
+                        <td>30 min</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>
