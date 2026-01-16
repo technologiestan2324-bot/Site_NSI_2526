@@ -68,6 +68,31 @@
             color: #316889;
             font-weight: bold;
         }
+        
+        /* Sous-menu */
+        .submenu {
+            display: none;
+            margin-top: 8px;
+            margin-left: 15px;
+        }
+        
+        .submenu a {
+            background-color: #e9ecef;
+            border-left: 4px solid #316889;
+            font-size: 0.9em;
+        }
+        
+        /* Affichage au survol */
+        .has-submenu:hover .submenu {
+            display: block;
+        }
+        
+        /* Icône flèche */
+        .has-submenu > a::after {
+            content: " ▼";
+            float: right;
+            font-size: 0.8em;
+        }
 
         /* Contenu principal */
         .main-content {
@@ -191,7 +216,7 @@
         <div class="menu-item">
             <a href="cours_processus.html">Cours : Les Processus</a>
         </div>
-        <div class="menu-item">
+         <div class="submenu">
             <a href="Processus/MiniProjetProcessus.html">Le Mini-Projet Processus </a>
             <a href="Processus/TP_Processus_V_1.html">TP Version 1 </a>
             <a href="Processus/TP_Processus_V_2.html">TP Version 2 </a>
