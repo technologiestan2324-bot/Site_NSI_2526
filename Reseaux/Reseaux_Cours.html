@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocoles de Routage RIP et OSPF</title>
+    <title>Protocoles de Routage RIP et OSPF - NSI Terminale</title>
     <style>
         * {
             margin: 0;
@@ -76,7 +76,7 @@
 
         .slide-2 ul {
             list-style: none;
-            font-size: 1.8em;
+            font-size: 1.6em;
             line-height: 2.5;
         }
 
@@ -94,7 +94,7 @@
             background: rgba(255,255,255,0.3);
         }
 
-        /* Slide 3 - Introduction routage */
+        /* Slide 3 - Introduction */
         .slide-3 {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
@@ -110,9 +110,10 @@
             padding: 40px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
-            max-width: 900px;
-            font-size: 1.4em;
+            max-width: 1000px;
+            font-size: 1.3em;
             line-height: 1.8;
+            text-align: left;
         }
 
         .highlight {
@@ -122,7 +123,7 @@
             font-weight: bold;
         }
 
-        /* Slide 4 - RIP Présentation */
+        /* Slide 4 - RIP Introduction */
         .slide-4 {
             background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             color: #333;
@@ -136,22 +137,22 @@
 
         .card {
             background: white;
-            padding: 30px;
+            padding: 35px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 800px;
+            max-width: 950px;
             margin: 20px 0;
         }
 
         .card h3 {
             color: #d63031;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 1.8em;
         }
 
         .card ul {
             list-style: none;
-            font-size: 1.3em;
+            font-size: 1.25em;
             line-height: 2;
         }
 
@@ -162,7 +163,24 @@
             margin-right: 10px;
         }
 
-        /* Slide 5 - RIP Fonctionnement */
+        .card p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+
+        .formula {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            margin: 20px 0;
+            border-left: 5px solid #d63031;
+            text-align: center;
+        }
+
+        /* Slide 5 - RIP Réseau */
         .slide-5 {
             background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
             color: white;
@@ -173,50 +191,73 @@
             margin-bottom: 40px;
         }
 
-        .diagram {
-            background: rgba(255,255,255,0.1);
+        .network-visual {
+            background: rgba(255,255,255,0.95);
             padding: 40px;
             border-radius: 20px;
-            backdrop-filter: blur(10px);
-            max-width: 1000px;
+            max-width: 1100px;
+            color: #333;
         }
 
-        .router-box {
+        .network-diagram {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .router {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             padding: 20px 30px;
             border-radius: 15px;
             margin: 10px;
-            font-size: 1.3em;
+            font-size: 1.4em;
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            min-width: 80px;
         }
 
-        .arrow {
+        .connection {
             display: inline-block;
             font-size: 2em;
-            margin: 0 20px;
-            color: #ffd700;
+            margin: 0 15px;
+            color: #333;
         }
 
-        /* Slide 6 - Exemple RIP */
+        /* Slide 6 - Tables RIP */
         .slide-6 {
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
             color: #333;
         }
 
         .slide-6 h1 {
-            font-size: 3em;
+            font-size: 2.8em;
             margin-bottom: 30px;
             color: #0984e3;
         }
 
-        .example-table {
+        .tables-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        .table-wrapper {
             background: white;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin: 20px auto;
+        }
+
+        .table-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: center;
         }
 
         table {
@@ -225,15 +266,16 @@
         }
 
         th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            font-size: 1.4em;
+            background: #f0f4f8;
+            color: #333;
+            padding: 15px 10px;
+            font-size: 1.1em;
+            border-bottom: 2px solid #667eea;
         }
 
         td {
-            padding: 15px 20px;
-            font-size: 1.2em;
+            padding: 12px 10px;
+            font-size: 1.05em;
             border-bottom: 1px solid #ddd;
             text-align: center;
         }
@@ -242,68 +284,72 @@
             background: #f8f9fa;
         }
 
-        /* Slide 7 - OSPF Présentation */
+        /* Slide 7 - Application RIP */
         .slide-7 {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             color: #333;
         }
 
         .slide-7 h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #d63031;
+        }
+
+        .application-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 1000px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .question {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #0984e3;
+            font-size: 1.3em;
+        }
+
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #00b894;
+            font-size: 1.2em;
+        }
+
+        .step strong {
+            color: #d63031;
+        }
+
+        .result {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Slide 8 - OSPF Introduction */
+        .slide-8 {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #333;
+        }
+
+        .slide-8 h1 {
             font-size: 3.5em;
             margin-bottom: 30px;
             color: #e17055;
         }
 
-        /* Slide 8 - OSPF Fonctionnement */
-        .slide-8 {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            color: #333;
-        }
-
-        .slide-8 h1 {
-            font-size: 3em;
-            margin-bottom: 40px;
-            color: #d63031;
-        }
-
-        .steps {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 900px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid #e17055;
-        }
-
-        .step-number {
-            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-right: 20px;
-            flex-shrink: 0;
-        }
-
-        .step-text {
-            font-size: 1.3em;
-        }
-
-        /* Slide 9 - Exemple OSPF */
+        /* Slide 9 - OSPF Formule */
         .slide-9 {
             background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
             color: #333;
@@ -311,42 +357,107 @@
 
         .slide-9 h1 {
             font-size: 3em;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             color: #00b894;
         }
 
-        .network-diagram {
+        .formula-box {
             background: white;
             padding: 40px;
             border-radius: 20px;
+            max-width: 900px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 1000px;
         }
 
-        .network-node {
-            display: inline-block;
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            color: white;
-            padding: 15px 25px;
+        .formula-large {
+            background: #f0f4f8;
+            padding: 30px;
+            border-radius: 15px;
+            font-size: 2em;
+            text-align: center;
+            margin: 30px 0;
+            border: 3px solid #00b894;
+            font-family: 'Courier New', monospace;
+        }
+
+        .example {
+            margin: 25px 0;
+            padding: 20px;
+            background: #e8f5e9;
             border-radius: 10px;
-            margin: 10px;
             font-size: 1.2em;
-            font-weight: bold;
         }
 
-        .cost-label {
-            color: #d63031;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-
-        /* Slide 10 - Comparaison */
+        /* Slide 10 - Graphes OSPF */
         .slide-10 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .slide-10 h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+
+        .graphs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        .graph-box {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 20px;
+            color: #333;
+        }
+
+        .graph-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e17055;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Slide 11 - Tables OSPF */
+        .slide-11 {
             background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
             color: #333;
         }
 
-        .slide-10 h1 {
+        .slide-11 h1 {
+            font-size: 2.5em;
+            margin-bottom: 25px;
+        }
+
+        .tables-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1300px;
+        }
+
+        /* Slide 12 - Application OSPF */
+        .slide-12 {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        .slide-12 h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #e17055;
+        }
+
+        /* Slide 13 - Comparaison */
+        .slide-13 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .slide-13 h1 {
             font-size: 3em;
             margin-bottom: 40px;
         }
@@ -355,19 +466,20 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
-            max-width: 1100px;
+            max-width: 1200px;
         }
 
         .protocol-card {
             background: white;
-            padding: 30px;
+            padding: 35px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            color: #333;
         }
 
         .protocol-card h2 {
             font-size: 2.5em;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: center;
         }
 
@@ -381,22 +493,22 @@
 
         .protocol-card ul {
             list-style: none;
-            font-size: 1.2em;
+            font-size: 1.15em;
             line-height: 2;
         }
 
         .protocol-card li {
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #eee;
         }
 
-        /* Slide 11 - Conclusion */
-        .slide-11 {
+        /* Slide 14 - Conclusion */
+        .slide-14 {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        .slide-11 h1 {
+        .slide-14 h1 {
             font-size: 3.5em;
             margin-bottom: 40px;
         }
@@ -406,11 +518,11 @@
             padding: 40px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
-            max-width: 900px;
+            max-width: 1000px;
         }
 
         .key-points li {
-            font-size: 1.5em;
+            font-size: 1.4em;
             line-height: 2.2;
             margin: 15px 0;
         }
@@ -455,7 +567,17 @@
             }
         }
 
-        /* Responsive */
+        .image-placeholder {
+            border: 3px dashed #999;
+            padding: 60px;
+            border-radius: 15px;
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin: 20px 0;
+            background: rgba(255,255,255,0.1);
+        }
+
         @media (max-width: 768px) {
             .slide {
                 padding: 30px;
@@ -463,7 +585,7 @@
             .slide h1 {
                 font-size: 2em !important;
             }
-            .comparison {
+            .comparison, .tables-container, .graphs-container, .tables-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -472,246 +594,554 @@
 <body>
     <!-- Slide 1 - Titre -->
     <div class="slide slide-1">
-        <h1>🌐 Protocoles de Routage</h1>
+        <h1>🌐 Protocoles de Routage Dynamiques</h1>
         <h2>RIP et OSPF</h2>
         <p>Cours NSI Terminale - Préparation BAC 2025</p>
-        <div class="slide-number">1/11</div>
+        <div class="slide-number">1/14</div>
     </div>
 
     <!-- Slide 2 - Sommaire -->
     <div class="slide slide-2">
         <h1>📋 Sommaire</h1>
         <ul>
-            <li>1️⃣ Introduction au routage</li>
-            <li>2️⃣ Protocole RIP</li>
-            <li>3️⃣ Protocole OSPF</li>
-            <li>4️⃣ Comparaison RIP vs OSPF</li>
-            <li>5️⃣ Applications pratiques</li>
+            <li>1️⃣ Introduction au routage dynamique</li>
+            <li>2️⃣ Protocole RIP (Routing Information Protocol)</li>
+            <li>3️⃣ Application pratique RIP</li>
+            <li>4️⃣ Protocole OSPF (Open Shortest Path First)</li>
+            <li>5️⃣ Application pratique OSPF</li>
+            <li>6️⃣ Comparaison RIP vs OSPF</li>
         </ul>
-        <div class="slide-number">2/11</div>
+        <div class="slide-number">2/14</div>
     </div>
 
     <!-- Slide 3 - Introduction -->
     <div class="slide slide-3">
-        <h1>🔄 Qu'est-ce que le routage ?</h1>
+        <h1>🔄 Protocoles de Routage Dynamiques</h1>
         <div class="content-box">
-            <p><strong>Le routage</strong> est le processus permettant de déterminer le <span class="highlight">meilleur chemin</span> pour transmettre des données d'une source vers une destination à travers un réseau.</p>
+            <p><strong>Définition :</strong> Un protocole de routage définit le <span class="highlight">format des paquets réseau</span> et les <span class="highlight">procédures</span> qui permettent à deux routeurs d'échanger des informations sur les tables de routage.</p>
             <br>
-            <p>Les <span class="highlight">protocoles de routage</span> permettent aux routeurs d'échanger des informations sur la topologie du réseau et de construire leurs <span class="highlight">tables de routage</span>.</p>
+            <p>💡 <strong>Fonctionnement :</strong> Les routeurs émettent et reçoivent entre eux des informations sur les routes, ce qui leur permet de <span class="highlight">mettre à jour leur propre table de routage de façon dynamique</span>.</p>
             <br>
-            <p>💡 Deux grandes familles : <strong>vecteur de distance</strong> (RIP) et <strong>état de liens</strong> (OSPF)</p>
+            <p>📊 Une colonne supplémentaire <strong>"coût"</strong> apparaît dans les tables de routage et permet aux routeurs de calculer la <span class="highlight">route la plus optimale</span> en fonction de l'algorithme utilisé.</p>
         </div>
-        <div class="slide-number">3/11</div>
+        <div class="slide-number">3/14</div>
     </div>
 
-    <!-- Slide 4 - RIP Présentation -->
+    <!-- Slide 4 - RIP Introduction -->
     <div class="slide slide-4">
         <h1>📡 RIP - Routing Information Protocol</h1>
         <div class="card">
-            <h3>Caractéristiques principales</h3>
+            <h3>Principe de la métrique "coût"</h3>
+            <p>Un routeur utilisant le protocole RIP a pour notion de <strong>"coût"</strong> le <span class="highlight">nombre de routeurs à traverser</span> entre lui et la destination finale du paquet.</p>
+            
+            <div class="formula">
+                Coût = Nombre de sauts (hops)
+            </div>
+            
+            <h3 style="margin-top: 30px;">Caractéristiques clés</h3>
             <ul>
-                <li>Protocole à <strong>vecteur de distance</strong></li>
-                <li>Métrique : <strong>nombre de sauts</strong> (hops)</li>
-                <li>Maximum : <strong>15 sauts</strong> (16 = inaccessible)</li>
-                <li>Mise à jour toutes les <strong>30 secondes</strong></li>
+                <li>Coût entre <strong>0 et 15</strong> dans la table de routage</li>
+                <li>Au-delà de 15 : destination considérée comme <strong>trop lointaine</strong></li>
+                <li>Privilégie un chemin avec un <strong>nombre de sauts minimum</strong></li>
                 <li>Simple mais limité aux petits réseaux</li>
-                <li>Convergence lente</li>
             </ul>
         </div>
-        <div class="slide-number">4/11</div>
+        <div class="slide-number">4/14</div>
     </div>
 
-    <!-- Slide 5 - RIP Fonctionnement -->
+    <!-- Slide 5 - RIP Réseau -->
     <div class="slide slide-5">
-        <h1>⚙️ Fonctionnement de RIP</h1>
-        <div class="diagram">
-            <p style="font-size: 1.4em; margin-bottom: 30px;">Échange d'informations entre routeurs :</p>
-            <div style="text-align: center; margin: 30px 0;">
-                <div class="router-box">Routeur A</div>
-                <span class="arrow">→</span>
-                <div class="router-box">Routeur B</div>
-                <span class="arrow">→</span>
-                <div class="router-box">Routeur C</div>
+        <h1>🗺️ Réseau d'exemple - Protocole RIP</h1>
+        <div class="network-visual">
+            <div class="image-placeholder">
+                📷 Insérez ici votre schéma de réseau avec les routeurs A, B, C, D, E, F, G
+                <br><br>
+                Structure : Routeurs interconnectés formant un graphe
             </div>
-            <p style="font-size: 1.3em; margin-top: 40px;">
-                <strong>Principe :</strong> Chaque routeur partage sa table de routage complète avec ses voisins directs.
-            </p>
-            <p style="font-size: 1.2em; margin-top: 20px;">
-                Le routeur choisit toujours le chemin avec le <strong>nombre de sauts minimum</strong>.
-            </p>
+            <div class="network-diagram" style="margin-top: 30px;">
+                <p style="font-size: 1.3em; color: #333; margin-bottom: 20px;">
+                    <strong>Configuration du réseau :</strong>
+                </p>
+                <div style="text-align: left; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <p>• Routeurs : A, B, C, D, E, F, G</p>
+                    <p>• Connexions directes formant un maillage</p>
+                    <p>• Chaque liaison = 1 saut en RIP</p>
+                </div>
+            </div>
         </div>
-        <div class="slide-number">5/11</div>
+        <div class="slide-number">5/14</div>
     </div>
 
-    <!-- Slide 6 - Exemple RIP -->
+    <!-- Slide 6 - Tables RIP -->
     <div class="slide slide-6">
-        <h1>📊 Exemple : Table de routage RIP</h1>
-        <div class="example-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Réseau Destination</th>
-                        <th>Passerelle</th>
-                        <th>Distance (sauts)</th>
-                        <th>Interface</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>192.168.1.0/24</td>
-                        <td>Direct</td>
-                        <td>0</td>
-                        <td>eth0</td>
-                    </tr>
-                    <tr>
-                        <td>192.168.2.0/24</td>
-                        <td>192.168.1.2</td>
-                        <td>1</td>
-                        <td>eth0</td>
-                    </tr>
-                    <tr>
-                        <td>192.168.3.0/24</td>
-                        <td>192.168.1.2</td>
-                        <td>2</td>
-                        <td>eth0</td>
-                    </tr>
-                    <tr>
-                        <td>10.0.0.0/8</td>
-                        <td>192.168.1.5</td>
-                        <td>3</td>
-                        <td>eth0</td>
-                    </tr>
-                </tbody>
-            </table>
+        <h1>📊 Tables de Routage RIP - Routeurs D et C</h1>
+        <div class="tables-container">
+            <div class="table-wrapper">
+                <div class="table-title">Routeur D</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Passerelle</th>
+                            <th>Coût (sauts)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>C</strong></td>
+                            <td>Direct</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>G</strong></td>
+                            <td>Direct</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B</strong></td>
+                            <td>G</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F</strong></td>
+                            <td>G</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E</strong></td>
+                            <td>C</td>
+                            <td>1</td>
+                        </tr>
+                        <tr style="background: #fff3cd;">
+                            <td><strong>A</strong></td>
+                            <td>C</td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-wrapper">
+                <div class="table-title">Routeur C</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Passerelle</th>
+                            <th>Coût (sauts)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>D</strong></td>
+                            <td>Direct</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E</strong></td>
+                            <td>Direct</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F</strong></td>
+                            <td>Direct</td>
+                            <td>0</td>
+                        </tr>
+                        <tr style="background: #fff3cd;">
+                            <td><strong>A</strong></td>
+                            <td>F</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>G</strong></td>
+                            <td>D</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B</strong></td>
+                            <td>F</td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="slide-number">6/11</div>
+        <div class="slide-number">6/14</div>
     </div>
 
-    <!-- Slide 7 - OSPF Présentation -->
+    <!-- Slide 7 - Application RIP -->
     <div class="slide slide-7">
+        <h1>🎯 Application : Trajet D → A avec RIP</h1>
+        <div class="application-box">
+            <div class="question">
+                <strong>Question :</strong> Le routeur D doit envoyer un paquet au routeur A. Quel chemin va être choisi ?
+            </div>
+            
+            <div class="step">
+                <strong>Étape 1 :</strong> Dans la table du routeur D, on cherche "A" → passerelle = C<br>
+                Le paquet est envoyé au routeur <strong>C</strong>
+            </div>
+            
+            <div class="step">
+                <strong>Étape 2 :</strong> Dans la table du routeur C, pour atteindre A → passerelle = F<br>
+                Le paquet est envoyé au routeur <strong>F</strong>
+            </div>
+            
+            <div class="step">
+                <strong>Étape 3 :</strong> Le routeur F est directement relié au routeur A<br>
+                Le paquet est transmis au routeur <strong>A</strong>
+            </div>
+            
+            <div class="result">
+                📍 Trajet final : D → C → F → A
+            </div>
+            
+            <p style="margin-top: 25px; font-size: 1.15em; font-style: italic; color: #666;">
+                ⚠️ Remarque : Les routeurs ne regardent que leur propre table de routage. Il n'y a donc pas d'ambiguïté et il n'y a qu'un seul chemin possible.
+            </p>
+        </div>
+        <div class="slide-number">7/14</div>
+    </div>
+
+    <!-- Slide 8 - OSPF Introduction -->
+    <div class="slide slide-8">
         <h1>🚀 OSPF - Open Shortest Path First</h1>
         <div class="card">
-            <h3>Caractéristiques principales</h3>
+            <h3>Principe de la métrique "coût"</h3>
+            <p>Dans le protocole OSPF, la notion de <strong>"coût"</strong> est liée au <span class="highlight">débit des connexions</span> :</p>
             <ul>
-                <li>Protocole à <strong>état de liens</strong></li>
-                <li>Métrique : <strong>coût</strong> (basé sur la bande passante)</li>
-                <li>Pas de limite de sauts</li>
-                <li>Convergence <strong>rapide</strong></li>
-                <li>Utilise l'algorithme de <strong>Dijkstra</strong></li>
-                <li>Adapté aux grands réseaux</li>
-                <li>Hiérarchie par <strong>zones</strong> (areas)</li>
+                <li>Plus le débit est <strong>élevé</strong>, plus le coût est <strong>faible</strong></li>
+                <li>Privilégie un chemin avec une <strong>somme des coûts minimum</strong></li>
+                <li>Calcul basé sur la <strong>bande passante</strong> réelle</li>
+                <li>Optimise la vitesse de transmission</li>
             </ul>
         </div>
-        <div class="slide-number">7/11</div>
+        <div class="slide-number">8/14</div>
     </div>
 
-    <!-- Slide 8 - OSPF Fonctionnement -->
-    <div class="slide slide-8">
-        <h1>⚙️ Fonctionnement d'OSPF</h1>
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-text">Découverte des voisins via paquets <strong>Hello</strong></div>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-text">Échange d'informations d'<strong>état de liens</strong> (LSA - Link State Advertisement)</div>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-text">Construction d'une <strong>base de données topologique</strong> complète du réseau</div>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-text">Calcul du <strong>plus court chemin</strong> avec l'algorithme de Dijkstra</div>
-            </div>
-            <div class="step">
-                <div class="step-number">5</div>
-                <div class="step-text">Création de la <strong>table de routage</strong> optimale</div>
-            </div>
-        </div>
-        <div class="slide-number">8/11</div>
-    </div>
-
-    <!-- Slide 9 - Exemple OSPF -->
+    <!-- Slide 9 - OSPF Formule -->
     <div class="slide slide-9">
-        <h1>📊 Exemple : Calcul de coût OSPF</h1>
-        <div class="network-diagram">
-            <p style="font-size: 1.3em; margin-bottom: 30px; color: #333;">
-                <strong>Réseau exemple :</strong> Routeur A vers Routeur D
-            </p>
-            <div style="text-align: center; margin: 30px 0;">
-                <div>
-                    <span class="network-node">A</span>
-                    <span style="margin: 0 15px;">—<span class="cost-label">[10]</span>—</span>
-                    <span class="network-node">B</span>
-                    <span style="margin: 0 15px;">—<span class="cost-label">[10]</span>—</span>
-                    <span class="network-node">D</span>
-                </div>
-                <div style="margin-top: 40px;">
-                    <span class="network-node">A</span>
-                    <span style="margin: 0 15px;">—<span class="cost-label">[5]</span>—</span>
-                    <span class="network-node">C</span>
-                    <span style="margin: 0 15px;">—<span class="cost-label">[5]</span>—</span>
-                    <span class="network-node">D</span>
-                </div>
+        <h1>📐 Formule de Calcul du Coût OSPF</h1>
+        <div class="formula-box">
+            <div class="formula-large">
+                coût = 10⁸ / d
             </div>
-            <p style="font-size: 1.2em; margin-top: 40px; color: #333;">
-                <strong>Chemin 1 :</strong> A → B → D = Coût 20<br>
-                <strong>Chemin 2 :</strong> A → C → D = Coût 10 ✅ <span style="color: #00b894;">(Meilleur chemin)</span>
+            
+            <p style="font-size: 1.3em; margin: 25px 0;">
+                où <strong>d</strong> est la bande passante en <strong>b/s</strong> (bits par seconde) d'une liaison
             </p>
+            
+            <div class="example">
+                <strong>Exemples de calcul :</strong><br><br>
+                • Liaison à 100 Mb/s : coût = 10⁸ / (100 × 10⁶) = <strong>1</strong><br>
+                • Liaison à 10 Mb/s : coût = 10⁸ / (10 × 10⁶) = <strong>10</strong><br>
+                • Liaison à 4 Mb/s : coût = 10⁸ / (4 × 10⁶) = <strong>25</strong>
+            </div>
         </div>
-        <div class="slide-number">9/11</div>
+        <div class="slide-number">9/14</div>
     </div>
 
-    <!-- Slide 10 - Comparaison -->
+    <!-- Slide 10 - Graphes OSPF -->
     <div class="slide slide-10">
-        <h1>⚖️ RIP vs OSPF</h1>
+        <h1>🗺️ Réseau OSPF - Graphes avec Débits et Coûts</h1>
+        <div class="graphs-container">
+            <div class="graph-box">
+                <div class="graph-title">📡 Graphe avec les Débits</div>
+                <div class="image-placeholder" style="min-height: 300px;">
+                    📷 Insérez ici le graphe montrant les débits en Mb/s
+                    <br><br>
+                    (Même topologie que RIP mais avec les débits sur chaque liaison)
+                </div>
+            </div>
+            
+            <div class="graph-box">
+                <div class="graph-title">📊 Graphe avec les Coûts OSPF</div>
+                <div class="image-placeholder" style="min-height: 300px;">
+                    📷 Insérez ici le graphe montrant les coûts calculés
+                    <br><br>
+                    (Mêmes liaisons avec les coûts calculés selon la formule)
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">10/14</div>
+    </div>
+
+    <!-- Slide 11 - Tables OSPF -->
+    <div class="slide slide-11">
+        <h1>📊 Tables de Routage OSPF - Routeurs D, C, E, F</h1>
+        <div class="tables-grid">
+            <div class="table-wrapper">
+                <div class="table-title">Routeur D</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Passerelle</th>
+                            <th>Coût</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>C</strong></td>
+                            <td>Direct</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F</strong></td>
+                            <td>C</td>
+                            <td>11</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E</strong></td>
+                            <td>C</td>
+                            <td>13,5</td>
+                        </tr>
+                        <tr style="background: #fff3cd;">
+                            <td><strong>A</strong></td>
+                            <td>C</td>
+                            <td>15,5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>G</strong></td>
+                            <td>C</td>
+                            <td>21</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B</strong></td>
+                            <td>C</td>
+                            <td>22</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-wrapper">
+                <div class="table-title">Routeur C</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Passerelle</th>
+                            <th>Coût</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>F</strong></td>
+                            <td>Direct</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E</strong></td>
+                            <td>F</td>
+                            <td>3,5</td>
+                        </tr>
+                        <tr style="background: #fff3cd;">
+                            <td><strong>A</strong></td>
+                            <td>F</td>
+                            <td>5,5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>D</strong></td>
+                            <td>Direct</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td><strong>G</strong></td>
+                            <td>F</td>
+                            <td>11</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B</strong></td>
+                            <td>F</td>
+                            <td>12</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-wrapper">
+                <div class="table-title">Routeur E</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Passerelle</th>
+                            <th>Coût</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #fff3cd;">
+                            <td><strong>A</strong></td>
+                            <td>Direct</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F</strong></td>
+                            <td>Direct</td>
+                            <td>2,5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>C</strong></td>
+                            <td>F</td>
+                            <td>3,5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>G</strong></td>
+                            <td>F</td>
+                            <td>12,5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B</strong></td>
+                            <td>F</td>
+                            <td>13,5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>D</strong></td>
+                            <td>F</td>
+                            <td>13,5</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-wrapper">
+                <div class="table-title">Routeur F</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Passerelle</th>
+                            <th>Coût</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>C</strong></td>
+                            <td>Direct</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E</strong></td>
+                            <td>Direct</td>
+                            <td>2,5</td>
+                        </tr>
+                        <tr style="background: #fff3cd;">
+                            <td><strong>A</strong></td>
+                            <td>E</td>
+                            <td>4,5</td>
+                        </tr>
+                        <tr>
+                            <td><strong>G</strong></td>
+                            <td>Direct</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td><strong>D</strong></td>
+                            <td>C</td>
+                            <td>11</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B</strong></td>
+                            <td>G</td>
+                            <td>11</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-number">11/14</div>
+    </div>
+
+    <!-- Slide 12 - Application OSPF -->
+    <div class="slide slide-12">
+        <h1>🎯 Application : Trajet D → A avec OSPF</h1>
+        <div class="application-box">
+            <div class="question">
+                <strong>Question :</strong> Le routeur D doit envoyer un paquet au routeur A. Quel chemin va être choisi ?
+            </div>
+            
+            <div class="step">
+                <strong>Étape 1 :</strong> Table du routeur D → pour A, passerelle = C (coût 15,5)<br>
+                Le paquet est envoyé au routeur <strong>C</strong>
+            </div>
+            
+            <div class="step">
+                <strong>Étape 2 :</strong> Table du routeur C → pour A, passerelle = F (coût 5,5)<br>
+                Le paquet est envoyé au routeur <strong>F</strong>
+            </div>
+            
+            <div class="step">
+                <strong>Étape 3 :</strong> Table du routeur F → pour A, passerelle = E (coût 4,5)<br>
+                Le paquet est envoyé au routeur <strong>E</strong>
+            </div>
+            
+            <div class="step">
+                <strong>Étape 4 :</strong> Table du routeur E → A est en connexion directe (coût 2)<br>
+                Le paquet est transmis au routeur <strong>A</strong>
+            </div>
+            
+            <div class="result">
+                📍 Trajet final : D → C → F → E → A
+            </div>
+            
+            <p style="margin-top: 25px; font-size: 1.15em; background: #e8f5e9; padding: 20px; border-radius: 10px;">
+                <strong>⚡ Remarque importante :</strong> On n'a pas optimisé le <em>nombre de sauts</em> (4 sauts au lieu de 3 avec RIP).<br>
+                <strong>Mais</strong> le trajet est <span style="color: #00b894; font-weight: bold;">plus rapide</span> grâce aux liaisons à haut débit !
+            </p>
+        </div>
+        <div class="slide-number">12/14</div>
+    </div>
+
+    <!-- Slide 13 - Comparaison -->
+    <div class="slide slide-13">
+        <h1>⚖️ Comparaison RIP vs OSPF</h1>
         <div class="comparison">
             <div class="protocol-card rip">
                 <h2>RIP</h2>
                 <ul>
-                    <li><strong>Type :</strong> Vecteur distance</li>
-                    <li><strong>Métrique :</strong> Sauts (max 15)</li>
-                    <li><strong>Convergence :</strong> Lente</li>
-                    <li><strong>Complexité :</strong> Simple</li>
-                    <li><strong>Bande passante :</strong> Élevée</li>
-                    <li><strong>Usage :</strong> Petits réseaux</li>
-                    <li><strong>Avantage :</strong> Facile à configurer</li>
+                    <li><strong>Métrique :</strong> Nombre de sauts</li>
+                    <li><strong>Maximum :</strong> 15 sauts</li>
+                    <li><strong>Critère :</strong> Chemin le plus court</li>
+                    <li><strong>Avantage :</strong> Simple à configurer</li>
+                    <li><strong>Inconvénient :</strong> Ne considère pas la bande passante</li>
+                    <li><strong>Usage :</strong> Petits réseaux simples</li>
+                    <li><strong>Exemple D→A :</strong> 3 sauts (D→C→F→A)</li>
                 </ul>
             </div>
             <div class="protocol-card ospf">
                 <h2>OSPF</h2>
                 <ul>
-                    <li><strong>Type :</strong> État de liens</li>
-                    <li><strong>Métrique :</strong> Coût (bande passante)</li>
-                    <li><strong>Convergence :</strong> Rapide</li>
-                    <li><strong>Complexité :</strong> Avancée</li>
-                    <li><strong>Bande passante :</strong> Optimisée</li>
-                    <li><strong>Usage :</strong> Grands réseaux</li>
-                    <li><strong>Avantage :</strong> Performance optimale</li>
+                    <li><strong>Métrique :</strong> Coût basé sur le débit</li>
+                    <li><strong>Maximum :</strong> Pas de limite</li>
+                    <li><strong>Critère :</strong> Somme des coûts minimum</li>
+                    <li><strong>Avantage :</strong> Optimise la vitesse réelle</li>
+                    <li><strong>Inconvénient :</strong> Plus complexe</li>
+                    <li><strong>Usage :</strong> Grands réseaux, performances critiques</li>
+                    <li><strong>Exemple D→A :</strong> 4 sauts mais plus rapide !</li>
                 </ul>
             </div>
         </div>
-        <div class="slide-number">10/11</div>
+        <div class="slide-number">13/14</div>
     </div>
 
-    <!-- Slide 11 - Conclusion -->
-    <div class="slide slide-11">
-        <h1>🎯 Points clés à retenir</h1>
+    <!-- Slide 14 - Conclusion -->
+    <div class="slide slide-14">
+        <h1>🎯 Points Clés à Retenir</h1>
         <div class="key-points">
             <ul>
-                <li>✅ RIP : simple, limité à 15 sauts, adapté aux petits réseaux</li>
-                <li>✅ OSPF : performant, utilise Dijkstra, pour grands réseaux</li>
-                <li>✅ RIP compte les sauts, OSPF calcule le coût optimal</li>
-                <li>✅ OSPF converge plus vite et est plus efficace</li>
-                <li>✅ Le choix dépend de la taille et complexité du réseau</li>
+                <li>✅ <strong>RIP :</strong> Métrique = nombre de sauts (max 15), chemin le plus court</li>
+                <li>✅ <strong>OSPF :</strong> Métrique = coût (10⁸/débit), chemin le plus rapide</li>
+                <li>✅ Les routeurs ne regardent que leur <strong>propre table</strong> de routage</li>
+                <li>✅ RIP privilégie la <strong>simplicité</strong>, OSPF privilégie la <strong>performance</strong></li>
+                <li>✅ Un même réseau peut donner des chemins <strong>différents</strong> selon le protocole</li>
+                <li>✅ OSPF peut faire plus de sauts mais être <strong>plus rapide</strong> au final</li>
             </ul>
         </div>
         <p style="margin-top: 50px; font-size: 1.5em;">
-            📚 Prochaine étape : Exercices type BAC !
+            📚 Prochaine étape : Exercices pratiques !
         </p>
-        <div class="slide-number">11/11</div>
+        <div class="slide-number">14/14</div>
     </div>
 
     <!-- Navigation -->
@@ -739,16 +1169,16 @@
             showSlide(currentSlide - 1);
         }
 
-        // Navigation au clavier
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
                 previousSlide();
             }
         });
 
-        // Initialisation
         slides.forEach((slide, index) => {
             if (index !== 0) slide.style.display = 'none';
         });
