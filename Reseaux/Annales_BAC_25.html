@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annales BAC 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .info-bar {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #667eea;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #F7F7D0;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .pdf-controls {
+            padding: 30px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background: #F2CE79;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .pdf-container {
+            width: 100%;
+            height: 800px;
+            border: none;
+        }
+
+        .pdf-embed {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .instructions {
+            padding: 30px 40px;
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            margin: 0;
+            text-align: center;
+        }
+
+        .instructions p {
+            color: #856404;
+            font-size: 1.1em;
+        }
+
+        .instructions strong {
+            color: #664d03;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .pdf-container {
+                height: 600px;
+            }
+            .pdf-controls {
+                flex-direction: column;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Cours - Protocoles de Routage</h1>
+            <div class="subtitle">NSI Terminale - Annales BAC 2025 RIP et OSPF</div>
+        </div>
+
+        <div class="info-bar">
+            <div class="info-item">
+                <span class="info-label">Document :</span>
+                <span class="info-value">Cours Complet PDF</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Matière :</span>
+                <span class="info-value">NSI Terminale</span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <object data="PO_BAC_2025.pdf" type="application/pdf" width="100%" height="500px">
+            Votre navigateur ne supporte pas l'affichage de PDF.
+              <a href="PO_BAC_2025.pdf" target="_blank">Ouvrir le PDF</a>.
+           
+            </object>
+
+            
+            <p><strong>Instructions :</strong> AMSE-3-FeuilleExercices.pdf</p>
+        </div>
+
+        <div class="pdf-controls">
+            <button class="btn" onclick="downloadPDF()">
+                <span>⬇</span> Télécharger le PDF
+            </button>
+            <button class="btn" onclick="window.print()">
+                <span>🖨</span> Imprimer
+            </button>
+        </div>
+
+        <div class="pdf-container">
+            <!-- MODIFIER L'URL DU PDF ICI -->
+            <iframe 
+                class="pdf-embed" 
+                src="VOTRE_URL_PDF_ICI"
+                type="application/pdf">
+            </iframe>
+        </div>
+    </div>
+
+    <script>
+        // URL du PDF - MODIFIER ICI
+        const pdfUrl = "VOTRE_URL_PDF_ICI";
+
+        function downloadPDF() {
+            const link = document.createElement('a');
+            link.href = pdfUrl;
+            link.download = 'Cours_Routage_NSI.pdf';
+            link.target = '_blank';
+            link.click();
+        }
+
+    </script>
+</body>
+</html>
