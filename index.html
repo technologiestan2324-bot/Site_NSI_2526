@@ -89,21 +89,49 @@
             background: #a29bfe;
             border-left-color: #6c5ce7;
         }        
-        /* Sous-menu */
-        .submenu {
-            display: none;
-            margin-top: 8px;
-            margin-left: 15px;
-        }
-        
-        
-        .submenu-item:nth-child(1) > a {
+          /* Le sous-menu du 1er item (rouge) */
+        .menu-item:nth-child(1) .submenu a {
             background: #ff6b6b;
             border-left-color: #ff5252;
         }
-        /* Affichage au survol */
-        .has-submenu:hover .submenu {
-            display: block;
+
+        .menu-item:nth-child(1) .submenu a:hover {
+            background: #ff5252;
+            padding-left: 25px;
+        }
+
+        /* Le sous-menu du 2ème item (turquoise) */
+        .menu-item:nth-child(2) .submenu a {
+            background: #4ecdc4;
+            border-left-color: #45b7af;
+        }
+
+        .menu-item:nth-child(2) .submenu a:hover {
+            background: #45b7af;
+            padding-left: 25px;
+        }
+
+        /* Le sous-menu du 3ème item (jaune) */
+        .menu-item:nth-child(3) .submenu a {
+            background: #ffd93d;
+            color: #333;
+            border-left-color: #ffc107;
+        }
+
+        .menu-item:nth-child(3) .submenu a:hover {
+            background: #ffc107;
+            padding-left: 25px;
+        }
+
+        /* Le sous-menu du 4ème item (violet) */
+        .menu-item:nth-child(4) .submenu a {
+            background: #a29bfe;
+            border-left-color: #6c5ce7;
+        }
+
+        .menu-item:nth-child(4) .submenu a:hover {
+            background: #6c5ce7;
+            padding-left: 25px;
         }
         
         /* Icône flèche */
