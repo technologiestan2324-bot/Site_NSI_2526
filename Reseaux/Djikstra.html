@@ -731,4 +731,408 @@
                     <text x="100" y="310" class="node-label">C</text>
                     
                     <circle cx="300" cy="300" r="30" class="node visited"/>
-                    <text x="300" y="310" class="node
+                    <text x="300" y="310" class="node-label">E</text>
+                </svg>
+            </div>
+            
+            <table>
+                <tr>
+                    <th>Sommet</th>
+                    <th>Distance</th>
+                    <th>Prédécesseur</th>
+                    <th>Visité</th>
+                </tr>
+                <tr class="visited-cell">
+                    <td>A</td>
+                    <td>0</td>
+                    <td>-</td>
+                    <td>✅</td>
+                </tr>
+                <tr class="visited-cell">
+                    <td>B</td>
+                    <td>4</td>
+                    <td>A</td>
+                    <td>✅</td>
+                </tr>
+                <tr class="visited-cell">
+                    <td>C</td>
+                    <td>2</td>
+                    <td>A</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td>5</td>
+                    <td>E</td>
+                    <td>❌</td>
+                </tr>
+                <tr class="visited-cell">
+                    <td>E</td>
+                    <td>3</td>
+                    <td>C</td>
+                    <td>✅</td>
+                </tr>
+            </table>
+            
+            <div class="algo-step">
+                <p><strong>On choisit B (distance 4)</strong></p>
+                <p><strong>Voisin de B :</strong> D (distance 3)</p>
+                <p>• Distance vers D via B : 4 + 3 = 7 &gt; 5 (on ne change pas)</p>
+                <p>➡️ Le chemin par E reste meilleur pour atteindre D</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Étape 5 Finale -->
+        <div class="slide">
+            <h2>🏁 Étape 5 - Traitement du sommet D (Final)</h2>
+            
+            <div class="graph-container">
+                <svg width="600" height="400">
+                    <line x1="100" y1="100" x2="300" y2="100" class="edge"/>
+                    <text x="200" y="90" class="edge-label">4</text>
+                    
+                    <line x1="100" y1="100" x2="100" y2="300" class="edge path"/>
+                    <text x="80" y="200" class="edge-label">2</text>
+                    
+                    <line x1="300" y1="100" x2="500" y2="100" class="edge"/>
+                    <text x="400" y="90" class="edge-label">3</text>
+                    
+                    <line x1="300" y1="100" x2="300" y2="300" class="edge"/>
+                    <text x="320" y="200" class="edge-label">5</text>
+                    
+                    <line x1="100" y1="300" x2="300" y2="300" class="edge path"/>
+                    <text x="200" y="320" class="edge-label">1</text>
+                    
+                    <line x1="300" y1="300" x2="500" y2="100" class="edge path"/>
+                    <text x="420" y="220" class="edge-label">2</text>
+                    
+                    <circle cx="100" cy="100" r="30" class="node visited"/>
+                    <text x="100" y="110" class="node-label">A</text>
+                    <text x="100" y="65" class="distance-label">0</text>
+                    
+                    <circle cx="300" cy="100" r="30" class="node visited"/>
+                    <text x="300" y="110" class="node-label">B</text>
+                    <text x="300" y="65" class="distance-label">4</text>
+                    
+                    <circle cx="500" cy="100" r="30" class="node visited"/>
+                    <text x="500" y="110" class="node-label">D</text>
+                    <text x="500" y="65" class="distance-label">5</text>
+                    
+                    <circle cx="100" cy="300" r="30" class="node visited"/>
+                    <text x="100" y="310" class="node-label">C</text>
+                    <text x="100" y="345" class="distance-label">2</text>
+                    
+                    <circle cx="300" cy="300" r="30" class="node visited"/>
+                    <text x="300" y="310" class="node-label">E</text>
+                    <text x="300" y="345" class="distance-label">3</text>
+                </svg>
+            </div>
+            
+            <table>
+                <tr>
+                    <th>Sommet</th>
+                    <th>Distance</th>
+                    <th>Prédécesseur</th>
+                    <th>Visité</th>
+                </tr>
+                <tr class="visited-cell">
+                    <td>A</td>
+                    <td>0</td>
+                    <td>-</td>
+                    <td>✅</td>
+                </tr>
+                <tr class="visited-cell">
+                    <td>B</td>
+                    <td>4</td>
+                    <td>A</td>
+                    <td>✅</td>
+                </tr>
+                <tr class="visited-cell">
+                    <td>C</td>
+                    <td>2</td>
+                    <td>A</td>
+                    <td>✅</td>
+                </tr>
+                <tr class="visited-cell">
+                    <td>D</td>
+                    <td>5</td>
+                    <td>E</td>
+                    <td>✅</td>
+                </tr>
+                <tr class="visited-cell">
+                    <td>E</td>
+                    <td>3</td>
+                    <td>C</td>
+                    <td>✅</td>
+                </tr>
+            </table>
+            
+            <div class="algo-step">
+                <p><strong>✅ Tous les sommets sont visités !</strong></p>
+                <p>Le plus court chemin de A vers D est : <strong style="color: #ff6b6b;">A → C → E → D</strong></p>
+                <p>Distance totale : <strong>5</strong></p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Résultats -->
+        <div class="slide">
+            <h2>📊 Résultats finaux</h2>
+            
+            <h3>Plus courts chemins depuis A :</h3>
+            
+            <table>
+                <tr>
+                    <th>Destination</th>
+                    <th>Distance</th>
+                    <th>Chemin</th>
+                </tr>
+                <tr>
+                    <td>A</td>
+                    <td>0</td>
+                    <td>A</td>
+                </tr>
+                <tr>
+                    <td>B</td>
+                    <td>4</td>
+                    <td>A → B</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>2</td>
+                    <td>A → C</td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td>5</td>
+                    <td>A → C → E → D</td>
+                </tr>
+                <tr>
+                    <td>E</td>
+                    <td>3</td>
+                    <td>A → C → E</td>
+                </tr>
+            </table>
+            
+            <div class="algo-step" style="margin-top: 40px;">
+                <h3>📝 Points importants :</h3>
+                <ul>
+                    <li>L'algorithme explore toujours le sommet non visité avec la plus petite distance</li>
+                    <li>Une fois un sommet visité, sa distance finale est garantie optimale</li>
+                    <li>On utilise le tableau des prédécesseurs pour reconstruire les chemins</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Implémentation Python -->
+        <div class="slide">
+            <h2>💻 Implémentation en Python</h2>
+            
+            <div class="code-block">
+<span class="keyword">def</span> dijkstra(graphe, depart):
+    <span class="comment"># Initialisation</span>
+    distances = {sommet: <span class="keyword">float</span>(<span class="string">'inf'</span>) <span class="keyword">for</span> sommet <span class="keyword">in</span> graphe}
+    distances[depart] = 0
+    predecesseurs = {sommet: <span class="keyword">None</span> <span class="keyword">for</span> sommet <span class="keyword">in</span> graphe}
+    non_visites = <span class="keyword">set</span>(graphe.keys())
+    
+    <span class="keyword">while</span> non_visites:
+        <span class="comment"># Sélectionner le sommet non visité avec la plus petite distance</span>
+        courant = <span class="keyword">min</span>(non_visites, key=<span class="keyword">lambda</span> s: distances[s])
+        non_visites.remove(courant)
+        
+        <span class="comment"># Explorer les voisins</span>
+        <span class="keyword">for</span> voisin, poids <span class="keyword">in</span> graphe[courant].items():
+            nouvelle_distance = distances[courant] + poids
+            
+            <span class="comment"># Mise à jour si on trouve un chemin plus court</span>
+            <span class="keyword">if</span> nouvelle_distance &lt; distances[voisin]:
+                distances[voisin] = nouvelle_distance
+                predecesseurs[voisin] = courant
+    
+    <span class="keyword">return</span> distances, predecesseurs
+            </div>
+            
+            <div class="algo-step">
+                <p><strong>Structure du graphe en Python :</strong></p>
+                <div class="code-block" style="margin-top: 10px;">
+graphe = {
+    <span class="string">'A'</span>: {<span class="string">'B'</span>: 4, <span class="string">'C'</span>: 2},
+    <span class="string">'B'</span>: {<span class="string">'A'</span>: 4, <span class="string">'D'</span>: 3, <span class="string">'E'</span>: 5},
+    <span class="string">'C'</span>: {<span class="string">'A'</span>: 2, <span class="string">'E'</span>: 1},
+    <span class="string">'D'</span>: {<span class="string">'B'</span>: 3, <span class="string">'E'</span>: 2},
+    <span class="string">'E'</span>: {<span class="string">'C'</span>: 1, <span class="string">'B'</span>: 5, <span class="string">'D'</span>: 2}
+}
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Complexité -->
+        <div class="slide">
+            <h2>⚡ Complexité de l'algorithme</h2>
+            
+            <h3>Analyse de la complexité :</h3>
+            
+            <div class="algo-step">
+                <h3>Version naïve (avec recherche linéaire) :</h3>
+                <ul>
+                    <li>On visite chaque sommet une fois : <strong>n</strong> itérations</li>
+                    <li>À chaque itération, on cherche le minimum parmi les non visités : <strong>O(n)</strong></li>
+                    <li>On examine les arêtes de chaque sommet : au total <strong>O(m)</strong> arêtes</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Complexité totale : O(n² + m) = O(n²)</strong> pour un graphe dense</p>
+            </div>
+            
+            <div class="algo-step">
+                <h3>Version optimisée (avec file de priorité) :</h3>
+                <ul>
+                    <li>Utilisation d'un tas (heap) pour trouver le minimum en O(log n)</li>
+                    <li>Insertion/mise à jour dans le tas : O(log n)</li>
+                    <li>Au total : m insertions dans le tas</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Complexité totale : O((n + m) log n)</strong></p>
+            </div>
+            
+            <div class="algo-step" style="background: #fff3cd; border-left-color: #ffc107;">
+                <p><strong>⚠️ Limitation importante :</strong></p>
+                <p>L'algorithme de Dijkstra ne fonctionne PAS avec des poids négatifs !</p>
+                <p>Pour les graphes avec poids négatifs, il faut utiliser l'algorithme de Bellman-Ford.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Exercices -->
+        <div class="slide">
+            <h2>📝 Exercices d'application</h2>
+            
+            <h3>Exercice 1 : Application de l'algorithme</h3>
+            <p>Appliquer l'algorithme de Dijkstra sur le graphe suivant depuis le sommet A :</p>
+            
+            <div class="graph-container">
+                <svg width="500" height="300">
+                    <line x1="100" y1="100" x2="250" y2="100" class="edge"/>
+                    <text x="175" y="90" class="edge-label">7</text>
+                    
+                    <line x1="100" y1="100" x2="250" y2="200" class="edge"/>
+                    <text x="150" y="170" class="edge-label">9</text>
+                    
+                    <line x1="250" y1="100" x2="400" y2="100" class="edge"/>
+                    <text x="325" y="90" class="edge-label">10</text>
+                    
+                    <line x1="250" y1="100" x2="250" y2="200" class="edge"/>
+                    <text x="270" y="150" class="edge-label">15</text>
+                    
+                    <line x1="250" y1="200" x2="400" y2="100" class="edge"/>
+                    <text x="340" y="170" class="edge-label">11</text>
+                    
+                    <circle cx="100" cy="100" r="25" class="node"/>
+                    <text x="100" y="105" class="node-label">A</text>
+                    
+                    <circle cx="250" cy="100" r="25" class="node"/>
+                    <text x="250" y="105" class="node-label">B</text>
+                    
+                    <circle cx="400" cy="100" r="25" class="node"/>
+                    <text x="400" y="105" class="node-label">D</text>
+                    
+                    <circle cx="250" cy="200" r="25" class="node"/>
+                    <text x="250" y="205" class="node-label">C</text>
+                </svg>
+            </div>
+            
+            <h3 style="margin-top: 40px;">Exercice 2 : Questions théoriques</h3>
+            <ul>
+                <li>Pourquoi Dijkstra ne fonctionne-t-il pas avec des poids négatifs ?</li>
+                <li>Quelle structure de données permet d'optimiser l'algorithme ?</li>
+                <li>Comment reconstruire le chemin complet à partir du tableau des prédécesseurs ?</li>
+            </ul>
+        </div>
+
+        <!-- Slide 15: Conclusion -->
+        <div class="slide">
+            <h2>🎓 Conclusion</h2>
+            
+            <h3>Ce qu'il faut retenir :</h3>
+            
+            <div class="algo-step">
+                <h3>✅ Principe général</h3>
+                <ul>
+                    <li>Explorer les sommets par ordre croissant de distance</li>
+                    <li>Mettre à jour les distances des voisins à chaque étape</li>
+                    <li>Un sommet visité a sa distance finale garantie optimale</li>
+                </ul>
+            </div>
+            
+            <div class="algo-step">
+                <h3>✅ Points clés</h3>
+                <ul>
+                    <li>Algorithme glouton (choix local optimal)</li>
+                    <li>Fonctionne uniquement avec des poids positifs</li>
+                    <li>Complexité O(n²) version naïve, O((n+m) log n) optimisée</li>
+                </ul>
+            </div>
+            
+            <div class="algo-step">
+                <h3>✅ Applications</h3>
+                <ul>
+                    <li>GPS et systèmes de navigation</li>
+                    <li>Routage dans les réseaux informatiques</li>
+                    <li>Planification de trajets</li>
+                    <li>Intelligence artificielle (pathfinding)</li>
+                </ul>
+            </div>
+            
+            <p style="text-align: center; font-size: 1.5em; margin-top: 50px; color: #667eea;">
+                <strong>Merci pour votre attention ! 👏</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- Contrôles de navigation -->
+    <div class="controls">
+        <button class="btn-prev" onclick="previousSlide()">◀ Précédent</button>
+        <span class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">15</span></span>
+        <button class="btn-next" onclick="nextSlide()">Suivant ▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = n;
+            if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+            if (currentSlide < 0) currentSlide = 0;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            // Gérer l'état des boutons
+            document.querySelector('.btn-prev').disabled = currentSlide === 0;
+            document.querySelector('.btn-next').disabled = currentSlide === totalSlides - 1;
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+        
+        function previousSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        // Navigation au clavier
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+        
+        // Initialiser
+        showSlide(0);
+    </script>
+</body>
+</html
