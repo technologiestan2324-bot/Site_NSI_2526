@@ -1,73 +1,74 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NSI Terminale - Accueil</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSI Terminale - Accueil</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-        }
+body {
+font-family: 'Courier New', Courier, monospace;
+background-color: #ffffff;
+min-height: 100vh;
+display: flex;
+}
 
-        /* Menu vertical gauche */
-        .sidebar {
-            width: 280px;
-            background-color: #f8f9fa;
-            padding: 30px 20px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            border-right: 3px solid #22817E;
-        }
+/* Menu vertical gauche */
+.sidebar {
+width: 280px;
+background-color: #f8f9fa;
+padding: 30px 20px;
+box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+position: fixed;
+height: 100vh;
+overflow-y: auto;
+border-right: 3px solid #22817E;
+}
 
-        .sidebar h2 {
-            color: #316889;
-            font-size: 1.3em;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #22817E;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+.sidebar h2 {
+color: #316889;
+font-size: 1.3em;
+margin-bottom: 25px;
+padding-bottom: 15px;
+border-bottom: 3px solid #22817E;
+text-transform: uppercase;
+letter-spacing: 2px;
+}
 
-        .menu-item {
-            margin-bottom: 15px;
-        }
+.menu-item {
+margin-bottom: 15px;
+}
 
-        .menu-item a {
-            display: block;
-            color: #333;
-            text-decoration: none;
-            padding: 12px 15px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border-left: 4px solid #22817E;
-            font-size: 0.95em;
-        }
+.menu-item a {
+display: block;
+color: #333;
+text-decoration: none;
+padding: 12px 15px;
+background-color: #ffffff;
+border-radius: 8px;
+transition: all 0.3s ease;
+border-left: 4px solid #22817E;
+font-size: 0.95em;
+}
 
-        .menu-item a:hover {
-            background-color: #22817E;
-            color: white;
-            transform: translateX(5px);
-            box-shadow: 0 4px 8px rgba(34, 129, 126, 0.2);
-        }
+.menu-item a:hover {
+background-color: #22817E;
+color: white;
+transform: translateX(5px);
+box-shadow: 0 4px 8px rgba(34, 129, 126, 0.2);
+}
 
-        .menu-item a::before {
-            content: "▸ ";
-            color: #316889;
-            font-weight: bold;
-        }
+.menu-item a::before {
+content: "▸ ";
+color: #316889;
+font-weight: bold;
+}
+        
  /* Couleurs différentes pour chaque élément du menu */
         .menu-item:nth-child(1) > a {
             background: #ff6b6b;
@@ -89,301 +90,244 @@
             background: #a29bfe;
             border-left-color: #6c5ce7;
         }        
-       /* Sous-menu */
-        .submenu {
-            position: absolute;
-            top: 0;
-            left: 100%;
-            background: white;
-            min-width: 280px;
-            border-radius: 8px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            display: none;
-            z-index: 100;
-            margin-left: 10px;
-            overflow: hidden;
-        }
-        
-        .has-submenu:hover .submenu {
-            display: block;
-        }
-        
-        .submenu a {
-            display: block;
-            padding: 15px 20px;
-            color: white;
-            text-decoration: none;
-            border-left: 4px solid;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.9em;
-        }
+/* Sous-menu */
+.submenu {
+display: none;
+margin-top: 8px;
+margin-left: 15px;
+}
 
-        /* Le sous-menu du 1er item (rouge) */
-        .menu-item:nth-child(1) .submenu a {
-            background: #ff6b6b;
-            border-left-color: #ff5252;
-        }
+.submenu a {
+background-color: #e9ecef;
+border-left: 4px solid #316889;
+font-size: 0.9em;
+}
 
-        .menu-item:nth-child(1) .submenu a:hover {
-            background: #ff5252;
-            padding-left: 25px;
-        }
+/* Affichage au survol */
+.has-submenu:hover .submenu {
+display: block;
+}
 
-        /* Le sous-menu du 2ème item (turquoise) */
-        .menu-item:nth-child(2) .submenu a {
-            background: #4ecdc4;
-            border-left-color: #45b7af;
-        }
+/* Icône flèche */
+.has-submenu > a::after {
+content: " ▼";
+float: right;
+font-size: 0.8em;
+}
 
-        .menu-item:nth-child(2) .submenu a:hover {
-            background: #45b7af;
-            padding-left: 25px;
-        }
+/* Contenu principal */
+.main-content {
+margin-left: 280px;
+padding: 40px;
+flex: 1;
+}
 
-        /* Le sous-menu du 3ème item (jaune) */
-        .menu-item:nth-child(3) .submenu a {
-            background: #ffd93d;
-            color: #333;
-            border-left-color: #ffc107;
-        }
+.header {
+background-color: #ffffff;
+padding: 50px;
+border-radius: 20px;
+box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+margin-bottom: 40px;
+text-align: center;
+border: 3px solid #22817E;
+}
 
-        .menu-item:nth-child(3) .submenu a:hover {
-            background: #ffc107;
-            padding-left: 25px;
-        }
+.header h1 {
+color: #316889;
+font-size: 3em;
+margin-bottom: 15px;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+letter-spacing: 3px;
+}
 
-        /* Le sous-menu du 4ème item (violet) */
-        .menu-item:nth-child(4) .submenu a {
-            background: #a29bfe;
-            border-left-color: #6c5ce7;
-        }
+.header p {
+color: #22817E;
+font-size: 1.3em;
+font-weight: bold;
+}
 
-        .menu-item:nth-child(4) .submenu a:hover {
-            background: #6c5ce7;
-            padding-left: 25px;
-        }
-        
-        /* Icône flèche */
-        .has-submenu > a::after {
-            content: " ▼";
-            float: right;
-            font-size: 0.8em;
-        }
+/* Sections de contenu */
+.content-section {
+background-color: white;
+padding: 40px;
+border-radius: 15px;
+box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+margin-bottom: 30px;
+}
 
-        /* Contenu principal */
-        .main-content {
-            margin-left: 280px;
-            padding: 40px;
-            flex: 1;
-        }
+.content-section h2 {
+color: #316889;
+font-size: 2em;
+margin-bottom: 20px;
+border-bottom: 3px solid #22817E;
+padding-bottom: 10px;
+}
 
-        .header {
-            background-color: #ffffff;
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            text-align: center;
-            border: 3px solid #22817E;
-        }
+.content-section p {
+color: #333;
+line-height: 1.8;
+font-size: 1.05em;
+margin-bottom: 15px;
+}
 
-        .header h1 {
-            color: #316889;
-            font-size: 3em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            letter-spacing: 3px;
-        }
+/* Grille d'images */
+.image-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 25px;
+margin-top: 30px;
+}
 
-        .header p {
-            color: #22817E;
-            font-size: 1.3em;
-            font-weight: bold;
-        }
+.image-card {
+background: linear-gradient(135deg, #22817E 0%, #1a6562 100%);
+border-radius: 15px;
+overflow: hidden;
+box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-        /* Sections de contenu */
-        .content-section {
-            background-color: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-        }
+.image-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+}
 
-        .content-section h2 {
-            color: #316889;
-            font-size: 2em;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #22817E;
-            padding-bottom: 10px;
-        }
+.image-card img {
+width: 100%;
+height: 180px;
+object-fit: cover;
+}
 
-        .content-section p {
-            color: #333;
-            line-height: 1.8;
-            font-size: 1.05em;
-            margin-bottom: 15px;
-        }
+.image-card .caption {
+padding: 15px;
+color: white;
+text-align: center;
+font-weight: bold;
+}
 
-        /* Grille d'images */
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
+/* Footer */
+.footer {
+text-align: center;
+padding: 20px;
+color: #666;
+font-size: 0.9em;
+}
 
-        .image-card {
-            background: linear-gradient(135deg, #22817E 0%, #1a6562 100%);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+/* Responsive */
+@media (max-width: 768px) {
+.sidebar {
+width: 100%;
+position: relative;
+height: auto;
+}
 
-        .image-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
-        }
+.main-content {
+margin-left: 0;
+}
 
-        .image-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .image-card .caption {
-            padding: 15px;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                position: relative;
-                height: auto;
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-
-            .header h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+.header h1 {
+font-size: 2em;
+}
+}
+</style>
 </head>
 <body>
-    <!-- Menu vertical -->
-    <nav class="sidebar">
-        <h2>📚 Menu NSI</h2>
-        
-        <!-- Menu item avec sous-menu -->
-        <div class="menu-item has-submenu">
-            <a href="cours_processus.html">Cours : Les Processus</a>
-            <div class="submenu">
-                <a href="Processus/MiniProjetProcessus.html">Le Mini-Projet Processus</a>
-                <a href="Processus/TP_Processus_V_1.html">TP Version 1</a>
-                <a href="Processus/TP_Processus_V_2.html">TP Version 2</a>
-                <a href="Processus/TP_Processus_V_3.html">TP Version 3</a>
-                <a href="Processus/TP_Processus_V_4.html">TP Version 4</a>
-                <a href="Processus/TP_Processus_V_5.html">TP Version 5</a>
-                <a href="Processus/TP_Processus_V_6.html">TP Version 6</a>
-            </div>
-        </div>
-         <div class="menu-item has-submenu">
-           
-            <a href="https://www.marion.szpieg.fr/NSI-Tale/Cours&Ressources/AMSE-3-CoursComplet.pdf">Cours: Réseaux - Protocoles de routage</a>
-            <div class="submenu">
-                <a href="Reseaux/Reseaux_Cours.html"> Présentation: Réseaux et Protocoles de routage </a>
-                <a href="Reseaux/Cours_Reseaux_Tle.html">Exercices Protocoles de routage</a>
-                <a href="Reseaux/Annales_BAC_25.html">Exercices Type BAC</a>
-                <a href="Reseaux/tp_python_reseaux.html">TP Python: Réseaux_Protocoles de routage</a>
-        
-                <a href="#.html">à faire</a>
-                <a href="#.html">à faire</a>
-                <a href="#.html">à faire</a>
-                <a href="#.html">à faire</a>
-            </div>
-        </div>
-        <div class="menu-item">
-            <a href="#ressources">Ressources</a>
-        </div>
-        <div class="menu-item">
-            <a href="#exercices">Exercices</a>
-        </div>
-    </nav>
+<!-- Menu vertical -->
+<nav class="sidebar">
+<h2>📚 Menu NSI</h2>
 
-    <!-- Contenu principal -->
-    <main class="main-content">
-        <div class="header">
-            <h1>🖥️ NSI TERMINALE</h1>
-            <p>Numérique et Sciences Informatiques</p>
-        </div>
+<!-- Menu item avec sous-menu -->
+<div class="menu-item has-submenu">
+<a href="cours_processus.html">Cours : Les Processus</a>
+<div class="submenu">
+<a href="Processus/MiniProjetProcessus.html">Le Mini-Projet Processus</a>
+<a href="Processus/TP_Processus_V_1.html">TP Version 1</a>
+<a href="Processus/TP_Processus_V_2.html">TP Version 2</a>
+<a href="Processus/TP_Processus_V_3.html">TP Version 3</a>
+<a href="Processus/TP_Processus_V_4.html">TP Version 4</a>
+<a href="Processus/TP_Processus_V_5.html">TP Version 5</a>
+<a href="Processus/TP_Processus_V_6.html">TP Version 6</a>
+</div>
+</div>
+<div class="menu-item has-submenu">
 
-        <section class="content-section">
-            <h2>Bienvenue sur le site de NSI</h2>
-            <p>
-                Ce site regroupe l'ensemble des cours, travaux pratiques et ressources 
-                pour l'enseignement de spécialité Numérique et Sciences Informatiques 
-                en classe de Terminale.
-            </p>
-            <p>
-                Vous trouverez dans le menu latéral les différents chapitres du programme, 
-                des exercices corrigés, ainsi que des projets à réaliser tout au long de l'année.
-            </p>
-            <p>
-                Utilisez la navigation pour accéder aux différentes sections : cours théoriques, 
-                travaux pratiques, et ressources complémentaires pour approfondir vos connaissances.
-            </p>
-        </section>
+<a href="https://www.marion.szpieg.fr/NSI-Tale/Cours&Ressources/AMSE-3-CoursComplet.pdf">Cours: Réseaux - Protocoles de routage</a>
+<div class="submenu">
+<a href="Reseaux/Reseaux_Cours.html"> Présentation: Réseaux et Protocoles de routage </a>
+<a href="Reseaux/Cours_Reseaux_Tle.html">Exercices Protocoles de routage</a>
+<a href="Reseaux/Annales_BAC_25.html">Exercices Type BAC</a>
+<a href="Reseaux/tp_python_reseaux.html">TP Python: Réseaux_Protocoles de routage</a>
 
-        <section class="content-section">
-            <h2>Thèmes du programme</h2>
-            <div class="image-grid">
-                <div class="image-card">
-                    <img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=400&h=300&fit=crop" alt="Structures de données">
-                    <div class="caption">Structures de données</div>
-                </div>
-                <div class="image-card">
-                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=300&fit=crop" alt="Bases de données">
-                    <div class="caption">Bases de données</div>
-                </div>
-                <div class="image-card">
-                    <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=300&fit=crop" alt="Architectures">
-                    <div class="caption">Architectures matérielles</div>
-                </div>
-                <div class="image-card">
-                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop" alt="Réseaux">
-                    <div class="caption">Réseaux & Protocoles</div>
-                </div>
-                <div class="image-card">
-                    <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&h=300&fit=crop" alt="Algorithmique">
-                    <div class="caption">Algorithmique</div>
-                </div>
-                <div class="image-card">
-                    <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400&h=300&fit=crop" alt="Programmation">
-                    <div class="caption">Programmation Python</div>
-                </div>
-            </div>
-        </section>
+<a href="#.html">à faire</a>
+<a href="#.html">à faire</a>
+<a href="#.html">à faire</a>
+<a href="#.html">à faire</a>
+</div>
+</div>
+<div class="menu-item">
+<a href="#ressources">Ressources</a>
+</div>
+<div class="menu-item">
+<a href="#exercices">Exercices</a>
+</div>
+</nav>
 
-        <div class="footer">
-            <p>© 2026 - NSI Terminale | Cours et ressources pédagogiques</p>
-        </div>
-    </main>
+<!-- Contenu principal -->
+<main class="main-content">
+<div class="header">
+<h1>🖥️ NSI TERMINALE</h1>
+<p>Numérique et Sciences Informatiques</p>
+</div>
+
+<section class="content-section">
+<h2>Bienvenue sur le site de NSI</h2>
+<p>
+Ce site regroupe l'ensemble des cours, travaux pratiques et ressources 
+pour l'enseignement de spécialité Numérique et Sciences Informatiques 
+en classe de Terminale.
+</p>
+<p>
+Vous trouverez dans le menu latéral les différents chapitres du programme, 
+des exercices corrigés, ainsi que des projets à réaliser tout au long de l'année.
+</p>
+<p>
+Utilisez la navigation pour accéder aux différentes sections : cours théoriques, 
+travaux pratiques, et ressources complémentaires pour approfondir vos connaissances.
+</p>
+</section>
+
+<section class="content-section">
+<h2>Thèmes du programme</h2>
+<div class="image-grid">
+<div class="image-card">
+<img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=400&h=300&fit=crop" alt="Structures de données">
+<div class="caption">Structures de données</div>
+</div>
+<div class="image-card">
+<img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=300&fit=crop" alt="Bases de données">
+<div class="caption">Bases de données</div>
+</div>
+<div class="image-card">
+<img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=300&fit=crop" alt="Architectures">
+<div class="caption">Architectures matérielles</div>
+</div>
+<div class="image-card">
+<img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop" alt="Réseaux">
+<div class="caption">Réseaux & Protocoles</div>
+</div>
+<div class="image-card">
+<img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&h=300&fit=crop" alt="Algorithmique">
+<div class="caption">Algorithmique</div>
+</div>
+<div class="image-card">
+<img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400&h=300&fit=crop" alt="Programmation">
+<div class="caption">Programmation Python</div>
+</div>
+</div>
+</section>
+
+<div class="footer">
+<p>© 2026 - NSI Terminale | Cours et ressources pédagogiques</p>
+</div>
+</main>
 </body>
 </html>
