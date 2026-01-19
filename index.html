@@ -89,7 +89,37 @@
             background: #a29bfe;
             border-left-color: #6c5ce7;
         }        
-          /* Le sous-menu du 1er item (rouge) */
+       /* Sous-menu */
+        .submenu {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            background: white;
+            min-width: 280px;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 100;
+            margin-left: 10px;
+            overflow: hidden;
+        }
+        
+        .has-submenu:hover .submenu {
+            display: block;
+        }
+        
+        .submenu a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        /* Le sous-menu du 1er item (rouge) */
         .menu-item:nth-child(1) .submenu a {
             background: #ff6b6b;
             border-left-color: #ff5252;
