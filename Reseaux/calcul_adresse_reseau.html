@@ -1,1 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices NSI - Adressage IP et Masques</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+        
+        .methodologie {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 30px;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        .exercice {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .exercice:hover {
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+        
+        .exercice-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px 8px 0 0;
+            margin: -25px -25px 20px -25px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .correction {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .correction h4 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .question {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border-left: 4px solid #764ba2;
+        }
+        
+        .question strong {
+            color: #764ba2;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 5px 5px 5px 0;
+        }
+        
+        .badge.correction-badge {
+            background: #4caf50;
+        }
+        
+        .badge.exercice-badge {
+            background: #ff9800;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .alert strong {
+            color: #856404;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .btn {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .code-block {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌐 Exercices NSI - Adressage IP</h1>
+            <p>Calcul d'adresse réseau avec masques atypiques</p>
+        </header>
+        
+        <div class="content">
+            <!-- Rappels méthodologiques -->
+            <div class="section">
+                <h2>📚 Rappels méthodologiques</h2>
+                <div class="methodologie">
+                    <h3>Calcul de l'adresse réseau avec ET bit à bit</h3>
+                    <p>Pour calculer l'adresse réseau, on effectue un ET logique entre l'adresse IP et le masque de sous-réseau :</p>
+                    <ul style="margin: 15px 0 15px 30px;">
+                        <li><strong>1 ET 1 = 1</strong></li>
+                        <li><strong>1 ET 0 = 0</strong></li>
+                        <li><strong>0 ET 1 = 0</strong></li>
+                        <li><strong>0 ET 0 = 0</strong></li>
+                    </ul>
+                </div>
+            </div>
 
+            <!-- Exemple corrigé -->
+            <div class="section">
+                <h2>✅ Exemple corrigé : Masque /25</h2>
+                <span class="badge correction-badge">CORRIGÉ DÉTAILLÉ</span>
+                
+                <div class="exercice">
+                    <div class="exercice-header">Exercice type avec masque /25</div>
+                    
+                    <p><strong>Énoncé :</strong> Une entreprise utilise l'adresse IP <strong>192.168.15.178/25</strong>.</p>
+                    
+                    <div class="question">
+                        <strong>1.1</strong> Convertir l'adresse IP en binaire.
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>CORRECTION 1.1</h4>
+                        <div class="code-block">192 = 11000000
+168 = 10101000
+15  = 00001111
+178 = 10110010
+
+Adresse IP complète : 11000000.10101000.00001111.10110010</div>
+                        <p><strong>Méthode de conversion (exemple pour 178) :</strong></p>
+                        <div class="code-block">178 ÷ 2 = 89 reste 0
+89 ÷ 2 = 44 reste 1
+44 ÷ 2 = 22 reste 0
+22 ÷ 2 = 11 reste 0
+11 ÷ 2 = 5 reste 1
+5 ÷ 2 = 2 reste 1
+2 ÷ 2 = 1 reste 0
+1 ÷ 2 = 0 reste 1
+
+En remontant : 10110010</div>
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.2</strong> Écrire le masque /25 en notation binaire puis en notation décimale pointée.
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>CORRECTION 1.2</h4>
+                        <p>Un masque /25 signifie que les 25 premiers bits sont à 1, les 7 restants à 0.</p>
+                        <div class="code-block">Masque en binaire :
+11111111.11111111.11111111.10000000
+
+Conversion en décimal :
+1er octet : 11111111 = 255
+2e octet  : 11111111 = 255
+3e octet  : 11111111 = 255
+4e octet  : 10000000 = 128
+
+Masque en notation décimale : 255.255.255.128</div>
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.3</strong> Calculer l'adresse réseau en effectuant le ET bit à bit.
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>CORRECTION 1.3</h4>
+                        <div class="code-block">Adresse IP : 11000000.10101000.00001111.10110010  (192.168.15.178)
+Masque /25 : 11111111.11111111.11111111.10000000  (255.255.255.128)
+             ----------------------------------------
+ET bit/bit : 11000000.10101000.00001111.10000000
+
+Détail du ET pour chaque octet :
+
+1er octet :
+  11000000  (192)
+ET 11111111  (255)
+  --------
+  11000000  (192)
+
+2e octet :
+  10101000  (168)
+ET 11111111  (255)
+  --------
+  10101000  (168)
+
+3e octet :
+  00001111  (15)
+ET 11111111  (255)
+  --------
+  00001111  (15)
+
+4e octet (LE PLUS IMPORTANT avec /25) :
+  10110010  (178)
+ET 10000000  (128)
+  --------
+  10000000  (128)
+
+Seul le premier bit compte, les 7 autres sont mis à 0</div>
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.4</strong> Donner l'adresse réseau en notation décimale pointée.
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>CORRECTION 1.4</h4>
+                        <div class="code-block">11000000 = 192
+10101000 = 168
+00001111 = 15
+10000000 = 128</div>
+                        <p style="font-size: 1.2em; color: #4caf50;"><strong>Adresse réseau = 192.168.15.128/25</strong></p>
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.5</strong> Combien d'adresses IP ce réseau peut-il contenir ?
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>CORRECTION 1.5</h4>
+                        <p>Avec un masque /25, il reste 32 - 25 = 7 bits pour les hôtes.</p>
+                        <div class="code-block">Nombre d'adresses = 2⁷ = 128 adresses
+
+Nombre d'hôtes utilisables = 2⁷ - 2 = 126
+(en excluant l'adresse réseau et l'adresse de broadcast)
+
+Plage d'adresses du réseau :
+- Adresse réseau : 192.168.15.128
+- Première adresse utilisable : 192.168.15.129
+- Dernière adresse utilisable : 192.168.15.254
+- Adresse de broadcast : 192.168.15.255</div>
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.6</strong> L'adresse <strong>192.168.15.200</strong> appartient-elle à ce réseau ?
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>CORRECTION 1.6</h4>
+                        <p>Convertissons 200 en binaire et calculons son adresse réseau :</p>
+                        <div class="code-block">200 = 11001000
+
+IP complète : 11000000.10101000.00001111.11001000
+
+Calcul de l'adresse réseau :
+IP        : 11000000.10101000.00001111.11001000  (192.168.15.200)
+Masque /25: 11111111.11111111.11111111.10000000  (255.255.255.128)
+            ----------------------------------------
+Réseau    : 11000000.10101000.00001111.10000000  (192.168.15.128)</div>
+                        <p style="font-size: 1.1em; color: #4caf50;"><strong>OUI, l'adresse 192.168.15.200 appartient au réseau 192.168.15.128/25</strong></p>
+                        <p>Car son adresse réseau est identique : 192.168.15.128</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercices à faire -->
+            <div class="section">
+                <h2>📝 Exercices à faire par les élèves</h2>
+                <span class="badge exercice-badge">À FAIRE</span>
+                
+                <!-- Exercice 1 -->
+                <div class="exercice">
+                    <div class="exercice-header">Exercice 1 : Masque /13</div>
+                    
+                    <p><strong>Énoncé :</strong> Un serveur possède l'adresse IP <strong>172.28.195.67/13</strong>.</p>
+                    
+                    <div class="question">
+                        <strong>1.1</strong> Rappeler ce que signifie la notation /13.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.2</strong> Écrire le masque de sous-réseau en notation binaire (sur 32 bits).
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.3</strong> Convertir ce masque en notation décimale pointée.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.4</strong> Convertir l'adresse IP 172.28.195.67 en binaire.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.5</strong> Calculer l'adresse réseau par la méthode du ET bit à bit. Présenter le calcul sous forme de tableau pour chaque octet.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.6</strong> Donner l'adresse réseau en notation décimale pointée.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>1.7</strong> Quelle est l'adresse de diffusion (broadcast) de ce réseau ?
+                    </div>
+                </div>
+                
+                <!-- Exercice 2 -->
+                <div class="exercice">
+                    <div class="exercice-header">Exercice 2 : Masque /21</div>
+                    
+                    <p><strong>Énoncé :</strong> On considère l'adresse <strong>10.64.88.250/21</strong>.</p>
+                    
+                    <div class="question">
+                        <strong>2.1</strong> Convertir l'adresse IP en binaire.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>2.2</strong> Écrire le masque /21 en binaire puis en décimal.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>2.3</strong> Calculer l'adresse réseau. Montrer tous les calculs binaires octet par octet.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>2.4</strong> Donner l'adresse réseau en notation décimale.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>2.5</strong> L'adresse <strong>10.64.95.12</strong> appartient-elle au même réseau ? Justifier en calculant son adresse réseau.
+                    </div>
+                    
+                    <div class="question">
+                        <strong>2.6</strong> Combien d'adresses utilisables ce réseau contient-il ?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Corrections pour les enseignants -->
+            <div class="section">
+                <h2>🔑 Corrections pour les enseignants</h2>
+                <span class="badge correction-badge">CORRECTION COMPLÈTE</span>
+                
+                <!-- Correction Exercice 1 -->
+                <div class="exercice">
+                    <div class="exercice-header">CORRECTION Exercice 1 : Masque /13</div>
+                    
+                    <div class="correction">
+                        <h4>1.1</h4>
+                        <p>La notation /13 signifie que le masque de sous-réseau possède <strong>13 bits à 1</strong> (en partant de la gauche), le reste étant à 0.</p>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>1.2 Masque /13 en binaire</h4>
+                        <div class="code-block">11111111.11111000.00000000.00000000
+(13 bits à 1, puis 19 bits à 0)</div>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>1.3 Masque en décimal</h4>
+                        <div class="code-block">1er octet : 11111111 = 255
+2e octet  : 11111000 = 128+64+32+16+8 = 248
+3e octet  : 00000000 = 0
+4e octet  : 00000000 = 0
+
+Masque = 255.248.0.0</div>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>1.4 Conversion de 172.28.195.67 en binaire</h4>
+                        <div class="code-block">172 = 10101100
+28  = 00011100
+195 = 11000011
+67  = 01000011
+
+IP = 10101100.00011100.11000011.01000011</div>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>1.5 ET bit à bit</h4>
+                        <div class="code-block">IP        : 10101100.00011100.11000011.01000011  (172.28.195.67)
+Masque /13: 11111111.11111000.00000000.00000000  (255.248.0.0)
+            ----------------------------------------
+Réseau    : 10101100.00011000.00000000.00000000
+
+Détail par octet :
+
+1er octet :
+  10101100  (172)
+ET 11111111  (255)
+  --------
+  10101100  (172)
+
+2e octet :
+  00011100  (28)
+ET 11111000  (248)
+  --------
+  00011000  (24)
+
+3e et 4e octets : ET avec 0 donne 0</div>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>1.6 Adresse réseau</h4>
+                        <div class="code-block">10101100 = 172
+00011000 = 24
+00000000 = 0
+00000000 = 0</div>
+                        <p style="font-size: 1.2em; color: #4caf50;"><strong>Adresse réseau = 172.24.0.0/13</strong></p>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>1.7 Adresse de broadcast</h4>
+                        <p>Avec 32 - 13 = 19 bits pour les hôtes, on met tous ces bits à 1 :</p>
+                        <div class="code-block">Réseau    : 10101100.00011000.00000000.00000000
+Broadcast : 10101100.00011111.11111111.11111111
+
+Conversion en décimal :
+10101100 = 172
+00011111 = 31
+11111111 = 255
+11111111 = 255</div>
+                        <p style="font-size: 1.2em; color: #4caf50;"><strong>Adresse de broadcast = 172.31.255.255</strong></p>
+                    </div>
+                </div>
+                
+                <!-- Correction Exercice 2 -->
+                <div class="exercice">
+                    <div class="exercice-header">CORRECTION Exercice 2 : Masque /21</div>
+                    
+                    <div class="correction">
+                        <h4>2.1 Conversion de 10.64.88.250 en binaire</h4>
+                        <div class="code-block">10  = 00001010
+64  = 01000000
+88  = 01011000
+250 = 11111010
+
+IP = 00001010.01000000.01011000.11111010</div>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>2.2 Masque /21</h4>
+                        <div class="code-block">Binaire : 11111111.11111111.11111000.00000000
+(21 bits à 1, puis 11 bits à 0)
+
+Décimal :
+1er octet : 11111111 = 255
+2e octet  : 11111111 = 255
+3e octet  : 11111000 = 128+64+32+16+8 = 248
+4e octet  : 00000000 = 0
+
+Masque = 255.255.248.0</div>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>2.3 Calcul de l'adresse réseau</h4>
+                        <div class="code-block">IP        : 00001010.01000000.01011000.11111010  (10.64.88.250)
+Masque /21: 11111111.11111111.11111000.00000000  (255.255.248.0)
+            ----------------------------------------
+Réseau    : 00001010.01000000.01011000.00000000
+
+Détail par octet :
+
+1er octet :
+  00001010  (10)
+ET 11111111  (255)
+  --------
+  00001010  (10)
+
+2e octet :
+  01000000  (64)
+ET 11111111  (255)
+  --------
+  01000000  (64)
+
+3e octet :
+  01011000  (88)
+ET 11111000  (248)
+  --------
+  01011000  (88)
+
+4e octet :
+  11111010  (250)
+ET 00000000  (0)
+  --------
+  00000000  (0)</div>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>2.4 Adresse réseau en décimal</h4>
+                        <p style="font-size: 1.2em; color: #4caf50;"><strong>Adresse réseau = 10.64.88.0/21</strong></p>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>2.5 Vérification pour 10.64.95.12</h4>
+                        <div class="code-block">Conversion de 10.64.95.12 en binaire :
+10  = 00001010
+64  = 01000000
+95  = 01011111
+12  = 00001100
+
+IP = 00001010.01000000.01011111.00001100
+
+Calcul de l'adresse réseau :
+IP        : 00001010.01000000.01011111.00001100
+Masque /21: 11111111.11111111.11111000.00000000
+            ----------------------------------------
+Réseau    : 00001010.01000000.01011000.00000000
+
+En décimal : 10.64.88.0</div>
+                        <p style="font-size: 1.1em; color: #4caf50;"><strong>OUI, 10.64.95.12 appartient au même réseau car son adresse réseau est aussi 10.64.88.0/21</strong></p>
+                    </div>
+                    
+                    <div class="correction">
+                        <h4>2.6 Nombre d'adresses utilisables</h4>
+                        <div class="code-block">Bits pour les hôtes : 32 - 21 = 11 bits
+
+Nombre total d'adresses : 2¹¹ = 2048 adresses
+
+Nombre d'adresses utilisables : 2048 - 2 = 2046
+(on retire l'adresse réseau et l'adresse de broadcast)</div>
+                        <p style="font-size: 1.1em; color: #4caf50;"><strong>Ce réseau contient 2046 adresses utilisables</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barème -->
+            <div class="section">
+                <h2>📊 Barème indicatif type BAC</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Compétence</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Conversion binaire/décimal</td>
+                            <td>2 points</td>
+                        </tr>
+                        <tr>
+                            <td>Calcul du masque</td>
+                            <td>2 points</td>
+                        </tr>
+                        <tr>
+                            <td>ET bit à bit détaillé</td>
+                            <td>4 points</td>
+                        </tr>
+                        <tr>
+                            <td>Adresse réseau finale</td>
+                            <td>1 point</td>
+                        </tr>
+                        <tr>
+                            <td>Analyse et vérifications</td>
+                            <td>3 points</td>
+                        </tr>
+                        <tr>
+                            <td>Planification de sous-réseaux</td>
+                            <td>4 points</td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <th>16 points</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Conseils -->
+            <div class="section">
+                <h2>💡 Conseils pour l'examen</h2>
+                <div class="alert">
+                    <strong>Points clés à retenir :</strong>
+                    <ul style="margin: 10px 0 0 30px;">
+                        <li>Toujours montrer les conversions binaires complètes</li>
+                        <li>Présenter le ET bit à bit octet par octet</li>
+                        <li>Vérifier la cohérence des résultats</li>
+                        <li>Utiliser un tableau pour clarifier les calculs</li>
+                        <li>Ne pas oublier les puissances de 2 pour compter les adresses</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="nav-buttons">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer</button>
+                <button class="btn btn-secondary" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️ Haut de page</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
