@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP Dijkstra - Algorithme du Plus Court Chemin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .slide {
+            display: none;
+            padding: 60px;
+            min-height: 600px;
+        }
+        
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #764ba2;
+            font-size: 2em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #667eea;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .graph-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .step-box {
+            background: #e8eaf6;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .slide-counter {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 2px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Slide 1: Titre -->
+        <div class="slide active">
+            <h1>🗺️ Algorithme de Dijkstra</h1>
+            <h2 style="text-align: center; color: #764ba2; border: none;">Plus Court Chemin entre Villes</h2>
+            
+            <div style="text-align: center; margin: 50px 0;">
+                <p style="font-size: 1.3em; color: #555; margin: 20px 0;">
+                    TP de NSI - Terminale
+                </p>
+                <p style="font-size: 1.1em; color: #777;">
+                    Objectif : Trouver le chemin le plus court entre deux villes
+                </p>
+            </div>
+            
+            <div class="step-box">
+                <h3>📚 Ce que vous allez apprendre :</h3>
+                <ul style="margin-left: 40px; line-height: 2;">
+                    <li>Comprendre le principe de l'algorithme de Dijkstra</li>
+                    <li>Construire un tableau d'évolution pas à pas</li>
+                    <li>Trouver le plus court chemin entre deux villes</li>
+                    <li>Implémenter l'algorithme en Python</li>
+                </ul>
+            </div>
+            
+            <div class="navigation">
+                <button disabled>← Précédent</button>
+                <button onclick="nextSlide()">Suivant →</button>
+            </div>
+            <div class="slide-counter">Slide 1 / 8</div>
+        </div>
+
+        <!-- Slide 2: Le graphe -->
+        <div class="slide">
+            <h2>📍 Le Réseau de Villes</h2>
+            
+            <div class="graph-container">
+                <svg width="700" height="500" viewBox="0 0 700 500">
+                    <!-- Arêtes -->
+                    <line x1="100" y1="100" x2="250" y2="100" stroke="#666" stroke-width="2"/>
+                    <text x="175" y="90" fill="#d32f2f" font-weight="bold">45</text>
+                    
+                    <line x1="100" y1="100" x2="150" y2="250" stroke="#666" stroke-width="2"/>
+                    <text x="100" y="175" fill="#d32f2f" font-weight="bold">70</text>
+                    
+                    <line x1="250" y1="100" x2="400" y2="100" stroke="#666" stroke-width="2"/>
+                    <text x="325" y="90" fill="#d32f2f" font-weight="bold">30</text>
+                    
+                    <line x1="250" y1="100" x2="300" y2="250" stroke="#666" stroke-width="2"/>
+                    <text x="250" y="175" fill="#d32f2f" font-weight="bold">55</text>
+                    
+                    <line x1="150" y1="250" x2="300" y2="250" stroke="#666" stroke-width="2"/>
+                    <text x="225" y="240" fill="#d32f2f" font-weight="bold">40</text>
+                    
+                    <line x1="150" y1="250" x2="200" y2="400" stroke="#666" stroke-width="2"/>
+                    <text x="150" y="325" fill="#d32f2f" font-weight="bold">60</text>
+                    
+                    <line x1="300" y1="250" x2="450" y2="250" stroke="#666" stroke-width="2"/>
+                    <text x="375" y="240" fill="#d32f2f" font-weight="bold">35</text>
+                    
+                    <line x1="300" y1="250" x2="350" y2="400" stroke="#666" stroke-width="2"/>
+                    <text x="300" y="325" fill="#d32f2f" font-weight="bold">50</text>
+                    
+                    <line x1="400" y1="100" x2="450" y2="250" stroke="#666" stroke-width="2"/>
+                    <text x="450" y="175" fill="#d32f2f" font-weight="bold">65</text>
+                    
+                    <line x1="400" y1="100" x2="550" y2="150" stroke="#666" stroke-width="2"/>
+                    <text x="500" y="110" fill="#d32f2f" font-weight="bold">80</text>
+                    
+                    <line x1="450" y1="250" x2="550" y2="150" stroke="#666" stroke-width="2"/>
+                    <text x="520" y="200" fill="#d32f2f" font-weight="bold">25</text>
+                    
+                    <line x1="200" y1="400" x2="350" y2="400" stroke="#666" stroke-width="2"/>
+                    <text x="275" y="390" fill="#d32f2f" font-weight="bold">45</text>
+                    
+                    <!-- Sommets -->
+                    <circle cx="100" cy="100" r="30" fill="#4CAF50" stroke="#2e7d32" stroke-width="3"/>
+                    <text x="100" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">A</text>
+                    
+                    <circle cx="250" cy="100" r="30" fill="#2196F3" stroke="#1565c0" stroke-width="3"/>
+                    <text x="250" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">B</text>
+                    
+                    <circle cx="400" cy="100" r="30" fill="#2196F3" stroke="#1565c0" stroke-width="3"/>
+                    <text x="400" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="18">C</text>
+                    
+                    <circle cx="150" cy="250" r="30" fill="#2196F3" stroke="#1565c0" stroke-width="3"/>
+                    <text x="150" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="18">D</text>
+                    
+                    <circle cx="300" cy="250" r="30" fill="#2196F3" stroke="#1565c0" stroke-width="3"/>
+                    <text x="300" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="18">E</text>
+                    
+                    <circle cx="450" cy="250" r="30" fill="#2196F3" stroke="#1565c0" stroke-width="3"/>
+                    <text x="450" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="18">F</text>
+                    
+                    <circle cx="550" cy="150" r="30" fill="#FF9800" stroke="#e65100" stroke-width="3"/>
+                    <text x="550" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="18">G</text>
+                    
+                    <circle cx="200" cy="400" r="30" fill="#2196F3" stroke="#1565c0" stroke-width="3"/>
+                    <text x="200" y="410" text-anchor="middle" fill="white" font-weight="bold" font-size="18">H</text>
+                    
+                    <circle cx="350" cy="400" r="30" fill="#2196F3" stroke="#1565c0" stroke-width="3"/>
+                    <text x="350" y="410" text-anchor="middle" fill="white" font-weight="bold" font-size="18">I</text>
+                </svg>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4CAF50;"></div>
+                    <span>Ville de départ (A)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF9800;"></div>
+                    <span>Ville d'arrivée (G)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #2196F3;"></div>
+                    <span>Villes intermédiaires</span>
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 20px; font-size: 1.1em;">
+                <strong>Objectif :</strong> Trouver le plus court chemin de <span class="highlight">A</span> vers <span class="highlight">G</span>
+            </p>
+            
+            <div class="navigation">
+                <button onclick="prevSlide()">← Précédent</button>
+                <button onclick="nextSlide()">Suivant →</button>
+            </div>
+            <div class="slide-counter">Slide 2 / 8</div>
+        </div>
+
+        <!-- Slide 3: Principe de l'algorithme -->
+        <div class="slide">
+            <h2>🧠 Principe de l'Algorithme</h2>
+            
+            <div class="step-box">
+                <h3>Comment fonctionne Dijkstra ?</h3>
+                <p style="margin-top: 15px; line-height: 1.8;">
+                    L'algorithme explore progressivement le graphe en choisissant toujours le sommet 
+                    le plus proche non encore visité, et met à jour les distances minimales.
+                </p>
+            </div>
+            
+            <h3>📋 Les étapes :</h3>
+            <ol style="margin-left: 40px; line-height: 2.5; font-size: 1.1em;">
+                <li><strong>Initialisation :</strong> Distance = 0 pour le départ, ∞ pour les autres</li>
+                <li><strong>Sélection :</strong> Choisir le sommet non visité avec la plus petite distance</li>
+                <li><strong>Mise à jour :</strong> Pour chaque voisin, calculer la nouvelle distance possible</li>
+                <li><strong>Comparaison :</strong> Si cette distance est meilleure, la garder</li>
+                <li><strong>Répétition :</strong> Recommencer jusqu'à atteindre la destination</li>
+            </ol>
+            
+            <div class="step-box" style="background: #fff3cd; border-left-color: #ff9800; margin-top: 30px;">
+                <h3>💡 Astuce :</h3>
+                <p style="line-height: 1.8;">
+                    À chaque étape, on note dans le tableau :<br>
+                    • La <strong>distance minimale</strong> trouvée jusqu'à présent<br>
+                    • Le <strong>sommet précédent</strong> qui permet d'atteindre cette distance (pour reconstituer le chemin)
+                </p>
+            </div>
+            
+            <div class="navigation">
+                <button onclick="prevSlide()">← Précédent</button>
+                <button onclick="nextSlide()">Suivant →</button>
+            </div>
+            <div class="slide-counter">Slide 3 / 8</div>
+        </div>
+
+        <!-- Slide 4: Tableau initial -->
+        <div class="slide">
+            <h2>📊 Initialisation du Tableau</h2>
+            
+            <p style="font-size: 1.1em; margin-bottom: 20px;">
+                On commence depuis la ville <span class="highlight">A</span>. Au départ, seule A est à distance 0, 
+                toutes les autres sont à distance infinie (∞).
+            </p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sommet</th>
+                        <th>Distance</th>
+                        <th>Prédécesseur</th>
+                        <th>Visité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #c8e6c9;">
+                        <td><strong>A</strong></td>
+                        <td><strong>0</strong></td>
+                        <td>-</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>F</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>G</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>H</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="step-box">
+                <h3>🎯 Étape 0 - Depuis A :</h3>
+                <p>On examine les voisins de A :</p>
+                <ul style="margin: 15px 0 15px 40px; line-height: 2;">
+                    <li>B est à 45 km → Distance(B) = 0 + 45 = <strong>45 km</strong></li>
+                    <li>D est à 70 km → Distance(D) = 0 + 70 = <strong>70 km</strong></li>
+                </ul>
+            </div>
+            
+            <div class="navigation">
+                <button onclick="prevSlide()">← Précédent</button>
+                <button onclick="nextSlide()">Suivant →</button>
+            </div>
+            <div class="slide-counter">Slide 4 / 8</div>
+        </div>
+
+        <!-- Slide 5: Après traitement de A -->
+        <div class="slide">
+            <h2>📊 Après avoir visité A</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sommet</th>
+                        <th>Distance</th>
+                        <th>Prédécesseur</th>
+                        <th>Visité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A</td>
+                        <td>0</td>
+                        <td>-</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr style="background: #fff9c4;">
+                        <td><strong>B</strong></td>
+                        <td><strong>45</strong></td>
+                        <td><strong>A</strong></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr style="background: #fff9c4;">
+                        <td><strong>D</strong></td>
+                        <td><strong>70</strong></td>
+                        <td><strong>A</strong></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>F</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>G</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>H</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>∞</td>
+                        <td>-</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="step-box" style="background: #c8e6c9; border-left-color: #4CAF50;">
+                <h3>✅ Sommet choisi : B (distance 45 km)</h3>
+                <p style="margin-top: 10px;">Pourquoi B ? C'est le sommet non visité avec la plus petite distance (45 < 70).</p>
+            </div>
+            
+            <div class="step-box">
+                <h3>🎯 Étape 1 - Depuis B :</h3>
+                <p>On examine les voisins de B :</p>
+                <ul style="margin: 15px 0 15px 40px; line-height: 2;">
+                    <li>C est à 30 km → Distance(C) = 45 + 30 = <strong>75 km</strong></li>
+                    <li>E est à 55 km → Distance(E) = 45 + 55 = <strong>100 km</strong></li>
+                </ul>
+            </div>
+            
+            <div class="navigation">
+                <button onclick="prevSlide()">← Précédent</button>
+                <button onclick="nextSlide()">Suivant →</button>
+            </div>
+            <div class="slide-counter">Slide 5 / 8</div>
+        </div>
+
+        <!-- Slide 6: Tableau final -->
+        <div class="slide">
+            <h2>📊 Tableau Final (Toutes les Étapes)</h2>
+            
+            <p style="font-size: 1.1em; margin-bottom: 20px;">
+                Après avoir exploré tous les sommets nécessaires :
+            </p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sommet</th>
+                        <th>Distance Finale</th>
+                        <th>Prédécesseur</th>
+                        <th>Chemin depuis A</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A</td>
+                        <td>0 km</td>
+                        <td>-</td>
+                        <td>A</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>45 km</td>
+                        <td>A</td>
+                        <td>A → B</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>75 km</td>
+                        <td>B</td>
+                        <td>A → B → C</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>70 km</td>
+                        <td>A</td>
+                        <td>A → D</td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>100 km</td>
+                        <td>B</td>
+                        <td>A → B → E</td>
+                    </tr>
+                    <tr>
+                        <td>F</td>
+                        <td>135 km</td>
+                        <td>E</td>
+                        <td>A → B → E → F</td>
+                    </tr>
+                    <tr style="background: #c8e6c9;">
+                        <td><strong>G</strong></td>
+                        <td><strong>160 km</strong></td>
+                        <td><strong>F</strong></td>
+                        <td><strong>A → B → E → F → G</strong></td>
+                    </tr>
+                    <tr>
+                        <td>H</td>
+                        <td>130 km</td>
+                        <td>D</td>
+                        <td>A → D → H</td>
+                    </tr>
+                    <tr>
+                        <td>I</td>
+                        <td>150 km</td>
+                        <td>E</td>
+                        <td>A → B → E → I</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="step-box" style="background: #c8e6c9; border-left-color: #4CAF50;">
+                <h3>🎉 Résultat Final :</h3>
+                <p style="font-size: 1.2em; margin-top: 10px;">
+                    Le plus court chemin de A vers G est : <strong>A → B → E → F → G</strong><br>
+                    Distance totale : <strong>160 km</strong>
+                </p>
+            </div>
+            
+            <div class="navigation">
+                <button onclick="prevSlide()">← Précédent</button>
+                <button onclick="nextSlide()">Suivant →</button>
+            </div>
+            <div class="slide-counter">Slide 6 / 8</div>
+        </div>
+
+        <!-- Slide 7: Implémentation Python -->
+        <div class="slide">
+            <h2>💻 Implémentation en Python</h2>
+            
+            <div class="code-block">
+<pre>import heapq
+
+def dijkstra(graphe, depart, arrivee):
+    # Initialisation
+    distances = {sommet: float('inf') for sommet in graphe}
+    distances[depart] = 0
+    predecesseurs = {sommet: None for sommet in graphe}
+    
+    # File de priorité : (distance, sommet)
+    file = [(0, depart)]
+    visites = set()
+    
+    while file:
+        dist_actuelle, sommet_actuel = heapq.heappop(file)
+        
+        if sommet_actuel in visites:
+            continue
+            
+        visites.add(sommet_actuel)
+        
+        # Si on a atteint l'arrivée
+        if sommet_actuel == arrivee:
+            break
+        
+        # Examiner les voisins
+        for voisin, poids in graphe[sommet_actuel].items():
+            distance = dist_actuelle + poids
+            
+            # Si on trouve un chemin plus court
+            if distance < distances[voisin]:
+                distances[voisin] = distance
+                predecesseurs[voisin] = sommet_actuel
+                heapq.heappush(file, (distance, voisin))
+    
+    # Reconstituer le chemin
+    chemin = []
+    sommet = arrivee
+    while sommet is not None:
+        chemin.append(sommet)
+        sommet = predecesseurs[sommet]
+    chemin.reverse()
+    
+    return distances[arrivee], chemin</pre>
+            </div>
+            
+            <div class="navigation">
+                <button onclick="prevSlide()">← Précédent</button>
+                <button onclick="nextSlide()">Suivant →</button>
+            </div>
+            <div class="slide-counter">Slide 7 / 8</div>
+        </div>
+
+        <!-- Slide 8: Exercice -->
+        <div class="slide">
+            <h2>✏️ À Votre Tour !</h2>
+            
+            <div class="step-box">
+                <h3>Exercice 1 : Compléter le graphe</h3>
+                <p>Créez le dictionnaire Python représentant notre graphe de villes :</p>
+            </div>
+            
+            <div class="code-block">
+<pre>graphe = {
+    'A': {'B': 45, 'D': 70},
+    'B': {'A': 45, 'C': 30, 'E': 55},
+    'C': {'B': 30, 'F': 65, 'G': 80},
+    # À vous de compléter pour D, E, F, G, H, I !
+}</pre>
+            </div
