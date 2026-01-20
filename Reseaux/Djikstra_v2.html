@@ -228,40 +228,40 @@
                 <svg width="700" height="500" viewBox="0 0 700 500">
                     <!-- Arêtes -->
                     <line x1="100" y1="100" x2="250" y2="100" stroke="#666" stroke-width="2"/>
-                    <text x="175" y="90" fill="#d32f2f" font-weight="bold">45</text>
+                    <text x="175" y="90" fill="#d32f2f" font-weight="bold">5</text>
                     
                     <line x1="100" y1="100" x2="150" y2="250" stroke="#666" stroke-width="2"/>
-                    <text x="100" y="175" fill="#d32f2f" font-weight="bold">70</text>
+                    <text x="100" y="175" fill="#d32f2f" font-weight="bold">8</text>
                     
                     <line x1="250" y1="100" x2="400" y2="100" stroke="#666" stroke-width="2"/>
-                    <text x="325" y="90" fill="#d32f2f" font-weight="bold">30</text>
+                    <text x="325" y="90" fill="#d32f2f" font-weight="bold">4</text>
                     
                     <line x1="250" y1="100" x2="300" y2="250" stroke="#666" stroke-width="2"/>
-                    <text x="250" y="175" fill="#d32f2f" font-weight="bold">55</text>
+                    <text x="250" y="175" fill="#d32f2f" font-weight="bold">7</text>
                     
                     <line x1="150" y1="250" x2="300" y2="250" stroke="#666" stroke-width="2"/>
-                    <text x="225" y="240" fill="#d32f2f" font-weight="bold">40</text>
+                    <text x="225" y="240" fill="#d32f2f" font-weight="bold">6</text>
                     
                     <line x1="150" y1="250" x2="200" y2="400" stroke="#666" stroke-width="2"/>
-                    <text x="150" y="325" fill="#d32f2f" font-weight="bold">60</text>
+                    <text x="150" y="325" fill="#d32f2f" font-weight="bold">9</text>
                     
                     <line x1="300" y1="250" x2="450" y2="250" stroke="#666" stroke-width="2"/>
-                    <text x="375" y="240" fill="#d32f2f" font-weight="bold">35</text>
+                    <text x="375" y="240" fill="#d32f2f" font-weight="bold">5</text>
                     
                     <line x1="300" y1="250" x2="350" y2="400" stroke="#666" stroke-width="2"/>
-                    <text x="300" y="325" fill="#d32f2f" font-weight="bold">50</text>
+                    <text x="300" y="325" fill="#d32f2f" font-weight="bold">7</text>
                     
                     <line x1="400" y1="100" x2="450" y2="250" stroke="#666" stroke-width="2"/>
-                    <text x="450" y="175" fill="#d32f2f" font-weight="bold">65</text>
+                    <text x="450" y="175" fill="#d32f2f" font-weight="bold">10</text>
                     
                     <line x1="400" y1="100" x2="550" y2="150" stroke="#666" stroke-width="2"/>
-                    <text x="500" y="110" fill="#d32f2f" font-weight="bold">80</text>
+                    <text x="500" y="110" fill="#d32f2f" font-weight="bold">12</text>
                     
                     <line x1="450" y1="250" x2="550" y2="150" stroke="#666" stroke-width="2"/>
-                    <text x="520" y="200" fill="#d32f2f" font-weight="bold">25</text>
+                    <text x="520" y="200" fill="#d32f2f" font-weight="bold">3</text>
                     
                     <line x1="200" y1="400" x2="350" y2="400" stroke="#666" stroke-width="2"/>
-                    <text x="275" y="390" fill="#d32f2f" font-weight="bold">45</text>
+                    <text x="275" y="390" fill="#d32f2f" font-weight="bold">6</text>
                     
                     <!-- Sommets -->
                     <circle cx="100" cy="100" r="30" fill="#4CAF50" stroke="#2e7d32" stroke-width="3"/>
@@ -436,8 +436,8 @@
                 <h3>🎯 Étape 0 - Depuis A :</h3>
                 <p>On examine les voisins de A :</p>
                 <ul style="margin: 15px 0 15px 40px; line-height: 2;">
-                    <li>B est à 45 km → Distance(B) = 0 + 45 = <strong>45 km</strong></li>
-                    <li>D est à 70 km → Distance(D) = 0 + 70 = <strong>70 km</strong></li>
+                    <li>B est à 5 km → Distance(B) = 0 + 5 = <strong>5 km</strong></li>
+                    <li>D est à 8 km → Distance(D) = 0 + 8 = <strong>8 km</strong></li>
                 </ul>
             </div>
             
@@ -470,7 +470,7 @@
                     </tr>
                     <tr style="background: #fff9c4;">
                         <td><strong>B</strong></td>
-                        <td><strong>45</strong></td>
+                        <td><strong>5</strong></td>
                         <td><strong>A</strong></td>
                         <td></td>
                     </tr>
@@ -482,7 +482,7 @@
                     </tr>
                     <tr style="background: #fff9c4;">
                         <td><strong>D</strong></td>
-                        <td><strong>70</strong></td>
+                        <td><strong>8</strong></td>
                         <td><strong>A</strong></td>
                         <td></td>
                     </tr>
@@ -703,4 +703,40 @@ def dijkstra(graphe, depart, arrivee):
     'C': {'B': 30, 'F': 65, 'G': 80},
     # À vous de compléter pour D, E, F, G, H, I !
 }</pre>
-            </div
+            </div>
+            
+            <div class="step-box" style="margin-top: 30px;">
+                <h3>Exercice 2 : Trouver d'autres chemins</h3>
+                <p>En utilisant le tableau final, trouvez :</p>
+                <ul style="margin-left: 40px; line-height: 2;">
+                    <li>Le plus court chemin de A vers H</li>
+                    <li>Le plus court chemin de A vers I</li>
+                    <li>Quelle est la distance totale de A vers C ?</li>
+                </ul>
+            </div>
+            
+            <div class="step-box" style="background: #e3f2fd; border-left-color: #2196F3; margin-top: 30px;">
+                <h3>💡 Pour aller plus loin :</h3>
+                <ul style="margin-left: 40px; line-height: 2;">
+                    <li>Testez l'algorithme avec votre propre réseau de villes</li>
+                    <li>Ajoutez une visualisation du chemin trouvé</li>
+                    <li>Comparez avec un algorithme de recherche en largeur</li>
+                </ul>
+            </div>
+            
+            <div class="navigation">
+                <button onclick="prevSlide()">← Précédent</button>
+                <button disabled>Suivant →</button>
+            </div>
+            <div class="slide-counter">Slide 8 / 8</div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = n;
+            if (currentSlide >= slides.length) currentSlide = slides
