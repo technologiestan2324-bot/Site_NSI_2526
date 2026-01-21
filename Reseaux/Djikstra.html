@@ -1,1138 +1,296 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithme de Dijkstra - Cours Pas à Pas</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .presentation {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        .slide {
-            display: none;
-            padding: 60px;
-            min-height: 600px;
-        }
-
-        .slide.active {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-align: center;
-            border-bottom: 4px solid #764ba2;
-            padding-bottom: 20px;
-        }
-
-        h2 {
-            color: #667eea;
-            font-size: 2em;
-            margin-bottom: 30px;
-            margin-top: 20px;
-        }
-
-        h3 {
-            color: #764ba2;
-            font-size: 1.5em;
-            margin: 20px 0;
-        }
-
-        p, li {
-            font-size: 1.2em;
-            line-height: 1.8;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        ul {
-            margin-left: 30px;
-        }
-
-        .graph-container {
-            display: flex;
-            justify-content: center;
-            margin: 30px 0;
-        }
-
-        svg {
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            background: #f8f9fa;
-        }
-
-        .node {
-            fill: white;
-            stroke: #667eea;
-            stroke-width: 3;
-        }
-
-        .node.visited {
-            fill: #4ecdc4;
-        }
-
-        .node.current {
-            fill: #ffd93d;
-        }
-
-        .node.start {
-            fill: #ff6b6b;
-        }
-
-        .edge {
-            stroke: #999;
-            stroke-width: 2;
-        }
-
-        .edge.path {
-            stroke: #ff6b6b;
-            stroke-width: 4;
-        }
-
-        .edge-label {
-            font-size: 14px;
-            font-weight: bold;
-            fill: #333;
-        }
-
-        .node-label {
-            font-size: 20px;
-            font-weight: bold;
-            fill: #333;
-            text-anchor: middle;
-        }
-
-        .distance-label {
-            font-size: 14px;
-            fill: #667eea;
-            font-weight: bold;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            font-size: 1.1em;
-        }
-
-        th {
-            background: #667eea;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            border: 2px solid #764ba2;
-        }
-
-        td {
-            padding: 12px;
-            text-align: center;
-            border: 2px solid #ddd;
-        }
-
-        .highlight {
-            background: #ffd93d;
-            font-weight: bold;
-        }
-
-        .visited-cell {
-            background: #4ecdc4;
-            color: white;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 60px;
-            background: #f8f9fa;
-            border-top: 3px solid #667eea;
-        }
-
-        button {
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-
-        .btn-prev {
-            background: #999;
-            color: white;
-        }
-
-        .btn-prev:hover:not(:disabled) {
-            background: #777;
-            transform: translateX(-5px);
-        }
-
-        .btn-next {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-next:hover:not(:disabled) {
-            background: #764ba2;
-            transform: translateX(5px);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .slide-counter {
-            font-size: 1.2em;
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        .code-block {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 20px;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 1em;
-            line-height: 1.6;
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        .keyword {
-            color: #ff79c6;
-        }
-
-        .string {
-            color: #f1fa8c;
-        }
-
-        .comment {
-            color: #6272a4;
-        }
-
-        .algo-step {
-            background: #e7f3ff;
-            border-left: 5px solid #667eea;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-
-        .infinity {
-            color: #999;
-            font-style: italic;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP Dijkstra NSI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#e3f2fd 0%,#f3e5f5 100%);min-height:100vh;padding:20px}
+.container{max-width:1400px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.1);overflow:hidden}
+.slide{display:none;padding:40px;min-height:600px}
+.slide.active{display:block;animation:fadeIn 0.5s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+h1{color:#5e35b1;font-size:2.5em;margin-bottom:20px;text-align:center}
+h2{color:#7e57c2;font-size:1.8em;margin-bottom:25px;border-bottom:3px solid #b39ddb;padding-bottom:10px}
+table{width:100%;border-collapse:collapse;margin:25px 0;font-size:1.05em}
+th{background:#b39ddb;color:#fff;padding:12px;text-align:center;font-weight:600;border:2px solid #fff}
+td{padding:12px;border:2px solid #e0e0e0;text-align:center;font-weight:500}
+.arrow-row td{border:none;padding:3px;font-size:1.4em}
+.selected-vertex{background:#fff9c4;font-weight:bold;border:3px solid #fbc02d!important}
+.closed{background:#ffccbc;color:#d32f2f;font-weight:bold}
+.updated{background:#c8e6c9;font-weight:bold}
+.navigation{display:flex;justify-content:space-between;margin-top:30px;padding-top:15px;border-top:2px solid #e0e0e0}
+button{background:linear-gradient(135deg,#9575cd 0%,#7e57c2 100%);color:#fff;border:none;padding:12px 30px;border-radius:25px;cursor:pointer;font-size:1.05em;font-weight:600;transition:all 0.3s;box-shadow:0 4px 15px rgba(149,117,205,0.3)}
+button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 20px rgba(149,117,205,0.4)}
+button:disabled{background:#e0e0e0;cursor:not-allowed;transform:none;box-shadow:none}
+.step-box{background:#f3e5f5;padding:18px;border-left:5px solid #9575cd;margin:18px 0;border-radius:8px}
+.slide-counter{text-align:center;color:#7e57c2;font-weight:600;margin-top:15px;font-size:1.05em}
+.note{background:#e1f5fe;padding:15px;border-left:5px solid #03a9f4;margin:18px 0;border-radius:8px}
+.path-result{background:#c8e6c9;padding:20px;border-radius:12px;margin:20px 0;border:3px solid #66bb6a;text-align:center}
+.path-arrow{color:#7e57c2;font-weight:bold;margin:0 8px}
+p{line-height:1.6}
+</style>
 </head>
 <body>
-    <div class="presentation">
-        <!-- Slide 1: Titre -->
-        <div class="slide active">
-            <h1>🎯 Algorithme de Dijkstra</h1>
-            <h2 style="text-align: center; color: #764ba2; margin-top: 80px;">
-                Plus court chemin dans un graphe pondéré
-            </h2>
-            <p style="text-align: center; font-size: 1.5em; margin-top: 60px; color: #667eea;">
-                NSI - Terminale
-            </p>
-            <p style="text-align: center; font-size: 1.2em; margin-top: 40px; color: #999;">
-                Cours interactif pas à pas
-            </p>
-        </div>
+<div class="container">
 
-        <!-- Slide 2: Introduction -->
-        <div class="slide">
-            <h2>📚 Introduction</h2>
-            <h3>Qu'est-ce que l'algorithme de Dijkstra ?</h3>
-            <ul>
-                <li>Algorithme créé par Edsger Dijkstra en 1956</li>
-                <li>Permet de trouver le plus court chemin entre deux sommets d'un graphe</li>
-                <li>Fonctionne sur des graphes pondérés avec des poids positifs</li>
-                <li>Utilisé dans les GPS, routage réseau, jeux vidéo...</li>
-            </ul>
-            
-            <h3 style="margin-top: 40px;">Applications concrètes</h3>
-            <ul>
-                <li>🗺️ Navigation GPS (Google Maps, Waze)</li>
-                <li>🌐 Routage de paquets sur Internet</li>
-                <li>🎮 Intelligence artificielle dans les jeux</li>
-                <li>✈️ Optimisation de trajets aériens</li>
-            </ul>
-        </div>
+<div class="slide active">
+<h1>🗺️ Algorithme de Dijkstra</h1>
+<h2 style="text-align:center;color:#7e57c2;border:none">Plus Court Chemin entre Villes</h2>
+<div style="text-align:center;margin:40px 0">
+<p style="font-size:1.3em;color:#555;margin:15px 0">TP de NSI - Terminale</p>
+<p style="font-size:1.1em;color:#777">Objectif : Trouver le chemin le plus court de A vers G</p>
+</div>
+<div class="step-box">
+<h3 style="color:#7e57c2">📚 Dans ce TP :</h3>
+<ul style="margin:15px 0 0 35px;line-height:2;font-size:1.05em">
+<li>Comprendre l'algorithme de Dijkstra</li>
+<li>Construire le tableau pas à pas</li>
+<li>Identifier le plus court chemin</li>
+<li>Reconstituer le parcours optimal</li>
+</ul>
+</div>
+<div class="navigation">
+<button disabled>← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 1 / 10</div>
+</div>
 
-        <!-- Slide 3: Le graphe -->
-        <div class="slide">
-            <h2>📊 Le graphe de départ</h2>
-            <p>Nous allons chercher le plus court chemin du sommet <strong style="color: #ff6b6b;">A</strong> vers tous les autres sommets.</p>
-            
-            <div class="graph-container">
-                <svg width="600" height="400">
-                    <!-- Arêtes -->
-                    <line x1="100" y1="100" x2="300" y2="100" class="edge"/>
-                    <text x="200" y="90" class="edge-label">4</text>
-                    
-                    <line x1="100" y1="100" x2="100" y2="300" class="edge"/>
-                    <text x="80" y="200" class="edge-label">2</text>
-                    
-                    <line x1="300" y1="100" x2="500" y2="100" class="edge"/>
-                    <text x="400" y="90" class="edge-label">3</text>
-                    
-                    <line x1="300" y1="100" x2="300" y2="300" class="edge"/>
-                    <text x="320" y="200" class="edge-label">5</text>
-                    
-                    <line x1="100" y1="300" x2="300" y2="300" class="edge"/>
-                    <text x="200" y="320" class="edge-label">1</text>
-                    
-                    <line x1="300" y1="300" x2="500" y2="100" class="edge"/>
-                    <text x="420" y="220" class="edge-label">2</text>
-                    
-                    <!-- Sommets -->
-                    <circle cx="100" cy="100" r="30" class="node start"/>
-                    <text x="100" y="110" class="node-label">A</text>
-                    
-                    <circle cx="300" cy="100" r="30" class="node"/>
-                    <text x="300" y="110" class="node-label">B</text>
-                    
-                    <circle cx="500" cy="100" r="30" class="node"/>
-                    <text x="500" y="110" class="node-label">D</text>
-                    
-                    <circle cx="100" cy="300" r="30" class="node"/>
-                    <text x="100" y="310" class="node-label">C</text>
-                    
-                    <circle cx="300" cy="300" r="30" class="node"/>
-                    <text x="300" y="310" class="node-label">E</text>
-                </svg>
-            </div>
-            
-            <div class="algo-step">
-                <strong>Légende :</strong>
-                <ul style="margin-top: 10px;">
-                    <li>🔴 Sommet de départ (A)</li>
-                    <li>⚪ Sommets non visités</li>
-                    <li>Les nombres sur les arêtes = poids (distance)</li>
-                </ul>
-            </div>
-        </div>
+<div class="slide">
+<h2>📍 Le Réseau de Villes</h2>
+<div style="background:#fafafa;padding:25px;border-radius:15px;margin:20px 0">
+<p style="font-size:1.1em;margin-bottom:15px">9 villes connectées (A à I) avec distances en km</p>
+<p style="font-size:1em;color:#666">Départ : <strong style="color:#66bb6a">A</strong> | Arrivée : <strong style="color:#ffa726">G</strong></p>
+</div>
+<div class="note">
+<strong>Connexions :</strong><br>
+A↔B(5), A↔D(8) | B↔C(4), B↔E(7) | C↔F(10), C↔G(12)<br>
+D↔E(6), D↔H(9) | E↔F(5), E↔I(7) | F↔G(3) | H↔I(6)
+</div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 2 / 10</div>
+</div>
 
-        <!-- Slide 4: Principe -->
-        <div class="slide">
-            <h2>⚙️ Principe de l'algorithme</h2>
-            
-            <div class="algo-step">
-                <h3>Étape 1 : Initialisation</h3>
-                <p>• On attribue la distance 0 au sommet de départ</p>
-                <p>• On attribue la distance ∞ (infini) à tous les autres sommets</p>
-                <p>• Tous les sommets sont "non visités"</p>
-            </div>
-            
-            <div class="algo-step">
-                <h3>Étape 2 : Boucle principale</h3>
-                <p><strong>Tant qu'il reste des sommets non visités :</strong></p>
-                <p>• On sélectionne le sommet non visité avec la plus petite distance</p>
-                <p>• On examine tous ses voisins non visités</p>
-                <p>• Pour chaque voisin, on calcule la distance totale en passant par le sommet actuel</p>
-                <p>• Si cette distance est plus courte, on la met à jour</p>
-                <p>• On marque le sommet actuel comme "visité"</p>
-            </div>
-        </div>
+<div class="slide">
+<h2>📊 Étape 0 : Initialisation</h2>
+<p style="font-size:1.1em;margin-bottom:20px">Distance 0 pour A, ∞ pour les autres</p>
+<table>
+<thead><tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr></thead>
+<tbody><tr><td class="selected-vertex">0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr></tbody>
+</table>
+<div class="step-box">
+<strong>Légende :</strong> Format = distance+provenance (ex: 5A) | X = fermé | ↓ = en traitement
+</div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 3 / 10</div>
+</div>
 
-        <!-- Slide 5: Initialisation -->
-        <div class="slide">
-            <h2>🚀 Étape 0 - Initialisation</h2>
-            
-            <table>
-                <tr>
-                    <th>Sommet</th>
-                    <th>Distance</th>
-                    <th>Prédécesseur</th>
-                    <th>Visité</th>
-                </tr>
-                <tr class="highlight">
-                    <td>A</td>
-                    <td>0</td>
-                    <td>-</td>
-                    <td>❌</td>
-                </tr>
-                <tr>
-                    <td>B</td>
-                    <td class="infinity">∞</td>
-                    <td>-</td>
-                    <td>❌</td>
-                </tr>
-                <tr>
-                    <td>C</td>
-                    <td class="infinity">∞</td>
-                    <td>-</td>
-                    <td>❌</td>
-                </tr>
-                <tr>
-                    <td>D</td>
-                    <td class="infinity">∞</td>
-                    <td>-</td>
-                    <td>❌</td>
-                </tr>
-                <tr>
-                    <td>E</td>
-                    <td class="infinity">∞</td>
-                    <td>-</td>
-                    <td>❌</td>
-                </tr>
-            </table>
-            
-            <div class="algo-step">
-                <p><strong>On commence avec le sommet A (distance = 0)</strong></p>
-                <p>Tous les autres sommets ont une distance infinie car nous ne connaissons pas encore de chemin pour les atteindre.</p>
-            </div>
-        </div>
+<div class="slide">
+<h2>📊 Étape 1 : Traitement de A</h2>
+<p style="font-size:1.1em;margin-bottom:20px">Voisins de A : B(5km), D(8km)</p>
+<table>
+<thead>
+<tr class="arrow-row"><td>↓</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><th class="selected-vertex">A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="updated">5A</td><td>∞</td><td class="updated">8A</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Calculs :</strong> B=0+5=5 | D=0+8=8</div>
+<div class="step-box">Prochain : <strong style="color:#1976d2;font-size:1.15em">B (5)</strong></div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 4 / 10</div>
+</div>
 
-        <!-- Slide 6: Étape 1 -->
-        <div class="slide">
-            <h2>📍 Étape 1 - Traitement du sommet A</h2>
-            
-            <div class="graph-container">
-                <svg width="600" height="400">
-                    <line x1="100" y1="100" x2="300" y2="100" class="edge path"/>
-                    <text x="200" y="90" class="edge-label">4</text>
-                    
-                    <line x1="100" y1="100" x2="100" y2="300" class="edge path"/>
-                    <text x="80" y="200" class="edge-label">2</text>
-                    
-                    <line x1="300" y1="100" x2="500" y2="100" class="edge"/>
-                    <text x="400" y="90" class="edge-label">3</text>
-                    
-                    <line x1="300" y1="100" x2="300" y2="300" class="edge"/>
-                    <text x="320" y="200" class="edge-label">5</text>
-                    
-                    <line x1="100" y1="300" x2="300" y2="300" class="edge"/>
-                    <text x="200" y="320" class="edge-label">1</text>
-                    
-                    <line x1="300" y1="300" x2="500" y2="100" class="edge"/>
-                    <text x="420" y="220" class="edge-label">2</text>
-                    
-                    <circle cx="100" cy="100" r="30" class="node current"/>
-                    <text x="100" y="110" class="node-label">A</text>
-                    <text x="100" y="65" class="distance-label">0</text>
-                    
-                    <circle cx="300" cy="100" r="30" class="node"/>
-                    <text x="300" y="110" class="node-label">B</text>
-                    <text x="300" y="65" class="distance-label">4</text>
-                    
-                    <circle cx="500" cy="100" r="30" class="node"/>
-                    <text x="500" y="110" class="node-label">D</text>
-                    
-                    <circle cx="100" cy="300" r="30" class="node"/>
-                    <text x="100" y="310" class="node-label">C</text>
-                    <text x="100" y="345" class="distance-label">2</text>
-                    
-                    <circle cx="300" cy="300" r="30" class="node"/>
-                    <text x="300" y="310" class="node-label">E</text>
-                </svg>
-            </div>
-            
-            <table>
-                <tr>
-                    <th>Sommet</th>
-                    <th>Distance</th>
-                    <th>Prédécesseur</th>
-                    <th>Visité</th>
-                </tr>
-                <tr class="visited-cell">
-                    <td>A</td>
-                    <td>0</td>
-                    <td>-</td>
-                    <td>✅</td>
-                </tr>
-                <tr class="highlight">
-                    <td>B</td>
-                    <td>4</td>
-                    <td>A</td>
-                    <td>❌</td>
-                </tr>
-                <tr class="highlight">
-                    <td>C</td>
-                    <td>2</td>
-                    <td>A</td>
-                    <td>❌</td>
-                </tr>
-                <tr>
-                    <td>D</td>
-                    <td class="infinity">∞</td>
-                    <td>-</td>
-                    <td>❌</td>
-                </tr>
-                <tr>
-                    <td>E</td>
-                    <td class="infinity">∞</td>
-                    <td>-</td>
-                    <td>❌</td>
-                </tr>
-            </table>
-            
-            <div class="algo-step">
-                <p><strong>Voisins de A :</strong> B (distance 4) et C (distance 2)</p>
-                <p>• Distance vers B via A : 0 + 4 = 4</p>
-                <p>• Distance vers C via A : 0 + 2 = 2</p>
-                <p>➡️ A est maintenant visité (en bleu turquoise)</p>
-            </div>
-        </div>
+<div class="slide">
+<h2>📊 Étape 2 : Traitement de B</h2>
+<p style="font-size:1.1em;margin-bottom:20px">Voisins de B : C(4km), E(7km)</p>
+<table>
+<thead>
+<tr class="arrow-row"><td></td><td>↓</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><th>A</th><th class="selected-vertex">B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td>5A</td><td>∞</td><td>8A</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td class="updated">9B</td><td>8A</td><td class="updated">12B</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Calculs :</strong> C=5+4=9 | E=5+7=12</div>
+<div class="step-box">Prochain : <strong style="color:#1976d2;font-size:1.15em">D (8)</strong></div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 5 / 10</div>
+</div>
 
-        <!-- Slide 7: Étape 2 -->
-        <div class="slide">
-            <h2>📍 Étape 2 - Traitement du sommet C</h2>
-            
-            <div class="graph-container">
-                <svg width="600" height="400">
-                    <line x1="100" y1="100" x2="300" y2="100" class="edge"/>
-                    <text x="200" y="90" class="edge-label">4</text>
-                    
-                    <line x1="100" y1="100" x2="100" y2="300" class="edge path"/>
-                    <text x="80" y="200" class="edge-label">2</text>
-                    
-                    <line x1="300" y1="100" x2="500" y2="100" class="edge"/>
-                    <text x="400" y="90" class="edge-label">3</text>
-                    
-                    <line x1="300" y1="100" x2="300" y2="300" class="edge"/>
-                    <text x="320" y="200" class="edge-label">5</text>
-                    
-                    <line x1="100" y1="300" x2="300" y2="300" class="edge path"/>
-                    <text x="200" y="320" class="edge-label">1</text>
-                    
-                    <line x1="300" y1="300" x2="500" y2="100" class="edge"/>
-                    <text x="420" y="220" class="edge-label">2</text>
-                    
-                    <circle cx="100" cy="100" r="30" class="node visited"/>
-                    <text x="100" y="110" class="node-label">A</text>
-                    
-                    <circle cx="300" cy="100" r="30" class="node"/>
-                    <text x="300" y="110" class="node-label">B</text>
-                    
-                    <circle cx="500" cy="100" r="30" class="node"/>
-                    <text x="500" y="110" class="node-label">D</text>
-                    
-                    <circle cx="100" cy="300" r="30" class="node current"/>
-                    <text x="100" y="310" class="node-label">C</text>
-                    <text x="100" y="345" class="distance-label">2</text>
-                    
-                    <circle cx="300" cy="300" r="30" class="node"/>
-                    <text x="300" y="310" class="node-label">E</text>
-                    <text x="300" y="345" class="distance-label">3</text>
-                </svg>
-            </div>
-            
-            <table>
-                <tr>
-                    <th>Sommet</th>
-                    <th>Distance</th>
-                    <th>Prédécesseur</th>
-                    <th>Visité</th>
-                </tr>
-                <tr class="visited-cell">
-                    <td>A</td>
-                    <td>0</td>
-                    <td>-</td>
-                    <td>✅</td>
-                </tr>
-                <tr>
-                    <td>B</td>
-                    <td>4</td>
-                    <td>A</td>
-                    <td>❌</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>C</td>
-                    <td>2</td>
-                    <td>A</td>
-                    <td>✅</td>
-                </tr>
-                <tr>
-                    <td>D</td>
-                    <td class="infinity">∞</td>
-                    <td>-</td>
-                    <td>❌</td>
-                </tr>
-                <tr class="highlight">
-                    <td>E</td>
-                    <td>3</td>
-                    <td>C</td>
-                    <td>❌</td>
-                </tr>
-            </table>
-            
-            <div class="algo-step">
-                <p><strong>On choisit C (distance 2, la plus petite parmi les non visités)</strong></p>
-                <p><strong>Voisin de C :</strong> E (distance 1)</p>
-                <p>• Distance vers E via C : 2 + 1 = 3 &lt; ∞</p>
-                <p>➡️ On met à jour la distance de E à 3</p>
-            </div>
-        </div>
+<div class="slide">
+<h2>📊 Étape 3 : Traitement de D</h2>
+<p style="font-size:1.1em;margin-bottom:20px">Voisins de D : E(6km), H(9km)</p>
+<table>
+<thead>
+<tr class="arrow-row"><td></td><td></td><td></td><td>↓</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><th>A</th><th>B</th><th>C</th><th class="selected-vertex">D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td>5A</td><td>∞</td><td>8A</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td>9B</td><td>8A</td><td>12B</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td>9B</td><td class="closed">X</td><td>12B</td><td>∞</td><td>∞</td><td class="updated">17D</td><td>∞</td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Calculs :</strong> E=8+6=14>12 (garde 12B) | H=8+9=17</div>
+<div class="step-box">Prochain : <strong style="color:#1976d2;font-size:1.15em">C (9)</strong></div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 6 / 10</div>
+</div>
 
-        <!-- Slide 8: Étape 3 -->
-        <div class="slide">
-            <h2>📍 Étape 3 - Traitement du sommet E</h2>
-            
-            <div class="graph-container">
-                <svg width="600" height="400">
-                    <line x1="100" y1="100" x2="300" y2="100" class="edge"/>
-                    <text x="200" y="90" class="edge-label">4</text>
-                    
-                    <line x1="100" y1="100" x2="100" y2="300" class="edge path"/>
-                    <text x="80" y="200" class="edge-label">2</text>
-                    
-                    <line x1="300" y1="100" x2="500" y2="100" class="edge"/>
-                    <text x="400" y="90" class="edge-label">3</text>
-                    
-                    <line x1="300" y1="100" x2="300" y2="300" class="edge"/>
-                    <text x="320" y="200" class="edge-label">5</text>
-                    
-                    <line x1="100" y1="300" x2="300" y2="300" class="edge path"/>
-                    <text x="200" y="320" class="edge-label">1</text>
-                    
-                    <line x1="300" y1="300" x2="500" y2="100" class="edge path"/>
-                    <text x="420" y="220" class="edge-label">2</text>
-                    
-                    <circle cx="100" cy="100" r="30" class="node visited"/>
-                    <text x="100" y="110" class="node-label">A</text>
-                    
-                    <circle cx="300" cy="100" r="30" class="node"/>
-                    <text x="300" y="110" class="node-label">B</text>
-                    
-                    <circle cx="500" cy="100" r="30" class="node"/>
-                    <text x="500" y="110" class="node-label">D</text>
-                    <text x="500" y="65" class="distance-label">5</text>
-                    
-                    <circle cx="100" cy="300" r="30" class="node visited"/>
-                    <text x="100" y="310" class="node-label">C</text>
-                    
-                    <circle cx="300" cy="300" r="30" class="node current"/>
-                    <text x="300" y="310" class="node-label">E</text>
-                    <text x="300" y="345" class="distance-label">3</text>
-                </svg>
-            </div>
-            
-            <table>
-                <tr>
-                    <th>Sommet</th>
-                    <th>Distance</th>
-                    <th>Prédécesseur</th>
-                    <th>Visité</th>
-                </tr>
-                <tr class="visited-cell">
-                    <td>A</td>
-                    <td>0</td>
-                    <td>-</td>
-                    <td>✅</td>
-                </tr>
-                <tr>
-                    <td>B</td>
-                    <td>4</td>
-                    <td>A</td>
-                    <td>❌</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>C</td>
-                    <td>2</td>
-                    <td>A</td>
-                    <td>✅</td>
-                </tr>
-                <tr class="highlight">
-                    <td>D</td>
-                    <td>5</td>
-                    <td>E</td>
-                    <td>❌</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>E</td>
-                    <td>3</td>
-                    <td>C</td>
-                    <td>✅</td>
-                </tr>
-            </table>
-            
-            <div class="algo-step">
-                <p><strong>On choisit E (distance 3)</strong></p>
-                <p><strong>Voisins de E :</strong> D (distance 2) et B (distance 5)</p>
-                <p>• Distance vers D via E : 3 + 2 = 5 &lt; ∞</p>
-                <p>• Distance vers B via E : 3 + 5 = 8 &gt; 4 (on ne change pas)</p>
-            </div>
-        </div>
+<div class="slide">
+<h2>📊 Étape 4 : Traitement de C</h2>
+<p style="font-size:1.1em;margin-bottom:20px">Voisins de C : F(10km), G(12km)</p>
+<table>
+<thead>
+<tr class="arrow-row"><td></td><td></td><td>↓</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><th>A</th><th>B</th><th class="selected-vertex">C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td>5A</td><td>∞</td><td>8A</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td>9B</td><td>8A</td><td>12B</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td>9B</td><td class="closed">X</td><td>12B</td><td>∞</td><td>∞</td><td>17D</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td>12B</td><td class="updated">19C</td><td class="updated">21C</td><td>17D</td><td>∞</td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Calculs :</strong> F=9+10=19 | G=9+12=21</div>
+<div class="step-box">Prochain : <strong style="color:#1976d2;font-size:1.15em">E (12)</strong></div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 7 / 10</div>
+</div>
 
-        <!-- Slide 9: Étape 4 -->
-        <div class="slide">
-            <h2>📍 Étape 4 - Traitement du sommet B</h2>
-            
-            <div class="graph-container">
-                <svg width="600" height="400">
-                    <line x1="100" y1="100" x2="300" y2="100" class="edge path"/>
-                    <text x="200" y="90" class="edge-label">4</text>
-                    
-                    <line x1="100" y1="100" x2="100" y2="300" class="edge path"/>
-                    <text x="80" y="200" class="edge-label">2</text>
-                    
-                    <line x1="300" y1="100" x2="500" y2="100" class="edge"/>
-                    <text x="400" y="90" class="edge-label">3</text>
-                    
-                    <line x1="300" y1="100" x2="300" y2="300" class="edge"/>
-                    <text x="320" y="200" class="edge-label">5</text>
-                    
-                    <line x1="100" y1="300" x2="300" y2="300" class="edge path"/>
-                    <text x="200" y="320" class="edge-label">1</text>
-                    
-                    <line x1="300" y1="300" x2="500" y2="100" class="edge path"/>
-                    <text x="420" y="220" class="edge-label">2</text>
-                    
-                    <circle cx="100" cy="100" r="30" class="node visited"/>
-                    <text x="100" y="110" class="node-label">A</text>
-                    
-                    <circle cx="300" cy="100" r="30" class="node current"/>
-                    <text x="300" y="110" class="node-label">B</text>
-                    <text x="300" y="65" class="distance-label">4</text>
-                    
-                    <circle cx="500" cy="100" r="30" class="node"/>
-                    <text x="500" y="110" class="node-label">D</text>
-                    <text x="500" y="65" class="distance-label">5</text>
-                    
-                    <circle cx="100" cy="300" r="30" class="node visited"/>
-                    <text x="100" y="310" class="node-label">C</text>
-                    
-                    <circle cx="300" cy="300" r="30" class="node visited"/>
-                    <text x="300" y="310" class="node-label">E</text>
-                </svg>
-            </div>
-            
-            <table>
-                <tr>
-                    <th>Sommet</th>
-                    <th>Distance</th>
-                    <th>Prédécesseur</th>
-                    <th>Visité</th>
-                </tr>
-                <tr class="visited-cell">
-                    <td>A</td>
-                    <td>0</td>
-                    <td>-</td>
-                    <td>✅</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>B</td>
-                    <td>4</td>
-                    <td>A</td>
-                    <td>✅</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>C</td>
-                    <td>2</td>
-                    <td>A</td>
-                    <td>✅</td>
-                </tr>
-                <tr>
-                    <td>D</td>
-                    <td>5</td>
-                    <td>E</td>
-                    <td>❌</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>E</td>
-                    <td>3</td>
-                    <td>C</td>
-                    <td>✅</td>
-                </tr>
-            </table>
-            
-            <div class="algo-step">
-                <p><strong>On choisit B (distance 4)</strong></p>
-                <p><strong>Voisin de B :</strong> D (distance 3)</p>
-                <p>• Distance vers D via B : 4 + 3 = 7 &gt; 5 (on ne change pas)</p>
-                <p>➡️ Le chemin par E reste meilleur pour atteindre D</p>
-            </div>
-        </div>
+<div class="slide">
+<h2>📊 Étape 5 : Traitement de E</h2>
+<p style="font-size:1.1em;margin-bottom:20px">Voisins de E : F(5km), I(7km)</p>
+<table>
+<thead>
+<tr class="arrow-row"><td></td><td></td><td></td><td></td><td>↓</td><td></td><td></td><td></td><td></td></tr>
+<tr><th>A</th><th>B</th><th>C</th><th>D</th><th class="selected-vertex">E</th><th>F</th><th>G</th><th>H</th><th>I</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td>5A</td><td>∞</td><td>8A</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td>9B</td><td>8A</td><td>12B</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td>9B</td><td class="closed">X</td><td>12B</td><td>∞</td><td>∞</td><td>17D</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td>12B</td><td>19C</td><td>21C</td><td>17D</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="updated">17E</td><td>21C</td><td>17D</td><td class="updated">19E</td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Calculs :</strong> F=12+5=17<19 (amélioration!) | I=12+7=19</div>
+<div class="step-box">Prochain : <strong style="color:#1976d2;font-size:1.15em">F (17)</strong></div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 8 / 10</div>
+</div>
 
-        <!-- Slide 10: Étape 5 Finale -->
-        <div class="slide">
-            <h2>🏁 Étape 5 - Traitement du sommet D (Final)</h2>
-            
-            <div class="graph-container">
-                <svg width="600" height="400">
-                    <line x1="100" y1="100" x2="300" y2="100" class="edge"/>
-                    <text x="200" y="90" class="edge-label">4</text>
-                    
-                    <line x1="100" y1="100" x2="100" y2="300" class="edge path"/>
-                    <text x="80" y="200" class="edge-label">2</text>
-                    
-                    <line x1="300" y1="100" x2="500" y2="100" class="edge"/>
-                    <text x="400" y="90" class="edge-label">3</text>
-                    
-                    <line x1="300" y1="100" x2="300" y2="300" class="edge"/>
-                    <text x="320" y="200" class="edge-label">5</text>
-                    
-                    <line x1="100" y1="300" x2="300" y2="300" class="edge path"/>
-                    <text x="200" y="320" class="edge-label">1</text>
-                    
-                    <line x1="300" y1="300" x2="500" y2="100" class="edge path"/>
-                    <text x="420" y="220" class="edge-label">2</text>
-                    
-                    <circle cx="100" cy="100" r="30" class="node visited"/>
-                    <text x="100" y="110" class="node-label">A</text>
-                    <text x="100" y="65" class="distance-label">0</text>
-                    
-                    <circle cx="300" cy="100" r="30" class="node visited"/>
-                    <text x="300" y="110" class="node-label">B</text>
-                    <text x="300" y="65" class="distance-label">4</text>
-                    
-                    <circle cx="500" cy="100" r="30" class="node visited"/>
-                    <text x="500" y="110" class="node-label">D</text>
-                    <text x="500" y="65" class="distance-label">5</text>
-                    
-                    <circle cx="100" cy="300" r="30" class="node visited"/>
-                    <text x="100" y="310" class="node-label">C</text>
-                    <text x="100" y="345" class="distance-label">2</text>
-                    
-                    <circle cx="300" cy="300" r="30" class="node visited"/>
-                    <text x="300" y="310" class="node-label">E</text>
-                    <text x="300" y="345" class="distance-label">3</text>
-                </svg>
-            </div>
-            
-            <table>
-                <tr>
-                    <th>Sommet</th>
-                    <th>Distance</th>
-                    <th>Prédécesseur</th>
-                    <th>Visité</th>
-                </tr>
-                <tr class="visited-cell">
-                    <td>A</td>
-                    <td>0</td>
-                    <td>-</td>
-                    <td>✅</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>B</td>
-                    <td>4</td>
-                    <td>A</td>
-                    <td>✅</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>C</td>
-                    <td>2</td>
-                    <td>A</td>
-                    <td>✅</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>D</td>
-                    <td>5</td>
-                    <td>E</td>
-                    <td>✅</td>
-                </tr>
-                <tr class="visited-cell">
-                    <td>E</td>
-                    <td>3</td>
-                    <td>C</td>
-                    <td>✅</td>
-                </tr>
-            </table>
-            
-            <div class="algo-step">
-                <p><strong>✅ Tous les sommets sont visités !</strong></p>
-                <p>Le plus court chemin de A vers D est : <strong style="color: #ff6b6b;">A → C → E → D</strong></p>
-                <p>Distance totale : <strong>5</strong></p>
-            </div>
-        </div>
+<div class="slide">
+<h2>📊 Étape 6 : Traitement de F - 🎯 G ATTEINT!</h2>
+<p style="font-size:1.1em;margin-bottom:20px">Voisin de F : G(3km)</p>
+<table>
+<thead>
+<tr class="arrow-row"><td></td><td></td><td></td><td></td><td></td><td>↓</td><td></td><td></td><td></td></tr>
+<tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th class="selected-vertex">F</th><th>G</th><th>H</th><th>I</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td>5A</td><td>∞</td><td>8A</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td>9B</td><td>8A</td><td>12B</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td>9B</td><td class="closed">X</td><td>12B</td><td>∞</td><td>∞</td><td>17D</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td>12B</td><td>19C</td><td>21C</td><td>17D</td><td>∞</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td>17E</td><td>21C</td><td>17D</td><td>19E</td></tr>
+<tr><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="closed">X</td><td class="updated">20F</td><td>17D</td><td>19E</td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Calcul :</strong> G=17+3=20<21 (amélioration!)</div>
+<div class="path-result"><h3>🎉 G atteint ! Distance : 20 km</h3></div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button onclick="changeSlide(1)">Suivant →</button>
+</div>
+<div class="slide-counter">Slide 9 / 10</div>
+</div>
 
-        <!-- Slide 11: Résultats -->
-        <div class="slide">
-            <h2>📊 Résultats finaux</h2>
-            
-            <h3>Plus courts chemins depuis A :</h3>
-            
-            <table>
-                <tr>
-                    <th>Destination</th>
-                    <th>Distance</th>
-                    <th>Chemin</th>
-                </tr>
-                <tr>
-                    <td>A</td>
-                    <td>0</td>
-                    <td>A</td>
-                </tr>
-                <tr>
-                    <td>B</td>
-                    <td>4</td>
-                    <td>A → B</td>
-                </tr>
-                <tr>
-                    <td>C</td>
-                    <td>2</td>
-                    <td>A → C</td>
-                </tr>
-                <tr>
-                    <td>D</td>
-                    <td>5</td>
-                    <td>A → C → E → D</td>
-                </tr>
-                <tr>
-                    <td>E</td>
-                    <td>3</td>
-                    <td>A → C → E</td>
-                </tr>
-            </table>
-            
-            <div class="algo-step" style="margin-top: 40px;">
-                <h3>📝 Points importants :</h3>
-                <ul>
-                    <li>L'algorithme explore toujours le sommet non visité avec la plus petite distance</li>
-                    <li>Une fois un sommet visité, sa distance finale est garantie optimale</li>
-                    <li>On utilise le tableau des prédécesseurs pour reconstruire les chemins</li>
-                </ul>
-            </div>
-        </div>
+<div class="slide">
+<h2>🎯 Reconstruction du Chemin</h2>
+<div class="step-box">
+<h3 style="color:#7e57c2">Comment reconstituer ?</h3>
+<p style="font-size:1.05em;line-height:1.7;margin-top:12px">
+On part de G et on remonte les prédécesseurs jusqu'à A
+</p>
+</div>
+<div style="background:#f5f5f5;padding:25px;border-radius:12px;margin:20px 0">
+<table style="width:auto;margin:0 auto;font-size:1.15em">
+<tr><td style="padding:12px;border:none;text-align:right"><strong>G</strong> vient de</td><td style="padding:12px;border:none;color:#7e57c2;font-weight:bold">→ F</td><td style="padding:12px;border:none;color:#666">(20=17+3)</td></tr>
+<tr><td style="padding:12px;border:none;text-align:right"><strong>F</strong> vient de</td><td style="padding:12px;border:none;color:#7e57c2;font-weight:bold">→ E</td><td style="padding:12px;border:none;color:#666">(17=12+5)</td></tr>
+<tr><td style="padding:12px;border:none;text-align:right"><strong>E</strong> vient de</td><td style="padding:12px;border:none;color:#7e57c2;font-weight:bold">→ B</td><td style="padding:12px;border:none;color:#666">(12=5+7)</td></tr>
+<tr><td style="padding:12px;border:none;text-align:right"><strong>B</strong> vient de</td><td style="padding:12px;border:none;color:#7e57c2;font-weight:bold">→ A</td><td style="padding:12px;border:none;color:#666">(5=0+5)</td></tr>
+</table>
+</div>
+<div class="path-result">
+<h3>✨ CHEMIN OPTIMAL</h3>
+<p style="font-size:1.8em;margin:18px 0;color:#2e7d32;font-weight:bold">
+A<span class="path-arrow">→</span>B<span class="path-arrow">→</span>E<span class="path-arrow">→</span>F<span class="path-arrow">→</span>G
+</p>
+<p style="font-size:1.4em;color:#2e7d32"><strong>Distance : 20 km</strong></p>
+</div>
+<div class="note">
+<strong>💡 Points clés :</strong><br>
+• Dijkstra choisit toujours le sommet non visité le plus proche<br>
+• On met à jour si on trouve un chemin plus court<br>
+• Les prédécesseurs permettent de reconstituer le chemin
+</div>
+<div class="navigation">
+<button onclick="changeSlide(-1)">← Précédent</button>
+<button disabled>Suivant →</button>
+</div>
+<div class="slide-counter">Slide 10 / 10</div>
+</div>
 
-        <!-- Slide 12: Implémentation Python -->
-        <div class="slide">
-            <h2>💻 Implémentation en Python</h2>
-            
-            <div class="code-block">
-<span class="keyword">def</span> dijkstra(graphe, depart):
-    <span class="comment"># Initialisation</span>
-    distances = {sommet: <span class="keyword">float</span>(<span class="string">'inf'</span>) <span class="keyword">for</span> sommet <span class="keyword">in</span> graphe}
-    distances[depart] = 0
-    predecesseurs = {sommet: <span class="keyword">None</span> <span class="keyword">for</span> sommet <span class="keyword">in</span> graphe}
-    non_visites = <span class="keyword">set</span>(graphe.keys())
-    
-    <span class="keyword">while</span> non_visites:
-        <span class="comment"># Sélectionner le sommet non visité avec la plus petite distance</span>
-        courant = <span class="keyword">min</span>(non_visites, key=<span class="keyword">lambda</span> s: distances[s])
-        non_visites.remove(courant)
-        
-        <span class="comment"># Explorer les voisins</span>
-        <span class="keyword">for</span> voisin, poids <span class="keyword">in</span> graphe[courant].items():
-            nouvelle_distance = distances[courant] + poids
-            
-            <span class="comment"># Mise à jour si on trouve un chemin plus court</span>
-            <span class="keyword">if</span> nouvelle_distance &lt; distances[voisin]:
-                distances[voisin] = nouvelle_distance
-                predecesseurs[voisin] = courant
-    
-    <span class="keyword">return</span> distances, predecesseurs
-            </div>
-            
-            <div class="algo-step">
-                <p><strong>Structure du graphe en Python :</strong></p>
-                <div class="code-block" style="margin-top: 10px;">
-graphe = {
-    <span class="string">'A'</span>: {<span class="string">'B'</span>: 4, <span class="string">'C'</span>: 2},
-    <span class="string">'B'</span>: {<span class="string">'A'</span>: 4, <span class="string">'D'</span>: 3, <span class="string">'E'</span>: 5},
-    <span class="string">'C'</span>: {<span class="string">'A'</span>: 2, <span class="string">'E'</span>: 1},
-    <span class="string">'D'</span>: {<span class="string">'B'</span>: 3, <span class="string">'E'</span>: 2},
-    <span class="string">'E'</span>: {<span class="string">'C'</span>: 1, <span class="string">'B'</span>: 5, <span class="string">'D'</span>: 2}
+</div>
+<script>
+let currentSlide=0;
+const slides=document.querySelectorAll('.slide');
+function changeSlide(dir){
+slides[currentSlide].classList.remove('active');
+currentSlide+=dir;
+if(currentSlide>=slides.length)currentSlide=slides.length-1;
+if(currentSlide<0)currentSlide=0;
+slides[currentSlide].classList.add('active');
 }
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 13: Complexité -->
-        <div class="slide">
-            <h2>⚡ Complexité de l'algorithme</h2>
-            
-            <h3>Analyse de la complexité :</h3>
-            
-            <div class="algo-step">
-                <h3>Version naïve (avec recherche linéaire) :</h3>
-                <ul>
-                    <li>On visite chaque sommet une fois : <strong>n</strong> itérations</li>
-                    <li>À chaque itération, on cherche le minimum parmi les non visités : <strong>O(n)</strong></li>
-                    <li>On examine les arêtes de chaque sommet : au total <strong>O(m)</strong> arêtes</li>
-                </ul>
-                <p style="margin-top: 15px;"><strong>Complexité totale : O(n² + m) = O(n²)</strong> pour un graphe dense</p>
-            </div>
-            
-            <div class="algo-step">
-                <h3>Version optimisée (avec file de priorité) :</h3>
-                <ul>
-                    <li>Utilisation d'un tas (heap) pour trouver le minimum en O(log n)</li>
-                    <li>Insertion/mise à jour dans le tas : O(log n)</li>
-                    <li>Au total : m insertions dans le tas</li>
-                </ul>
-                <p style="margin-top: 15px;"><strong>Complexité totale : O((n + m) log n)</strong></p>
-            </div>
-            
-            <div class="algo-step" style="background: #fff3cd; border-left-color: #ffc107;">
-                <p><strong>⚠️ Limitation importante :</strong></p>
-                <p>L'algorithme de Dijkstra ne fonctionne PAS avec des poids négatifs !</p>
-                <p>Pour les graphes avec poids négatifs, il faut utiliser l'algorithme de Bellman-Ford.</p>
-            </div>
-        </div>
-
-        <!-- Slide 14: Exercices -->
-        <div class="slide">
-            <h2>📝 Exercices d'application</h2>
-            
-            <h3>Exercice 1 : Application de l'algorithme</h3>
-            <p>Appliquer l'algorithme de Dijkstra sur le graphe suivant depuis le sommet A :</p>
-            
-            <div class="graph-container">
-                <svg width="500" height="300">
-                    <line x1="100" y1="100" x2="250" y2="100" class="edge"/>
-                    <text x="175" y="90" class="edge-label">7</text>
-                    
-                    <line x1="100" y1="100" x2="250" y2="200" class="edge"/>
-                    <text x="150" y="170" class="edge-label">9</text>
-                    
-                    <line x1="250" y1="100" x2="400" y2="100" class="edge"/>
-                    <text x="325" y="90" class="edge-label">10</text>
-                    
-                    <line x1="250" y1="100" x2="250" y2="200" class="edge"/>
-                    <text x="270" y="150" class="edge-label">15</text>
-                    
-                    <line x1="250" y1="200" x2="400" y2="100" class="edge"/>
-                    <text x="340" y="170" class="edge-label">11</text>
-                    
-                    <circle cx="100" cy="100" r="25" class="node"/>
-                    <text x="100" y="105" class="node-label">A</text>
-                    
-                    <circle cx="250" cy="100" r="25" class="node"/>
-                    <text x="250" y="105" class="node-label">B</text>
-                    
-                    <circle cx="400" cy="100" r="25" class="node"/>
-                    <text x="400" y="105" class="node-label">D</text>
-                    
-                    <circle cx="250" cy="200" r="25" class="node"/>
-                    <text x="250" y="205" class="node-label">C</text>
-                </svg>
-            </div>
-            
-            <h3 style="margin-top: 40px;">Exercice 2 : Questions théoriques</h3>
-            <ul>
-                <li>Pourquoi Dijkstra ne fonctionne-t-il pas avec des poids négatifs ?</li>
-                <li>Quelle structure de données permet d'optimiser l'algorithme ?</li>
-                <li>Comment reconstruire le chemin complet à partir du tableau des prédécesseurs ?</li>
-            </ul>
-        </div>
-
-        <!-- Slide 15: Conclusion -->
-        <div class="slide">
-            <h2>🎓 Conclusion</h2>
-            
-            <h3>Ce qu'il faut retenir :</h3>
-            
-            <div class="algo-step">
-                <h3>✅ Principe général</h3>
-                <ul>
-                    <li>Explorer les sommets par ordre croissant de distance</li>
-                    <li>Mettre à jour les distances des voisins à chaque étape</li>
-                    <li>Un sommet visité a sa distance finale garantie optimale</li>
-                </ul>
-            </div>
-            
-            <div class="algo-step">
-                <h3>✅ Points clés</h3>
-                <ul>
-                    <li>Algorithme glouton (choix local optimal)</li>
-                    <li>Fonctionne uniquement avec des poids positifs</li>
-                    <li>Complexité O(n²) version naïve, O((n+m) log n) optimisée</li>
-                </ul>
-            </div>
-            
-            <div class="algo-step">
-                <h3>✅ Applications</h3>
-                <ul>
-                    <li>GPS et systèmes de navigation</li>
-                    <li>Routage dans les réseaux informatiques</li>
-                    <li>Planification de trajets</li>
-                    <li>Intelligence artificielle (pathfinding)</li>
-                </ul>
-            </div>
-            
-            <p style="text-align: center; font-size: 1.5em; margin-top: 50px; color: #667eea;">
-                <strong>Merci pour votre attention ! 👏</strong>
-            </p>
-        </div>
-    </div>
-
-    <!-- Contrôles de navigation -->
-    <div class="controls">
-        <button class="btn-prev" onclick="previousSlide()">◀ Précédent</button>
-        <span class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">15</span></span>
-        <button class="btn-next" onclick="nextSlide()">Suivant ▶</button>
-    </div>
-
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        
-        document.getElementById('total-slides').textContent = totalSlides;
-        
-        function showSlide(n) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = n;
-            if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
-            if (currentSlide < 0) currentSlide = 0;
-            slides[currentSlide].classList.add('active');
-            
-            document.getElementById('current-slide').textContent = currentSlide + 1;
-            
-            // Gérer l'état des boutons
-            document.querySelector('.btn-prev').disabled = currentSlide === 0;
-            document.querySelector('.btn-next').disabled = currentSlide === totalSlides - 1;
-        }
-        
-        function nextSlide() {
-            if (currentSlide < totalSlides - 1) {
-                showSlide(currentSlide + 1);
-            }
-        }
-        
-        function previousSlide() {
-            if (currentSlide > 0) {
-                showSlide(currentSlide - 1);
-            }
-        }
-        
-        // Navigation au clavier
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'ArrowLeft') previousSlide();
-        });
-        
-        // Initialiser
-        showSlide(0);
-    </script>
+document.addEventListener('keydown',function(e){
+if(e.key==='ArrowRight')changeSlide(1);
+if(e.key==='ArrowLeft')changeSlide(-1);
+});
+</script>
 </body>
-</html
+</html>
