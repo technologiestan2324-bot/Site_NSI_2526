@@ -58,8 +58,99 @@ p{line-height:1.6}
 <div class="slide-counter">Slide 1 / 10</div>
 </div>
 
-<div class="slide">
-<h2>📍 Le Réseau de Villes</h2>
+
+  <!-- Slide 2: Le graphe -->
+        <div class="slide">
+            <h2>📍 Le Réseau de Villes</h2>
+            
+            <div class="graph-container">
+                <svg width="700" height="500" viewBox="0 0 700 500">
+                    <!-- Arêtes -->
+                    <line x1="100" y1="100" x2="250" y2="100" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="175" y="85" fill="#d32f2f" font-weight="bold" font-size="18">5</text>
+                    
+                    <line x1="100" y1="100" x2="150" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="100" y="175" fill="#d32f2f" font-weight="bold" font-size="18">8</text>
+                    
+                    <line x1="250" y1="100" x2="400" y2="100" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="325" y="85" fill="#d32f2f" font-weight="bold" font-size="18">4</text>
+                    
+                    <line x1="250" y1="100" x2="300" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="255" y="175" fill="#d32f2f" font-weight="bold" font-size="18">7</text>
+                    
+                    <line x1="150" y1="250" x2="300" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="225" y="235" fill="#d32f2f" font-weight="bold" font-size="18">6</text>
+                    
+                    <line x1="150" y1="250" x2="200" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="155" y="330" fill="#d32f2f" font-weight="bold" font-size="18">9</text>
+                    
+                    <line x1="300" y1="250" x2="450" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="375" y="235" fill="#d32f2f" font-weight="bold" font-size="18">5</text>
+                    
+                    <line x1="300" y1="250" x2="350" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="305" y="330" fill="#d32f2f" font-weight="bold" font-size="18">7</text>
+                    
+                    <line x1="400" y1="100" x2="450" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="455" y="175" fill="#d32f2f" font-weight="bold" font-size="18">10</text>
+                    
+                    <line x1="400" y1="100" x2="550" y2="150" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="500" y="110" fill="#d32f2f" font-weight="bold" font-size="18">12</text>
+                    
+                    <line x1="450" y1="250" x2="550" y2="150" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="520" y="195" fill="#d32f2f" font-weight="bold" font-size="18">3</text>
+                    
+                    <line x1="200" y1="400" x2="350" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="275" y="385" fill="#d32f2f" font-weight="bold" font-size="18">6</text>
+                    
+                    <!-- Sommets -->
+                    <circle cx="100" cy="100" r="35" fill="#66bb6a" stroke="#2e7d32" stroke-width="3"/>
+                    <text x="100" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">A</text>
+                    
+                    <circle cx="250" cy="100" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="250" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">B</text>
+                    
+                    <circle cx="400" cy="100" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="400" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">C</text>
+                    
+                    <circle cx="150" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="150" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">D</text>
+                    
+                    <circle cx="300" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="300" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">E</text>
+                    
+                    <circle cx="450" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="450" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">F</text>
+                    
+                    <circle cx="550" cy="150" r="35" fill="#ffa726" stroke="#e65100" stroke-width="3"/>
+                    <text x="550" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="24">G</text>
+                    
+                    <circle cx="200" cy="400" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="200" y="410" text-anchor="middle" fill="white" font-weight="bold" font-size="24">H</text>
+                    
+                    <circle cx="350" cy="400" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="350" y="410" text-anchor="middle" fill="white" font-weight="bold" font-size="24">I</text>
+                </svg>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #66bb6a;"></div>
+                    <span><strong>Ville de départ (A)</strong></span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffa726;"></div>
+                    <span><strong>Ville d'arrivée (G)</strong></span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #64b5f6;"></div>
+                    <span><strong>Villes intermédiaires</strong></span>
+                </div>
+            </div>
+            
+            <div class="note">
+                <strong>Les nombres sur les arêtes</strong> représentent les <strong>distances en km</strong> entre les villes connectées.
+            </div>
+            
 <div style="background:#fafafa;padding:25px;border-radius:15px;margin:20px 0">
 <p style="font-size:1.1em;margin-bottom:15px">9 villes connectées (A à I) avec distances en km</p>
 <p style="font-size:1em;color:#666">Départ : <strong style="color:#66bb6a">A</strong> | Arrivée : <strong style="color:#ffa726">G</strong></p>
