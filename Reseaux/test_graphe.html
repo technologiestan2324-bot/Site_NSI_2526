@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP Dijkstra - NSI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .slide {
+            display: none;
+            padding: 50px;
+            min-height: 600px;
+        }
+        
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            color: #5e35b1;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        h2 {
+            color: #7e57c2;
+            font-size: 2em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #b39ddb;
+            padding-bottom: 10px;
+        }
+        
+        .graph-container {
+            background: #fafafa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+        
+        th {
+            background: #b39ddb;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            border: 2px solid white;
+        }
+        
+        td {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .arrow-row td {
+            border: none;
+            padding: 5px;
+            font-size: 1.5em;
+        }
+        
+        .selected-vertex {
+            background: #fff9c4;
+            font-weight: bold;
+            border: 3px solid #fbc02d !important;
+        }
+        
+        .closed {
+            background: #ffccbc;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        
+        .updated {
+            background: #c8e6c9;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #9575cd 0%, #7e57c2 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(149, 117, 205, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(149, 117, 205, 0.4);
+        }
+        
+        button:disabled {
+            background: #e0e0e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .step-box {
+            background: #f3e5f5;
+            padding: 20px;
+            border-left: 5px solid #9575cd;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .slide-counter {
+            text-align: center;
+            color: #7e57c2;
+            font-weight: 600;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .legend-color {
+            width: 35px;
+            height: 35px;
+            border-radius: 5px;
+            border: 2px solid #666;
+        }
+        
+        .note {
+            background: #e1f5fe;
+            padding: 15px;
+            border-left: 5px solid #03a9f4;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .path-result {
+            background: #c8e6c9;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border: 3px solid #66bb6a;
+            text-align: center;
+        }
+        
+        .path-result h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .path-arrow {
+            color: #7e57c2;
+            font-weight: bold;
+            margin: 0 8px;
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+<h2>📍 Le Réseau de Villes</h2>
+            
+            <div class="graph-container">
+                <svg width="700" height="500" viewBox="0 0 700 500">
+                    <!-- Arêtes -->
+                    <line x1="100" y1="100" x2="250" y2="100" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="175" y="85" fill="#d32f2f" font-weight="bold" font-size="18">5</text>
+                    
+                    <line x1="100" y1="100" x2="150" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="100" y="175" fill="#d32f2f" font-weight="bold" font-size="18">8</text>
+                    
+                    <line x1="250" y1="100" x2="400" y2="100" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="325" y="85" fill="#d32f2f" font-weight="bold" font-size="18">4</text>
+                    
+                    <line x1="250" y1="100" x2="300" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="255" y="175" fill="#d32f2f" font-weight="bold" font-size="18">7</text>
+                    
+                    <line x1="150" y1="250" x2="300" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="225" y="235" fill="#d32f2f" font-weight="bold" font-size="18">6</text>
+                    
+                    <line x1="150" y1="250" x2="200" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="155" y="330" fill="#d32f2f" font-weight="bold" font-size="18">9</text>
+                    
+                    <line x1="300" y1="250" x2="450" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="375" y="235" fill="#d32f2f" font-weight="bold" font-size="18">5</text>
+                    
+                    <line x1="300" y1="250" x2="350" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="305" y="330" fill="#d32f2f" font-weight="bold" font-size="18">7</text>
+                    
+                    <line x1="400" y1="100" x2="450" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="455" y="175" fill="#d32f2f" font-weight="bold" font-size="18">10</text>
+                    
+                    <line x1="400" y1="100" x2="550" y2="150" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="500" y="110" fill="#d32f2f" font-weight="bold" font-size="18">12</text>
+                    
+                    <line x1="450" y1="250" x2="550" y2="150" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="520" y="195" fill="#d32f2f" font-weight="bold" font-size="18">3</text>
+                    
+                    <line x1="200" y1="400" x2="350" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="275" y="385" fill="#d32f2f" font-weight="bold" font-size="18">6</text>
+                    
+                    <!-- Sommets -->
+                    <circle cx="100" cy="100" r="35" fill="#66bb6a" stroke="#2e7d32" stroke-width="3"/>
+                    <text x="100" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">A</text>
+                    
+                    <circle cx="250" cy="100" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="250" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">B</text>
+                    
+                    <circle cx="400" cy="100" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="400" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">C</text>
+                    
+                    <circle cx="150" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="150" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">D</text>
+                    
+                    <circle cx="300" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="300" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">E</text>
+                    
+                    <circle cx="450" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="450" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">F</text>
+                    
+                    <circle cx="550" cy="150" r="35" fill="#ffa726" stroke="#e65100" stroke-width="3"/>
+                    <text x="550" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="24">G</text>
+                    
+                    <circle cx="200" cy="400" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="200" y="410" text-anchor="middle" fill="white" font-weight="bold" font-size="24">H</text>
+                    
+                    <circle cx="350" cy="400" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="350" y="410" text-anchor="middle" fill="white" font-weight="bold" font-size="24">I</text>
+                </svg>
