@@ -215,8 +215,8 @@ p{line-height:1.6}
                     <line x1="200" y1="400" x2="350" y2="400" stroke="#9e9e9e" stroke-width="3"/>
                     <text x="275" y="385" fill="#d32f2f" font-weight="bold" font-size="18">6</text>
                     
-                    <!-- Sommets -->
-                    <circle cx="100" cy="100" r="35" fill="#bdbdbd" stroke="#2e7d32" stroke-width="3"/>
+                    <!-- Sommets #bdbdbd gris clair pour les sommets élimimés-->
+                    <circle cx="100" cy="100" r="35" fill="#fff9c4" stroke="#2e7d32" stroke-width="3"/>
                     <text x="100" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">A</text>
                     
                     <circle cx="250" cy="100" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
@@ -261,6 +261,74 @@ p{line-height:1.6}
 <div class="slide">
 <h2>📊 Étape 1 : Traitement de A</h2>
 <p style="font-size:1.1em;margin-bottom:20px">Voisins de A : B(5km), D(8km)</p>
+      <div class="graph-container">
+                <svg width="700" height="500" viewBox="0 0 700 500">
+                    <!-- Arêtes -->
+                    <line x1="100" y1="100" x2="250" y2="100" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="175" y="85" fill="#d32f2f" font-weight="bold" font-size="18">5</text>
+                    
+                    <line x1="100" y1="100" x2="150" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="100" y="175" fill="#d32f2f" font-weight="bold" font-size="18">8</text>
+                    
+                    <line x1="250" y1="100" x2="400" y2="100" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="325" y="85" fill="#d32f2f" font-weight="bold" font-size="18">4</text>
+                    
+                    <line x1="250" y1="100" x2="300" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="255" y="175" fill="#d32f2f" font-weight="bold" font-size="18">7</text>
+                    
+                    <line x1="150" y1="250" x2="300" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="225" y="235" fill="#d32f2f" font-weight="bold" font-size="18">6</text>
+                    
+                    <line x1="150" y1="250" x2="200" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="155" y="330" fill="#d32f2f" font-weight="bold" font-size="18">9</text>
+                    
+                    <line x1="300" y1="250" x2="450" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="375" y="235" fill="#d32f2f" font-weight="bold" font-size="18">5</text>
+                    
+                    <line x1="300" y1="250" x2="350" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="305" y="330" fill="#d32f2f" font-weight="bold" font-size="18">7</text>
+                    
+                    <line x1="400" y1="100" x2="450" y2="250" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="455" y="175" fill="#d32f2f" font-weight="bold" font-size="18">10</text>
+                    
+                    <line x1="400" y1="100" x2="550" y2="150" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="500" y="110" fill="#d32f2f" font-weight="bold" font-size="18">12</text>
+                    
+                    <line x1="450" y1="250" x2="550" y2="150" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="520" y="195" fill="#d32f2f" font-weight="bold" font-size="18">3</text>
+                    
+                    <line x1="200" y1="400" x2="350" y2="400" stroke="#9e9e9e" stroke-width="3"/>
+                    <text x="275" y="385" fill="#d32f2f" font-weight="bold" font-size="18">6</text>
+                    
+ <!-- Sommets #bdbdbd gris clair pour les sommets éliminés , #fff9c4 jaune pourles séléctionnés -->
+                    <circle cx="100" cy="100" r="35" fill="#bdbdbd" stroke="#2e7d32" stroke-width="3"/>
+                    <text x="100" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">A</text>
+                    
+                    <circle cx="250" cy="100" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="250" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">B</text>
+                    
+                    <circle cx="400" cy="100" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="400" y="110" text-anchor="middle" fill="white" font-weight="bold" font-size="24">C</text>
+                    
+                    <circle cx="150" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="150" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">D</text>
+                    
+                    <circle cx="300" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="300" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">E</text>
+                    
+                    <circle cx="450" cy="250" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="450" y="260" text-anchor="middle" fill="white" font-weight="bold" font-size="24">F</text>
+                    
+                    <circle cx="550" cy="150" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="550" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="24">G</text>
+                    
+                    <circle cx="200" cy="400" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="200" y="410" text-anchor="middle" fill="white" font-weight="bold" font-size="24">H</text>
+                    
+                    <circle cx="350" cy="400" r="35" fill="#64b5f6" stroke="#1976d2" stroke-width="3"/>
+                    <text x="350" y="410" text-anchor="middle" fill="white" font-weight="bold" font-size="24">I</text>
+                </svg>
+            </div>
 <table>
 <thead>
 <tr class="arrow-row"><td>↓</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
