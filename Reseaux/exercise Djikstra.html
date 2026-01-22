@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice Dijkstra NSI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn-print {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .btn-print:hover {
+            background: #45a049;
+        }
+        
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #555;
+            margin-top: 25px;
+        }
+        
+        .box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        
+        pre {
+            background: #f5f5f5;
+            padding: 20px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        th {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .response {
+            background: #fff9e6;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .btn-print {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimer PDF</button>
+    
+    <div class="container">
+        <h1>Exercice NSI : Algorithme de Dijkstra</h1>
+        
+        <div class="box">
+            <h2>Contexte</h2>
+            <p>Une entreprise possède 6 routeurs (R1, R2, R3, R4, R5, R6) interconnectés. Chaque liaison a un débit en Mbps. On cherche le chemin avec le <strong>débit maximal</strong> entre deux routeurs.</p>
+        </div>
+        
+        <div class="alert">
+            <strong>⚠️ Important :</strong> Pour utiliser Dijkstra, on transforme le débit en coût :<br>
+            <strong>coût = 1000 / débit</strong>
+        </div>
+        
+        <h2>Le réseau</h2>
+        
+        <pre>        100          50
+   R1 ------- R2 -------- R3
+   |          |           |
+20 |        80|         30|
+   |          |           |
+   R4 ------- R5 -------- R6
+        40          60</pre>
+        
+        <h2>Tableau des liaisons</h2>
+        
+        <table>
+            <tr>
+                <th>Liaison</th>
+                <th>Débit (Mbps)</th>
+                <th>Coût</th>
+            </tr>
+            <tr>
+                <td>R1-R2</td>
+                <td>100</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>R1-R4</td>
+                <td>20</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>R2-R3</td>
+                <td>50</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td>R2-R5</td>
+                <td>80</td>
+                <td>12,5</td>
+            </tr>
+            <tr>
+                <td>R3-R6</td>
+                <td>30</td>
+                <td>33,3</td>
+            </tr>
+            <tr>
+                <td>R4-R5</td>
+                <td>40</td>
+                <td>25</td>
+            </tr>
+            <tr>
+                <td>R5-R6</td>
+                <td>60</td>
+                <td>16,7</td>
+            </tr>
+        </table>
+        
+        <div class="response">
+            <h2>Question</h2>
+            <p>Appliquez l'algorithme de Dijkstra pour trouver le chemin de <strong>R1 à R6</strong> qui minimise le coût total.</p>
+        </div>
+        
+        <h2>Tableau d'exécution à compléter</h2>
+        
+        <table>
+            <tr>
+                <th>Itération</th>
+                <th>Sommet visité</th>
+                <th>R1</th>
+                <th>R2</th>
+                <th>R3</th>
+                <th>R4</th>
+                <th>R5</th>
+                <th>R6</th>
+                <th>Non visités</th>
+            </tr>
+            <tr>
+                <td>Init</td>
+                <td>-</td>
+                <td>0</td>
+                <td>∞</td>
+                <td>∞</td>
+                <td>∞</td>
+                <td>∞</td>
+                <td>∞</td>
+                <td>{R1,R2,R3,R4,R5,R6}</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        
+        <div class="response">
+            <h2>Réponses</h2>
+            <p><strong>Chemin optimal de R1 à R6 :</strong> ____________________________</p>
+            <p><strong>Coût total :</strong> ____________________________</p>
+        </div>
+        
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #ddd; text-align: center;">
+            <p><strong>Nom :</strong> _________________ <strong>Classe :</strong> _____ <strong>Date :</strong> _________</p>
+        </div>
+    </div>
+</body>
+</html>
