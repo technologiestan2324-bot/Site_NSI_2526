@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Correction Exercice 3 – NSI 2025</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 30px;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    .question {
+      margin-bottom: 25px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Baccalauréat NSI 2025</h1>
+<h2>Exercice 3 – Partie B<br>Corrigé</h2>
+
+<div class="question">
+  <h3>Question 10</h3>
+  <p>
+    On se place dans le dossier <code>important</code> qui contient le fichier
+    <code>prog1.py</code>.  
+    Le dossier <code>TP</code> se trouve dans le même dossier parent.
+  </p>
+  <p>
+    En utilisant un <strong>chemin absolu à partir du dossier parent de
+    <code>important</code></strong>, on peut écrire :
+  </p>
+  <pre><code>cp /important/prog1.py /TP/prog1.py</code></pre>
+  <p>
+    Cette commande copie le fichier <code>prog1.py</code> depuis le dossier
+    <code>important</code> vers le dossier <code>TP</code>.
+  </p>
+</div>
+
+<div class="question">
+  <h3>Question 11</h3>
+  <p>
+    Pour vérifier si l’ordinateur P1 est accessible depuis l’ordinateur P2,
+    on utilise la commande :
+  </p>
+  <pre><code>ping 190.12.10.25</code></pre>
+</div>
+
+<div class="question">
+  <h3>Question 12</h3>
+  <p>
+    Données :
+  </p>
+  <ul>
+    <li>Adresse réseau : <code>12.128.0.0</code></li>
+    <li>Masque : <code>255.255.0.0</code> (/16)</li>
+    <li>Adresses possibles : <code>12.128.0.1</code> à <code>12.128.255.254</code></li>
+  </ul>
+  <p>
+    Exemple d’adresse IP possible pour l’ordinateur P2 :
+  </p>
+  <pre><code>12.128.1.1</code></pre>
+</div>
+
+<div class="question">
+  <h3>Question 13</h3>
+  <p>
+    Le chemin suivi par un paquet de données de P1 vers P2 est :
+  </p>
+  <pre><code>R1 → R2 → R3 → R8 → R9</code></pre>
+</div>
+
+<div class="question">
+  <h3>Question 14</h3>
+  <p>
+    Le protocole de routage utilisé est <strong>RIP</strong>.
+  </p>
+  <p>
+    Justification : le protocole RIP choisit la route comportant le plus petit
+    nombre de routeurs (nombre de sauts), sans tenir compte du débit des liaisons.
+  </p>
+</div>
+
+<div class="question">
+  <h3>Question 15</h3>
+  <p>
+    Le coût OSPF est calculé avec la formule :
+  </p>
+  <pre><code>C = 10⁸ / BP</code></pre>
+  <ul>
+    <li>100 Mb/s : <code>10⁸ / (100 × 10⁶) = 1</code></li>
+    <li>1 Gb/s : <code>10⁸ / 10⁹ = 0,1</code></li>
+    <li>10 Gb/s : <code>10⁸ / 10¹⁰ = 0,01</code></li>
+  </ul>
+</div>
+
+<div class="question">
+  <h3>Question 16</h3>
+  <p>
+    Le protocole OSPF choisit la route dont la somme des coûts est minimale.
+  </p>
+  <p>
+    Chemin choisi :
+  </p>
+  <pre><code>R1 → R5 → R4 → R3 → R8 → R9</code></pre>
+  <p>
+    Calcul du coût total :
+  </p>
+  <pre><code>0,01 + 0,1 + 0,1 + 0,01 + 0,1 = 0,32</code></pre>
+  <p>
+    Ce chemin est retenu car son coût total est inférieur à celui des autres
+    chemins possibles.
+  </p>
+</div>
+
+</body>
+</html>
