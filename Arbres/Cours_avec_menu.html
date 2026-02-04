@@ -123,13 +123,20 @@
     <div id="menu-container"></div>
 
     <script>
-        // Charge le menu.html dans la div
-        fetch('../menu.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('menu-container').innerHTML = data;
-            });
-    </script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("../menu.html")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Menu introuvable");
+            }
+            return response.text();
+        })
+        .then(data => {
+            document.getElementById("menu-container").innerHTML = data;
+        })
+        .catch(error => console.log("Erreur :", error));
+});
+</script
     <div class="navigation">
         <strong>Navigation :</strong>
         <a href="https://technologiestan2324-bot.github.io/Site_NSI_2526/">← Retour au siti de NSI Betina</a>
