@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Arbres Binaires - NSI Terminale</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #7f8c8d;
+        }
+        .objectifs {
+            background-color: #e8f4f8;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .definition {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .exemple {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .important {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background-color: transparent;
+            color: #f8f8f2;
+        }
+        .liens-utiles {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .liens-utiles a {
+            display: block;
+            color: #0066cc;
+            text-decoration: none;
+            margin: 5px 0;
+            padding: 5px;
+        }
+        .liens-utiles a:hover {
+            background-color: #d0e7ff;
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .exercice {
+            background-color: #fff;
+            border: 2px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .exercice h4 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌳 Les Arbres Binaires</h1>
+    <p><strong>Programme NSI Terminale</strong> - Conforme au Bulletin Officiel</p>
+
+    <div class="objectifs">
+        <h3>📚 Objectifs du chapitre (B.O.)</h3>
+        <ul>
+            <li>Identifier des situations nécessitant une structure de données arborescente</li>
+            <li>Évaluer la hauteur et la taille d'un arbre</li>
+            <li>Parcourir un arbre de différentes façons (parcours préfixe, infixe, suffixe, en largeur)</li>
+            <li>Distinguer les arbres binaires de recherche (ABR)</li>
+            <li>Implémenter les opérations de base sur les arbres binaires</li>
+        </ul>
+    </div>
+
+    <h2>I. Introduction aux arbres</h2>
+
+    <h3>1.1 Motivation</h3>
+    <p>Les arbres sont des structures de données non linéaires, hiérarchiques, utilisées pour représenter des relations de parenté ou d'ordre. Ils sont omniprésents en informatique :</p>
+    <ul>
+        <li>Systèmes de fichiers (dossiers et sous-dossiers)</li>
+        <li>DOM (Document Object Model) en HTML</li>
+        <li>Arbres de décision en intelligence artificielle</li>
+        <li>Structures de données pour optimiser les recherches (ABR, arbres AVL)</li>
+    </ul>
+
+    <div class="definition">
+        <h3>📖 Définition : Arbre</h3>
+        <p>Un <strong>arbre</strong> est une structure de données constituée de <strong>nœuds</strong> reliés par des <strong>arêtes</strong>, avec les propriétés suivantes :</p>
+        <ul>
+            <li>Il existe un nœud particulier appelé <strong>racine</strong></li>
+            <li>Chaque nœud (sauf la racine) possède exactement un <strong>parent</strong></li>
+            <li>Il n'y a pas de cycle (pas de chemin qui revient au point de départ)</li>
+            <li>Tous les nœuds sont accessibles depuis la racine</li>
+        </ul>
+    </div>
+
+    <h3>1.2 Vocabulaire des arbres</h3>
+    <table>
+        <tr>
+            <th>Terme</th>
+            <th>Définition</th>
+        </tr>
+        <tr>
+            <td><strong>Racine</strong></td>
+            <td>Nœud de départ de l'arbre, sans parent</td>
+        </tr>
+        <tr>
+            <td><strong>Feuille</strong></td>
+            <td>Nœud sans enfant</td>
+        </tr>
+        <tr>
+            <td><strong>Nœud interne</strong></td>
+            <td>Nœud qui n'est ni racine ni feuille (possède au moins un enfant)</td>
+        </tr>
+        <tr>
+            <td><strong>Hauteur</strong></td>
+            <td>Longueur du plus long chemin de la racine à une feuille</td>
+        </tr>
+        <tr>
+            <td><strong>Taille</strong></td>
+            <td>Nombre total de nœuds dans l'arbre</td>
+        </tr>
+        <tr>
+            <td><strong>Profondeur (niveau)</strong></td>
+            <td>Distance d'un nœud à la racine</td>
+        </tr>
+        <tr>
+            <td><strong>Sous-arbre</strong></td>
+            <td>Arbre formé par un nœud et tous ses descendants</td>
+        </tr>
+    </table>
+
+    <h2>II. Les arbres binaires</h2>
+
+    <div class="definition">
+        <h3>📖 Définition : Arbre binaire</h3>
+        <p>Un <strong>arbre binaire</strong> est un arbre dans lequel chaque nœud possède <strong>au plus deux enfants</strong>, appelés <strong>fils gauche</strong> et <strong>fils droit</strong>.</p>
+    </div>
+
+    <div class="exemple">
+        <h3>💡 Exemple d'arbre binaire</h3>
+        <pre><code>        15
+       /  \
+      10   20
+     / \   / \
+    5  12 18 25
+   /
+  3
+</code></pre>
+        <p>Dans cet arbre :</p>
+        <ul>
+            <li>Racine : 15</li>
+            <li>Hauteur : 3 (chemin 15 → 10 → 5 → 3)</li>
+            <li>Taille : 7 nœuds</li>
+            <li>Feuilles : 3, 12, 18, 25</li>
+        </ul>
+    </div>
+
+    <h3>2.1 Implémentation en Python</h3>
+    <p>On utilise généralement une classe pour représenter un nœud d'arbre binaire :</p>
+
+    <pre><code class="python">class Noeud:
+    def __init__(self, valeur, gauche=None, droit=None):
+        self.valeur = valeur
+        self.gauche = gauche
+        self.droit = droit
+    
+    def est_feuille(self):
+        """Vérifie si le nœud est une feuille"""
+        return self.gauche is None and self.droit is None
+
+# Construction de l'arbre exemple
+arbre = Noeud(15,
+    Noeud(10,
+        Noeud(5, Noeud(3), None),
+        Noeud(12)),
+    Noeud(20,
+        Noeud(18),
+        Noeud(25))
+)
+</code></pre>
+
+    <h3>2.2 Calcul de la taille d'un arbre</h3>
+    <p>La taille se calcule récursivement :</p>
+    <pre><code class="python">def taille(arbre):
+    """Retourne le nombre de nœuds dans l'arbre"""
+    if arbre is None:
+        return 0
+    return 1 + taille(arbre.gauche) + taille(arbre.droit)
+
+# Exemple d'utilisation
+print(taille(arbre))  # Affiche : 7
+</code></pre>
+
+    <h3>2.3 Calcul de la hauteur d'un arbre</h3>
+    <p>La hauteur se calcule également de manière récursive :</p>
+    <pre><code class="python">def hauteur(arbre):
+    """Retourne la hauteur de l'arbre"""
+    if arbre is None:
+        return -1  # Convention : arbre vide a hauteur -1
+    return 1 + max(hauteur(arbre.gauche), hauteur(arbre.droit))
+
+# Exemple d'utilisation
+print(hauteur(arbre))  # Affiche : 3
+</code></pre>
+
+    <div class="important">
+        <h3>⚠️ Attention : Conventions</h3>
+        <p>Deux conventions coexistent pour la hauteur d'un arbre vide :</p>
+        <ul>
+            <li><strong>Hauteur = -1</strong> : l'arbre réduit à une feuille a hauteur 0</li>
+            <li><strong>Hauteur = 0</strong> : l'arbre réduit à une feuille a hauteur 1</li>
+        </ul>
+        <p>Dans ce cours, nous adoptons la première convention (hauteur = -1 pour un arbre vide).</p>
+    </div>
+
+    <h2>III. Parcours d'arbres binaires</h2>
+
+    <p>Il existe plusieurs façons de parcourir un arbre binaire, c'est-à-dire de visiter tous ses nœuds dans un ordre précis.</p>
+
+    <h3>3.1 Parcours en profondeur</h3>
+
+    <h4>Parcours préfixe (ou préordre)</h4>
+    <p>On visite d'abord la racine, puis le sous-arbre gauche, puis le sous-arbre droit.</p>
+    <pre><code class="python">def parcours_prefixe(arbre):
+    """Parcours préfixe : Racine - Gauche - Droit"""
+    if arbre is not None:
+        print(arbre.valeur, end=' ')
+        parcours_prefixe(arbre.gauche)
+        parcours_prefixe(arbre.droit)
+
+# Résultat : 15 10 5 3 12 20 18 25
+</code></pre>
+
+    <h4>Parcours infixe (ou en ordre)</h4>
+    <p>On visite le sous-arbre gauche, puis la racine, puis le sous-arbre droit.</p>
+    <pre><code class="python">def parcours_infixe(arbre):
+    """Parcours infixe : Gauche - Racine - Droit"""
+    if arbre is not None:
+        parcours_infixe(arbre.gauche)
+        print(arbre.valeur, end=' ')
+        parcours_infixe(arbre.droit)
+
+# Résultat : 3 5 10 12 15 18 20 25
+</code></pre>
+
+    <h4>Parcours suffixe (ou postordre)</h4>
+    <p>On visite le sous-arbre gauche, puis le sous-arbre droit, puis la racine.</p>
+    <pre><code class="python">def parcours_suffixe(arbre):
+    """Parcours suffixe : Gauche - Droit - Racine"""
+    if arbre is not None:
+        parcours_suffixe(arbre.gauche)
+        parcours_suffixe(arbre.droit)
+        print(arbre.valeur, end=' ')
+
+# Résultat : 3 5 12 10 18 25 20 15
+</code></pre>
+
+    <h3>3.2 Parcours en largeur</h3>
+    <p>On visite les nœuds niveau par niveau, de gauche à droite. Ce parcours nécessite l'utilisation d'une file.</p>
+    <pre><code class="python">from collections import deque
+
+def parcours_largeur(arbre):
+    """Parcours en largeur (BFS)"""
+    if arbre is None:
+        return
+    
+    file = deque([arbre])
+    while file:
+        noeud = file.popleft()
+        print(noeud.valeur, end=' ')
+        
+        if noeud.gauche is not None:
+            file.append(noeud.gauche)
+        if noeud.droit is not None:
+            file.append(noeud.droit)
+
+# Résultat : 15 10 20 5 12 18 25 3
+</code></pre>
+
+    <h2>IV. Arbres binaires de recherche (ABR)</h2>
+
+    <div class="definition">
+        <h3>📖 Définition : Arbre binaire de recherche</h3>
+        <p>Un <strong>arbre binaire de recherche (ABR)</strong> est un arbre binaire qui vérifie la propriété suivante :</p>
+        <ul>
+            <li>Pour tout nœud, les valeurs du sous-arbre gauche sont <strong>strictement inférieures</strong> à la valeur du nœud</li>
+            <li>Pour tout nœud, les valeurs du sous-arbre droit sont <strong>supérieures ou égales</strong> à la valeur du nœud</li>
+        </ul>
+    </div>
+
+    <div class="exemple">
+        <h3>💡 Propriété importante</h3>
+        <p>Le <strong>parcours infixe</strong> d'un ABR donne les valeurs <strong>triées dans l'ordre croissant</strong>.</p>
+        <p>Dans notre exemple : 3, 5, 10, 12, 15, 18, 20, 25 ✓</p>
+    </div>
+
+    <h3>4.1 Recherche dans un ABR</h3>
+    <pre><code class="python">def recherche(arbre, valeur):
+    """Recherche une valeur dans un ABR"""
+    if arbre is None:
+        return False
+    if arbre.valeur == valeur:
+        return True
+    elif valeur < arbre.valeur:
+        return recherche(arbre.gauche, valeur)
+    else:
+        return recherche(arbre.droit, valeur)
+
+# Complexité : O(h) où h est la hauteur
+# Meilleur cas : O(log n) (arbre équilibré)
+# Pire cas : O(n) (arbre dégénéré en liste)
+</code></pre>
+
+    <h3>4.2 Insertion dans un ABR</h3>
+    <pre><code class="python">def inserer(arbre, valeur):
+    """Insère une valeur dans un ABR"""
+    if arbre is None:
+        return Noeud(valeur)
+    
+    if valeur < arbre.valeur:
+        arbre.gauche = inserer(arbre.gauche, valeur)
+    else:
+        arbre.droit = inserer(arbre.droit, valeur)
+    
+    return arbre
+
+# Exemple d'utilisation
+arbre = None
+for val in [15, 10, 20, 5, 12, 18, 25, 3]:
+    arbre = inserer(arbre, val)
+</code></pre>
+
+    <h3>4.3 Complexité des opérations</h3>
+    <table>
+        <tr>
+            <th>Opération</th>
+            <th>Arbre équilibré</th>
+            <th>Arbre dégénéré</th>
+        </tr>
+        <tr>
+            <td>Recherche</td>
+            <td>O(log n)</td>
+            <td>O(n)</td>
+        </tr>
+        <tr>
+            <td>Insertion</td>
+            <td>O(log n)</td>
+            <td>O(n)</td>
+        </tr>
+        <tr>
+            <td>Suppression</td>
+            <td>O(log n)</td>
+            <td>O(n)</td>
+        </tr>
+    </table>
+
+    <h2>V. Exercices</h2>
+
+    <div class="exercice">
+        <h4>Exercice 1 : Compter les feuilles</h4>
+        <p>Écrire une fonction <code>nombre_feuilles(arbre)</code> qui retourne le nombre de feuilles dans un arbre binaire.</p>
+    </div>
+
+    <div class="exercice">
+        <h4>Exercice 2 : Valeur maximale</h4>
+        <p>Écrire une fonction <code>valeur_max(arbre)</code> qui retourne la valeur maximale dans un ABR.</p>
+    </div>
+
+    <div class="exercice">
+        <h4>Exercice 3 : Vérifier si un arbre est un ABR</h4>
+        <p>Écrire une fonction <code>est_abr(arbre)</code> qui vérifie si un arbre binaire est un ABR.</p>
+    </div>
+
+    <div class="exercice">
+        <h4>Exercice 4 : Somme des valeurs</h4>
+        <p>Écrire une fonction <code>somme(arbre)</code> qui calcule la somme de toutes les valeurs d'un arbre binaire.</p>
+    </div>
+
+    <div class="exercice">
+        <h4>Exercice 5 : Arbre miroir</h4>
+        <p>Écrire une fonction <code>miroir(arbre)</code> qui retourne un nouvel arbre qui est le miroir de l'arbre donné (fils gauche et droit inversés).</p>
+    </div>
+
+    <div class="liens-utiles">
+        <h3>🔗 Liens utiles pour s'exercer</h3>
+        <a href="https://www.france-ioi.org/" target="_blank">📝 France IOI - Exercices sur les structures de données</a>
+        <a href="https://pixees.fr/informatiquelycee/n_site/nsi_term.html" target="_blank">📚 Pixees - Ressources NSI Terminale</a>
+        <a href="https://visualgo.net/en/bst" target="_blank">🎨 VisuAlgo - Visualisation des ABR (animation interactive)</a>
+        <a href="https://www.cs.usfca.edu/~galles/visualization/BST.html" target="_blank">🎯 USFCA - Visualisation des arbres binaires de recherche</a>
+        <a href="https://informatiquelycee.fr/" target="_blank">📖 Informatique au Lycée - Cours et exercices NSI</a>
+        <a href="https://leetcode.com/tag/tree/" target="_blank">💻 LeetCode - Problèmes sur les arbres (niveau avancé)</a>
+    </div>
+
+    <h2>VI. Mini TP Python : Manipulation d'arbres binaires</h2>
+
+    <div class="important">
+        <h3>🎯 Objectif du TP</h3>
+        <p>Implémenter et manipuler des arbres binaires de recherche en Python, en créant une classe complète avec toutes les opérations de base.</p>
+    </div>
+
+    <h3>Énoncé du TP</h3>
+    <p>Vous allez créer un fichier Python contenant une implémentation complète d'un arbre binaire de recherche.</p>
+
+    <h4>Partie 1 : Classe de base</h4>
+    <ol>
+        <li>Créer une classe <code>Noeud</code> avec les attributs <code>valeur</code>, <code>gauche</code>, et <code>droit</code></li>
+        <li>Ajouter une méthode <code>__str__</code> pour afficher le nœud</li>
+    </ol>
+
+    <h4>Partie 2 : Classe ABR</h4>
+    <ol>
+        <li>Créer une classe <code>ABR</code> qui encapsule l'arbre</li>
+        <li>Implémenter les méthodes suivantes :
+            <ul>
+                <li><code>inserer(valeur)</code> : insère une valeur</li>
+                <li><code>rechercher(valeur)</code> : recherche une valeur</li>
+                <li><code>taille()</code> : retourne le nombre de nœuds</li>
+                <li><code>hauteur()</code> : retourne la hauteur</li>
+                <li><code>afficher_infixe()</code> : affiche en parcours infixe</li>
+                <li><code>afficher_prefixe()</code> : affiche en parcours préfixe</li>
+                <li><code>afficher_largeur()</code> : affiche en parcours en largeur</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h4>Partie 3 : Tests</h4>
+    <ol>
+        <li>Créer un ABR avec les valeurs : [50, 30, 70, 20, 40, 60, 80, 10, 25, 35, 65]</li>
+        <li>Afficher l'arbre avec les différents parcours</li>
+        <li>Tester la recherche de valeurs présentes et absentes</li>
+        <li>Afficher la taille et la hauteur de l'arbre</li>
+    </ol>
+
+    <h4>Partie 4 : Fonctions avancées (bonus)</h4>
+    <ol>
+        <li><code>valeur_min()</code> : retourne la valeur minimale</li>
+        <li><code>valeur_max()</code> : retourne la valeur maximale</li>
+        <li><code>est_equilibre()</code> : vérifie si l'arbre est équilibré</li>
+        <li><code>nombre_feuilles()</code> : compte les feuilles</li>
+        <li><code>affichage_graphique()</code> : affiche l'arbre de manière visuelle</li>
+    </ol>
+
+    <div class="exemple">
+        <h3>💡 Résultat attendu</h3>
+        <pre><code>Arbre créé avec succès !
+
+Parcours infixe : 10 20 25 30 35 40 50 60 65 70 80
+Parcours préfixe : 50 30 20 10 25 40 35 70 60 65 80
+Parcours largeur : 50 30 70 20 40 60 80 10 25 35 65
+
+Taille de l'arbre : 11
+Hauteur de l'arbre : 3
+
+Recherche de 35 : Trouvé ✓
+Recherche de 100 : Non trouvé ✗
+
+Valeur minimale : 10
+Valeur maximale : 80
+Nombre de feuilles : 4
+</code></pre>
+    </div>
+
+    <h3>Code de départ du TP</h3>
+    <p>Voir le fichier <code>tp_arbres_binaires.py</code> fourni séparément.</p>
+
+    <h2>VII. Pour aller plus loin</h2>
+
+    <h3>7.1 Arbres équilibrés</h3>
+    <p>Pour garantir des opérations en O(log n), on utilise des arbres auto-équilibrés :</p>
+    <ul>
+        <li><strong>Arbres AVL</strong> : différence de hauteur entre sous-arbres ≤ 1</li>
+        <li><strong>Arbres Rouge-Noir</strong> : utilisés dans les implémentations de dictionnaires</li>
+        <li><strong>Arbres B</strong> : utilisés dans les bases de données</li>
+    </ul>
+
+    <h3>7.2 Applications pratiques</h3>
+    <ul>
+        <li><strong>Compression de données</strong> : arbres de Huffman</li>
+        <li><strong>Bases de données</strong> : index B-tree</li>
+        <li><strong>Jeux vidéo</strong> : arbres de décision pour l'IA</li>
+        <li><strong>Compilation</strong> : arbres syntaxiques abstraits (AST)</li>
+    </ul>
+
+    <h2>VIII. Résumé du chapitre</h2>
+
+    <div class="objectifs">
+        <h3>✅ Points clés à retenir</h3>
+        <ul>
+            <li>Un arbre binaire : chaque nœud a au plus 2 enfants</li>
+            <li>Hauteur d'un arbre vide : -1 (convention)</li>
+            <li>Trois parcours en profondeur : préfixe, infixe, suffixe</li>
+            <li>Un parcours en largeur : niveau par niveau (utilise une file)</li>
+            <li>ABR : sous-arbre gauche < racine ≤ sous-arbre droit</li>
+            <li>Parcours infixe d'un ABR → ordre croissant</li>
+            <li>Complexité des opérations : O(h) où h = hauteur</li>
+            <li>Arbre équilibré → O(log n), arbre dégénéré → O(n)</li>
+        </ul>
+    </div>
+
+    <footer style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #3498db; text-align: center; color: #7f8c8d;">
+        <p>Cours NSI Terminale - Les Arbres Binaires</p>
+        <p>Conforme au Bulletin Officiel de l'Éducation Nationale</p>
+        <p style="font-size: 0.9em;">Pour toute question ou suggestion, n'hésitez pas à consulter votre enseignant(e).</p>
+    </footer>
+</body>
+</html>
+</code>
