@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices sur les Arbres Binaires - NSI Terminale</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #e74c3c;
+            padding-left: 15px;
+        }
+        .exercice {
+            background-color: #fff;
+            border: 2px solid #e74c3c;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .exercice h3 {
+            color: #e74c3c;
+            margin-top: 0;
+        }
+        .difficulte {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .facile {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .moyen {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .difficile {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .corrige {
+            background-color: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+        .corrige.visible {
+            display: block;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre code {
+            background-color: transparent;
+            color: #f8f8f2;
+        }
+        .indice {
+            background-color: #e7f3ff;
+            border-left: 4px solid #0066cc;
+            padding: 10px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .navigation {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .navigation a {
+            color: #3498db;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <strong>Navigation :</strong>
+        <a href="cours_arbres_binaires.html">← Retour au cours</a>
+        <a href="tp_arbres_binaires.py" download>Télécharger le TP Python</a>
+    </div>
+
+    <h1>📝 Exercices sur les Arbres Binaires</h1>
+    <p><strong>NSI Terminale</strong> - Exercices progressifs avec corrigés</p>
+
+    <h2>Exercices de base</h2>
+
+    <div class="exercice">
+        <h3>Exercice 1 : Compter les feuilles</h3>
+        <span class="difficulte facile">★ Facile</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>Écrire une fonction <code>nombre_feuilles(arbre)</code> qui retourne le nombre de feuilles dans un arbre binaire.</p>
+        
+        <p><strong>Rappel :</strong> Une feuille est un nœud sans enfants (gauche et droit sont None).</p>
+        
+        <p><strong>Exemple :</strong></p>
+        <pre><code>    10
+   /  \
+  5   15
+ /
+3
+
+nombre_feuilles(arbre) → 2  (les feuilles sont 3 et 15)
+</code></pre>
+        
+        <div class="indice">
+            💡 <strong>Indice :</strong> Utilisez la récursivité. Cas de base : arbre vide → 0, feuille → 1.
+        </div>
+        
+        <button onclick="toggleCorrige('corrige1')">Voir le corrigé</button>
+        
+        <div id="corrige1" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <pre><code class="python">def nombre_feuilles(arbre):
+    """Retourne le nombre de feuilles dans l'arbre"""
+    # Cas de base : arbre vide
+    if arbre is None:
+        return 0
+    
+    # Cas de base : feuille
+    if arbre.gauche is None and arbre.droit is None:
+        return 1
+    
+    # Cas récursif : somme des feuilles des sous-arbres
+    return nombre_feuilles(arbre.gauche) + nombre_feuilles(arbre.droit)
+
+
+# Test
+arbre = Noeud(10,
+    Noeud(5, Noeud(3), None),
+    Noeud(15)
+)
+print(nombre_feuilles(arbre))  # Affiche : 2
+</code></pre>
+            <p><strong>Explication :</strong></p>
+            <ul>
+                <li>Si l'arbre est vide (None), il n'y a pas de feuilles → retourne 0</li>
+                <li>Si c'est une feuille (pas d'enfants), on compte 1</li>
+                <li>Sinon, on additionne les feuilles du sous-arbre gauche et du sous-arbre droit</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="exercice">
+        <h3>Exercice 2 : Valeur maximale dans un ABR</h3>
+        <span class="difficulte facile">★ Facile</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>Écrire une fonction <code>valeur_max(arbre)</code> qui retourne la valeur maximale dans un arbre binaire de recherche.</p>
+        
+        <p><strong>Rappel :</strong> Dans un ABR, le maximum est toujours le nœud le plus à droite.</p>
+        
+        <div class="indice">
+            💡 <strong>Indice :</strong> Parcourez l'arbre en allant toujours à droite jusqu'à ne plus pouvoir.
+        </div>
+        
+        <button onclick="toggleCorrige('corrige2')">Voir le corrigé</button>
+        
+        <div id="corrige2" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <pre><code class="python">def valeur_max(arbre):
+    """Retourne la valeur maximale dans un ABR"""
+    # Cas de base : arbre vide
+    if arbre is None:
+        return None
+    
+    # Aller le plus à droite possible
+    while arbre.droit is not None:
+        arbre = arbre.droit
+    
+    return arbre.valeur
+
+
+# Version récursive alternative
+def valeur_max_recursif(arbre):
+    """Version récursive"""
+    if arbre is None:
+        return None
+    
+    if arbre.droit is None:
+        return arbre.valeur
+    
+    return valeur_max_recursif(arbre.droit)
+</code></pre>
+            <p><strong>Complexité :</strong> O(h) où h est la hauteur de l'arbre</p>
+        </div>
+    </div>
+
+    <div class="exercice">
+        <h3>Exercice 3 : Somme des valeurs</h3>
+        <span class="difficulte facile">★ Facile</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>Écrire une fonction <code>somme(arbre)</code> qui calcule la somme de toutes les valeurs d'un arbre binaire.</p>
+        
+        <p><strong>Exemple :</strong></p>
+        <pre><code>    10
+   /  \
+  5   15
+ /
+3
+
+somme(arbre) → 10 + 5 + 15 + 3 = 33
+</code></pre>
+        
+        <button onclick="toggleCorrige('corrige3')">Voir le corrigé</button>
+        
+        <div id="corrige3" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <pre><code class="python">def somme(arbre):
+    """Retourne la somme de toutes les valeurs de l'arbre"""
+    if arbre is None:
+        return 0
+    
+    return arbre.valeur + somme(arbre.gauche) + somme(arbre.droit)
+
+
+# Test
+arbre = Noeud(10,
+    Noeud(5, Noeud(3), None),
+    Noeud(15)
+)
+print(somme(arbre))  # Affiche : 33
+</code></pre>
+        </div>
+    </div>
+
+    <h2>Exercices intermédiaires</h2>
+
+    <div class="exercice">
+        <h3>Exercice 4 : Vérifier si un arbre est un ABR</h3>
+        <span class="difficulte moyen">★★ Moyen</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>Écrire une fonction <code>est_abr(arbre)</code> qui vérifie si un arbre binaire est un arbre binaire de recherche.</p>
+        
+        <p><strong>Rappel :</strong> Un ABR vérifie : pour chaque nœud, toutes les valeurs du sous-arbre gauche sont inférieures à la valeur du nœud, et toutes les valeurs du sous-arbre droit sont supérieures ou égales.</p>
+        
+        <div class="indice">
+            💡 <strong>Indice :</strong> Utilisez une fonction auxiliaire avec des bornes min et max pour chaque sous-arbre.
+        </div>
+        
+        <button onclick="toggleCorrige('corrige4')">Voir le corrigé</button>
+        
+        <div id="corrige4" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <pre><code class="python">def est_abr(arbre, min_val=float('-inf'), max_val=float('inf')):
+    """
+    Vérifie si l'arbre est un ABR
+    :param min_val: valeur minimale autorisée
+    :param max_val: valeur maximale autorisée
+    """
+    # Cas de base : arbre vide est un ABR
+    if arbre is None:
+        return True
+    
+    # Vérifier que la valeur respecte les bornes
+    if arbre.valeur < min_val or arbre.valeur > max_val:
+        return False
+    
+    # Vérifier récursivement les sous-arbres
+    # Sous-arbre gauche : valeurs < arbre.valeur
+    # Sous-arbre droit : valeurs >= arbre.valeur
+    return (est_abr(arbre.gauche, min_val, arbre.valeur - 1) and
+            est_abr(arbre.droit, arbre.valeur, max_val))
+
+
+# Tests
+# ABR valide
+abr_valide = Noeud(10,
+    Noeud(5, Noeud(3), Noeud(7)),
+    Noeud(15, Noeud(12), Noeud(20))
+)
+print(est_abr(abr_valide))  # True
+
+# Pas un ABR
+pas_abr = Noeud(10,
+    Noeud(5, Noeud(3), Noeud(15)),  # 15 > 10, donc invalide à gauche
+    Noeud(20)
+)
+print(est_abr(pas_abr))  # False
+</code></pre>
+        </div>
+    </div>
+
+    <div class="exercice">
+        <h3>Exercice 5 : Arbre miroir</h3>
+        <span class="difficulte moyen">★★ Moyen</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>Écrire une fonction <code>miroir(arbre)</code> qui retourne un nouvel arbre qui est le miroir de l'arbre donné (fils gauche et droit inversés).</p>
+        
+        <p><strong>Exemple :</strong></p>
+        <pre><code>Arbre original :     Arbre miroir :
+      10                    10
+     /  \                  /  \
+    5   15                15   5
+   /                           \
+  3                             3
+</code></pre>
+        
+        <button onclick="toggleCorrige('corrige5')">Voir le corrigé</button>
+        
+        <div id="corrige5" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <pre><code class="python">def miroir(arbre):
+    """Retourne le miroir de l'arbre"""
+    # Cas de base : arbre vide
+    if arbre is None:
+        return None
+    
+    # Créer un nouveau nœud avec fils inversés
+    nouveau = Noeud(arbre.valeur)
+    nouveau.gauche = miroir(arbre.droit)  # Gauche ← Droit
+    nouveau.droit = miroir(arbre.gauche)  # Droit ← Gauche
+    
+    return nouveau
+
+
+# Test
+arbre = Noeud(10,
+    Noeud(5, Noeud(3), None),
+    Noeud(15)
+)
+
+arbre_miroir = miroir(arbre)
+
+# Vérification avec parcours infixe
+def afficher_infixe(a):
+    if a is not None:
+        afficher_infixe(a.gauche)
+        print(a.valeur, end=' ')
+        afficher_infixe(a.droit)
+
+print("Original : ", end='')
+afficher_infixe(arbre)  # 3 5 10 15
+
+print("\nMiroir : ", end='')
+afficher_infixe(arbre_miroir)  # 15 10 5 3
+</code></pre>
+        </div>
+    </div>
+
+    <div class="exercice">
+        <h3>Exercice 6 : Chercher un élément à un niveau donné</h3>
+        <span class="difficulte moyen">★★ Moyen</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>Écrire une fonction <code>elements_niveau(arbre, niveau)</code> qui retourne une liste de toutes les valeurs au niveau donné (la racine est au niveau 0).</p>
+        
+        <p><strong>Exemple :</strong></p>
+        <pre><code>      10         (niveau 0)
+     /  \
+    5   15       (niveau 1)
+   / \    \
+  3   7   20     (niveau 2)
+
+elements_niveau(arbre, 1) → [5, 15]
+elements_niveau(arbre, 2) → [3, 7, 20]
+</code></pre>
+        
+        <button onclick="toggleCorrige('corrige6')">Voir le corrigé</button>
+        
+        <div id="corrige6" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <pre><code class="python">def elements_niveau(arbre, niveau):
+    """Retourne les éléments au niveau donné"""
+    resultats = []
+    
+    def parcourir(noeud, niveau_actuel):
+        if noeud is None:
+            return
+        
+        if niveau_actuel == niveau:
+            resultats.append(noeud.valeur)
+        else:
+            parcourir(noeud.gauche, niveau_actuel + 1)
+            parcourir(noeud.droit, niveau_actuel + 1)
+    
+    parcourir(arbre, 0)
+    return resultats
+
+
+# Test
+arbre = Noeud(10,
+    Noeud(5, Noeud(3), Noeud(7)),
+    Noeud(15, None, Noeud(20))
+)
+
+print(elements_niveau(arbre, 0))  # [10]
+print(elements_niveau(arbre, 1))  # [5, 15]
+print(elements_niveau(arbre, 2))  # [3, 7, 20]
+</code></pre>
+        </div>
+    </div>
+
+    <h2>Exercices avancés</h2>
+
+    <div class="exercice">
+        <h3>Exercice 7 : Plus long chemin de la racine à une feuille</h3>
+        <span class="difficulte difficile">★★★ Difficile</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>Écrire une fonction <code>plus_long_chemin(arbre)</code> qui retourne la liste des valeurs du plus long chemin de la racine à une feuille.</p>
+        
+        <button onclick="toggleCorrige('corrige7')">Voir le corrigé</button>
+        
+        <div id="corrige7" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <pre><code class="python">def plus_long_chemin(arbre):
+    """Retourne le plus long chemin de la racine à une feuille"""
+    if arbre is None:
+        return []
+    
+    # Si c'est une feuille
+    if arbre.gauche is None and arbre.droit is None:
+        return [arbre.valeur]
+    
+    # Chercher les plus longs chemins dans chaque sous-arbre
+    chemin_gauche = plus_long_chemin(arbre.gauche)
+    chemin_droit = plus_long_chemin(arbre.droit)
+    
+    # Prendre le plus long
+    if len(chemin_gauche) > len(chemin_droit):
+        return [arbre.valeur] + chemin_gauche
+    else:
+        return [arbre.valeur] + chemin_droit
+
+
+# Test
+arbre = Noeud(10,
+    Noeud(5, Noeud(3, Noeud(1), None), Noeud(7)),
+    Noeud(15)
+)
+
+print(plus_long_chemin(arbre))  # [10, 5, 3, 1]
+</code></pre>
+        </div>
+    </div>
+
+    <div class="exercice">
+        <h3>Exercice 8 : Ancêtre commun le plus proche</h3>
+        <span class="difficulte difficile">★★★ Difficile</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>Écrire une fonction <code>ancetre_commun(arbre, val1, val2)</code> qui retourne la valeur de l'ancêtre commun le plus proche de deux valeurs dans un ABR.</p>
+        
+        <p><strong>Exemple :</strong></p>
+        <pre><code>      20
+     /  \
+   10    30
+   / \   / \
+  5  15 25 35
+
+ancetre_commun(arbre, 5, 15) → 10
+ancetre_commun(arbre, 5, 25) → 20
+</code></pre>
+        
+        <button onclick="toggleCorrige('corrige8')">Voir le corrigé</button>
+        
+        <div id="corrige8" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <pre><code class="python">def ancetre_commun(arbre, val1, val2):
+    """
+    Trouve l'ancêtre commun le plus proche dans un ABR
+    """
+    if arbre is None:
+        return None
+    
+    # Si les deux valeurs sont plus petites, chercher à gauche
+    if val1 < arbre.valeur and val2 < arbre.valeur:
+        return ancetre_commun(arbre.gauche, val1, val2)
+    
+    # Si les deux valeurs sont plus grandes, chercher à droite
+    if val1 > arbre.valeur and val2 > arbre.valeur:
+        return ancetre_commun(arbre.droit, val1, val2)
+    
+    # Sinon, c'est le nœud actuel
+    return arbre.valeur
+
+
+# Test
+arbre = Noeud(20,
+    Noeud(10, Noeud(5), Noeud(15)),
+    Noeud(30, Noeud(25), Noeud(35))
+)
+
+print(ancetre_commun(arbre, 5, 15))   # 10
+print(ancetre_commun(arbre, 5, 25))   # 20
+print(ancetre_commun(arbre, 25, 35))  # 30
+</code></pre>
+        </div>
+    </div>
+
+    <h2>Exercices de type BAC</h2>
+
+    <div class="exercice">
+        <h3>Exercice 9 : QCM - Parcours d'arbres</h3>
+        <span class="difficulte moyen">★★ Moyen</span>
+        
+        <p><strong>Soit l'arbre suivant :</strong></p>
+        <pre><code>      F
+     / \
+    B   G
+   / \   \
+  A   D   I
+     / \  /
+    C  E H
+</code></pre>
+        
+        <p><strong>Questions :</strong></p>
+        <ol>
+            <li>Quel est le parcours préfixe de cet arbre ?
+                <ul>
+                    <li>a) A B C D E F G H I</li>
+                    <li>b) F B A D C E G I H</li>
+                    <li>c) A C E D B H I G F</li>
+                </ul>
+            </li>
+            <li>Quel est le parcours infixe de cet arbre ?
+                <ul>
+                    <li>a) F B A D C E G I H</li>
+                    <li>b) A B C D E F G H I</li>
+                    <li>c) A C E D B H I G F</li>
+                </ul>
+            </li>
+            <li>Quelle est la hauteur de cet arbre ?
+                <ul>
+                    <li>a) 3</li>
+                    <li>b) 4</li>
+                    <li>c) 5</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <button onclick="toggleCorrige('corrige9')">Voir le corrigé</button>
+        
+        <div id="corrige9" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <p><strong>Réponses :</strong></p>
+            <ol>
+                <li><strong>b) F B A D C E G I H</strong><br>
+                Parcours préfixe : Racine → Gauche → Droit<br>
+                F, puis B (et son sous-arbre), puis G (et son sous-arbre)</li>
+                
+                <li><strong>b) A B C D E F G H I</strong><br>
+                Parcours infixe : Gauche → Racine → Droit<br>
+                L'infixe d'un arbre binaire quelconque donne les nœuds de gauche à droite</li>
+                
+                <li><strong>a) 3</strong><br>
+                Le plus long chemin : F → B → D → C (ou E), ou F → G → I → H<br>
+                Longueur = 3 arêtes, donc hauteur = 3</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="exercice">
+        <h3>Exercice 10 : Problème de complexité</h3>
+        <span class="difficulte difficile">★★★ Difficile</span>
+        
+        <p><strong>Énoncé :</strong></p>
+        <p>On insère les valeurs suivantes dans un ABR initialement vide, dans cet ordre : 50, 30, 70, 20, 40, 60, 80.</p>
+        
+        <ol>
+            <li>Dessiner l'arbre obtenu.</li>
+            <li>Quelle est la hauteur de cet arbre ?</li>
+            <li>Combien de comparaisons sont nécessaires pour rechercher la valeur 60 ?</li>
+            <li>Si on avait inséré les valeurs dans l'ordre : 20, 30, 40, 50, 60, 70, 80, quelle aurait été la hauteur ?</li>
+            <li>Quelle conclusion peut-on tirer sur l'importance de l'ordre d'insertion ?</li>
+        </ol>
+        
+        <button onclick="toggleCorrige('corrige10')">Voir le corrigé</button>
+        
+        <div id="corrige10" class="corrige">
+            <h4>✅ Corrigé</h4>
+            <p><strong>1. Arbre obtenu :</strong></p>
+            <pre><code>      50
+     /  \
+   30    70
+   / \   / \
+  20 40 60 80
+</code></pre>
+            
+            <p><strong>2. Hauteur :</strong> 2 (arbre équilibré)</p>
+            
+            <p><strong>3. Recherche de 60 :</strong></p>
+            <ul>
+                <li>Comparaison 1 : 60 vs 50 → aller à droite</li>
+                <li>Comparaison 2 : 60 vs 70 → aller à gauche</li>
+                <li>Comparaison 3 : 60 vs 60 → trouvé !</li>
+                <li><strong>Total : 3 comparaisons</strong></li>
+            </ul>
+            
+            <p><strong>4. Insertion dans l'ordre croissant :</strong></p>
+            <pre><code>20
+ \
+  30
+   \
+    40
+     \
+      50
+       \
+        60
+         \
+          70
+           \
+            80
+</code></pre>
+            <p><strong>Hauteur : 6</strong> (arbre complètement déséquilibré = liste chaînée)</p>
+            
+            <p><strong>5. Conclusion :</strong></p>
+            <ul>
+                <li>L'ordre d'insertion a un <strong>impact majeur</strong> sur les performances</li>
+                <li>Insertion aléatoire → arbre plutôt équilibré → O(log n)</li>
+                <li>Insertion triée → arbre dégénéré → O(n)</li>
+                <li>Solution : utiliser des arbres auto-équilibrés (AVL, Rouge-Noir)</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>🔗 Ressources complémentaires</h2>
+    <ul>
+        <li><a href="https://visualgo.net/en/bst" target="_blank">VisuAlgo - Visualisation interactive des ABR</a></li>
+        <li><a href="https://www.cs.usfca.edu/~galles/visualization/BST.html" target="_blank">USFCA - Animations d'arbres binaires</a></li>
+        <li><a href="https://www.france-ioi.org/" target="_blank">France IOI - Exercices algorithmiques</a></li>
+        <li><a href="cours_arbres_binaires.html">Retour au cours complet</a></li>
+    </ul>
+
+    <script>
+        function toggleCorrige(id) {
+            const corrige = document.getElementById(id);
+            corrige.classList.toggle('visible');
+        }
+    </script>
+
+    <footer style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #e74c3c; text-align: center; color: #7f8c8d;">
+        <p>Exercices NSI Terminale - Les Arbres Binaires</p>
+        <p style="font-size: 0.9em;">Bon courage pour vos révisions ! 💪</p>
+    </footer>
+</body>
+</html>
