@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur d'Arbres Binaires - NSI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+
+        .control-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+        }
+
+        .control-group input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.2);
+        }
+
+        .color-option.active {
+            border-color: #000;
+            transform: scale(1.15);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .canvas-container {
+            padding: 30px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
+        }
+
+        canvas {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .example-btn {
+            padding: 10px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .example-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌳 Générateur d'Arbres Binaires</h1>
+            <p>Créez et visualisez des arbres binaires avec style !</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>📝 Entrez les valeurs séparées par des virgules (ordre : niveau par niveau, de gauche à droite)</label>
+                <input type="text" id="treeInput" placeholder="Exemple: 15,10,20,5,12,18,25,3" value="15,10,20,5,12,18,25,3">
+            </div>
+
+            <div class="control-group">
+                <label>🎨 Choisissez la couleur des nœuds</label>
+                <div class="color-picker">
+                    <div class="color-option active" style="background: #667eea;" data-color="#667eea"></div>
+                    <div class="color-option" style="background: #f093fb;" data-color="#f093fb"></div>
+                    <div class="color-option" style="background: #4facfe;" data-color="#4facfe"></div>
+                    <div class="color-option" style="background: #43e97b;" data-color="#43e97b"></div>
+                    <div class="color-option" style="background: #fa709a;" data-color="#fa709a"></div>
+                    <div class="color-option" style="background: #fee140;" data-color="#fee140"></div>
+                    <div class="color-option" style="background: #30cfd0;" data-color="#30cfd0"></div>
+                    <div class="color-option" style="background: #ff6b6b;" data-color="#ff6b6b"></div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="drawTree()">🎨 Dessiner l'arbre</button>
+                <button class="btn-secondary" onclick="clearCanvas()">🗑️ Effacer</button>
+                <button class="btn-success" onclick="downloadImage()">💾 Télécharger PNG</button>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Exemples rapides :</strong>
+                <div class="examples">
+                    <button class="example-btn" onclick="loadExample('15,10,20,5,12,18,25,3')">ABR Simple</button>
+                    <button class="example-btn" onclick="loadExample('A,B,C,D,E,,F')">Arbre avec lettres</button>
+                    <button class="example-btn" onclick="loadExample('50,30,70,20,40,60,80')">Arbre complet</button>
+                    <button class="example-btn" onclick="loadExample('10,5,15,3,7,,20,1')">Arbre déséquilibré</button>
+                </div>
+                <br>
+                <strong>📋 Format :</strong> Valeurs séparées par des virgules, niveau par niveau (de gauche à droite).<br>
+                • Utilisez une virgule vide pour un nœud absent : <code>A,B,C,D,E,,F</code> (C n'a pas d'enfant gauche)<br>
+                • Les valeurs peuvent être des nombres ou des lettres
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="treeCanvas" width="1200" height="700"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('treeCanvas');
+        const ctx = canvas.getContext('2d');
+        let selectedColor = '#667eea';
+
+        // Gestion de la sélection de couleur
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+                selectedColor = this.getAttribute('data-color');
+            });
+        });
+
+        function loadExample(values) {
+            document.getElementById('treeInput').value = values;
+            drawTree();
+        }
+
+        function isNumeric(str) {
+            return !isNaN(str) && !isNaN(parseFloat(str));
+        }
+
+        function drawNode(x, y, value, color) {
+            if (!value || value === '') return;
+            
+            const isNum = isNumeric(value);
+            
+            if (isNum) {
+                // Cercle pour les nombres
+                const radius = 30;
+                
+                // Ombre
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                ctx.shadowBlur = 10;
+                ctx.shadowOffsetX = 3;
+                ctx.shadowOffsetY = 3;
+                
+                // Cercle
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#2c3e50';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Réinitialiser l'ombre
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                
+                // Texte
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(value, x, y);
+            } else {
+                // Rectangle pour les lettres/textes
+                const padding = 15;
+                ctx.font = 'bold 18px Arial';
+                const textWidth = ctx.measureText(value).width;
+                const width = Math.max(textWidth + padding * 2, 50);
+                const height = 40;
+                const rx = 8;
+                
+                // Ombre
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                ctx.shadowBlur = 10;
+                ctx.shadowOffsetX = 3;
+                ctx.shadowOffsetY = 3;
+                
+                // Rectangle arrondi
+                ctx.beginPath();
+                ctx.moveTo(x - width/2 + rx, y - height/2);
+                ctx.lineTo(x + width/2 - rx, y - height/2);
+                ctx.quadraticCurveTo(x + width/2, y - height/2, x + width/2, y - height/2 + rx);
+                ctx.lineTo(x + width/2, y + height/2 - rx);
+                ctx.quadraticCurveTo(x + width/2, y + height/2, x + width/2 - rx, y + height/2);
+                ctx.lineTo(x - width/2 + rx, y + height/2);
+                ctx.quadraticCurveTo(x - width/2, y + height/2, x - width/2, y + height/2 - rx);
+                ctx.lineTo(x - width/2, y - height/2 + rx);
+                ctx.quadraticCurveTo(x - width/2, y - height/2, x - width/2 + rx, y - height/2);
+                ctx.closePath();
+                
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#2c3e50';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Réinitialiser l'ombre
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                
+                // Texte
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(value, x, y);
+            }
+        }
+
+        function drawEdge(x1, y1, x2, y2) {
+            // Arête épaisse avec dégradé
+            const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+            gradient.addColorStop(0, '#34495e');
+            gradient.addColorStop(1, '#7f8c8d');
+            
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        function drawTree() {
+            const input = document.getElementById('treeInput').value.trim();
+            if (!input) {
+                alert('❌ Veuillez entrer des valeurs !');
+                return;
+            }
+
+            // Parser l'entrée (format niveau par niveau)
+            const values = input.split(',').map(v => v.trim());
+            
+            if (values.length === 0) {
+                alert('❌ Aucune valeur trouvée !');
+                return;
+            }
+
+            // Créer la structure de l'arbre
+            const nodes = [];
+            for (let i = 0; i < values.length; i++) {
+                if (values[i] && values[i] !== '') {
+                    const leftChild = 2 * i + 1;
+                    const rightChild = 2 * i + 2;
+                    
+                    // Vérifier si les enfants existent vraiment
+                    const hasLeft = leftChild < values.length && values[leftChild] && values[leftChild] !== '';
+                    const hasRight = rightChild < values.length && values[rightChild] && values[rightChild] !== '';
+                    
+                    nodes[i] = {
+                        value: values[i],
+                        left: hasLeft ? leftChild : -1,
+                        right: hasRight ? rightChild : -1
+                    };
+                } else {
+                    nodes[i] = null;
+                }
+            }
+
+            // Calculer la hauteur et ajuster le canvas
+            function getHeight(index) {
+                if (index === -1 || !nodes[index]) return 0;
+                return 1 + Math.max(getHeight(nodes[index].left), getHeight(nodes[index].right));
+            }
+
+            // Compter le nombre de nœuds à chaque niveau
+            function getMaxWidth(index, level, levels) {
+                if (index === -1 || !nodes[index]) return;
+                levels[level] = (levels[level] || 0) + 1;
+                const node = nodes[index];
+                getMaxWidth(node.left, level + 1, levels);
+                getMaxWidth(node.right, level + 1, levels);
+            }
+
+            const height = getHeight(0);
+            const levels = {};
+            getMaxWidth(0, 0, levels);
+            const maxNodesAtLevel = Math.max(...Object.values(levels));
+            
+            // Ajuster la largeur du canvas selon le nombre de nœuds
+            const minSpacing = 70; // Espacement minimum entre nœuds (réduit à 70px)
+            const requiredWidth = maxNodesAtLevel * minSpacing + 100;
+            canvas.width = Math.max(1000, requiredWidth);
+            
+            // Ajuster la hauteur selon la profondeur
+            const requiredHeight = height * 110 + 150;
+            canvas.height = Math.max(600, requiredHeight);
+
+            clearCanvas();
+
+            const verticalSpacing = 110;
+
+            // Calculer les positions avec espacement adaptatif
+            const positions = [];
+            
+            function calculatePositions(index, left, right, y) {
+                if (index === -1 || !nodes[index]) return;
+                
+                const x = (left + right) / 2;
+                positions[index] = { x, y };
+                
+                const node = nodes[index];
+                const nextY = y + verticalSpacing;
+                
+                if (node.left !== -1) {
+                    calculatePositions(node.left, left, x, nextY);
+                }
+                if (node.right !== -1) {
+                    calculatePositions(node.right, x, right, nextY);
+                }
+            }
+
+            const margin = 40;
+            calculatePositions(0, margin, canvas.width - margin, 50);
+
+            // Dessiner les arêtes d'abord
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i] && positions[i]) {
+                    const node = nodes[i];
+                    const pos = positions[i];
+                    
+                    if (node.left !== -1 && positions[node.left]) {
+                        drawEdge(pos.x, pos.y, positions[node.left].x, positions[node.left].y);
+                    }
+                    if (node.right !== -1 && positions[node.right]) {
+                        drawEdge(pos.x, pos.y, positions[node.right].x, positions[node.right].y);
+                    }
+                }
+            }
+
+            // Dessiner les nœuds
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i] && positions[i]) {
+                    drawNode(positions[i].x, positions[i].y, nodes[i].value, selectedColor);
+                }
+            }
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Fond blanc
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'arbre_binaire.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Initialisation : dessiner l'arbre par défaut
+        window.onload = function() {
+            clearCanvas();
+            drawTree();
+        };
+    </script>
+</body>
+</html>
