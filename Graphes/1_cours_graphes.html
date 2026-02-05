@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours - Les Graphes - NSI Terminale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f4c75;
+            --highlight: #3282b8;
+            --bg: #f8f9fa;
+            --text: #2d3436;
+            --sidebar-bg: #0f172a;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--highlight);
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .nav-menu {
+            margin-top: 2rem;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(50, 130, 184, 0.1);
+            color: white;
+            border-left-color: var(--highlight);
+        }
+
+        .nav-link.active {
+            background: rgba(50, 130, 184, 0.2);
+            color: white;
+            border-left-color: var(--highlight);
+            font-weight: 600;
+        }
+
+        .nav-link.page-link {
+            background: rgba(50, 130, 184, 0.15);
+            margin: 0.5rem 1rem;
+            border-radius: 8px;
+            border-left: none;
+            font-weight: 500;
+        }
+
+        .nav-link.page-link:hover {
+            background: rgba(50, 130, 184, 0.3);
+        }
+
+        .nav-link.page-link.active {
+            background: var(--highlight);
+            color: white;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 3rem;
+            max-width: 1200px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        section {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--highlight);
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--highlight);
+        }
+
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        h4 {
+            color: var(--highlight);
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        p {
+            line-height: 1.7;
+            margin: 1rem 0;
+        }
+
+        .definition {
+            background: linear-gradient(135deg, #3282b820 0%, #0f4c7520 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .definition strong {
+            color: var(--highlight);
+            font-size: 1.1rem;
+        }
+
+        .exemple {
+            background: linear-gradient(135deg, #10b98120 0%, #0ea77320 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #10b981;
+        }
+
+        .exemple::before {
+            content: '💡 Exemple';
+            display: block;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 0.8rem;
+        }
+
+        .attention {
+            background: linear-gradient(135deg, #f59e0b20 0%, #d9770620 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .attention::before {
+            content: '⚠️ Attention';
+            display: block;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 0.8rem;
+        }
+
+        .note {
+            background: linear-gradient(135deg, #8b5cf620 0%, #7c3aed20 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .note::before {
+            content: '📝 À retenir';
+            display: block;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 0.8rem;
+        }
+
+        code {
+            background: var(--secondary);
+            color: #a5f3fc;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin: 1rem 0;
+        }
+
+        li {
+            margin: 0.5rem 0;
+            line-height: 1.7;
+        }
+
+        .graph-visual {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-radius: 10px;
+        }
+
+        .graph-visual svg {
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h1>🕸️ Les Graphes</h1>
+            <p>NSI Terminale</p>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="1_cours_graphes.html" class="nav-link page-link active">📖 Cours</a>
+                <a href="2_exercices_graphes.html" class="nav-link page-link">✏️ Exercices</a>
+                <a href="3_tp_python_graphes.html" class="nav-link page-link">🖥️ TP Python</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Contenu du cours</div>
+                <a href="#introduction" class="nav-link">Introduction</a>
+                <a href="#definition" class="nav-link">Définition</a>
+                <a href="#notations" class="nav-link">Notations</a>
+                <a href="#applications" class="nav-link">Applications</a>
+                <a href="#types" class="nav-link">Types de graphes</a>
+                <a href="#representations" class="nav-link">Représentations</a>
+                <a href="#parcours" class="nav-link">Parcours</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header>
+            <h1>Cours - Les Graphes</h1>
+            <p>Structure de données fondamentale pour modéliser des relations</p>
+        </header>
+
+        <!-- INTRODUCTION -->
+        <section id="introduction">
+            <h2>📖 Introduction aux Graphes</h2>
+            
+            <p>Un graphe est une structure mathématique qui représente des relations entre des objets. C'est un outil puissant pour modéliser et résoudre de nombreux problèmes concrets.</p>
+
+            <div class="graph-visual">
+                <svg width="450" height="300" viewBox="0 0 450 300">
+                    <!-- Arêtes -->
+                    <line x1="100" y1="80" x2="200" y2="80" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="100" y1="80" x2="150" y2="180" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="200" y1="80" x2="250" y2="180" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="200" y1="80" x2="300" y2="80" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="150" y1="180" x2="250" y2="180" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="250" y1="180" x2="300" y2="80" stroke="#3282b8" stroke-width="3"/>
+                    
+                    <!-- Sommets -->
+                    <circle cx="100" cy="80" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="200" cy="80" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="300" cy="80" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="150" cy="180" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="250" cy="180" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    
+                    <!-- Étiquettes -->
+                    <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="18">A</text>
+                    <text x="200" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="18">B</text>
+                    <text x="300" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="18">C</text>
+                    <text x="150" y="185" text-anchor="middle" fill="white" font-weight="bold" font-size="18">D</text>
+                    <text x="250" y="185" text-anchor="middle" fill="white" font-weight="bold" font-size="18">E</text>
+                </svg>
+                <p style="margin-top: 1rem; color: #64748b;"><em>Exemple de graphe non orienté à 5 sommets</em></p>
+            </div>
+        </section>
+
+        <!-- DÉFINITION -->
+        <section id="definition">
+            <h2>1. Définition d'un Graphe</h2>
+
+            <div class="definition">
+                <p><strong>Un graphe</strong> est une structure mathématique composée de :</p>
+                <ul>
+                    <li><strong>Sommets (ou nœuds)</strong> : représentent les objets ou entités</li>
+                    <li><strong>Arêtes (ou arcs)</strong> : représentent les connexions ou relations entre ces objets</li>
+                </ul>
+            </div>
+
+            <p>On note un graphe : <span class="math">G = (V, E)</span></p>
+            <ul>
+                <li><span class="math">V</span> : ensemble des sommets (Vertices)</li>
+                <li><span class="math">E</span> : ensemble des arêtes (Edges)</li>
+            </ul>
+
+            <div class="exemple">
+                <strong>Réseau social</strong>
+                <ul>
+                    <li>Les <strong>sommets</strong> représentent les utilisateurs</li>
+                    <li>Les <strong>arêtes</strong> représentent les connexions entre amis</li>
+                </ul>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h4>🏙️ Cartographie</h4>
+                    <p><strong>Sommets</strong> : villes<br>
+                    <strong>Arêtes</strong> : routes entre les villes</p>
+                </div>
+                <div class="card">
+                    <h4>🚇 Réseau de métro</h4>
+                    <p><strong>Sommets</strong> : stations<br>
+                    <strong>Arêtes</strong> : lignes entre les stations</p>
+                </div>
+                <div class="card">
+                    <h4>⚡ Circuits électroniques</h4>
+                    <p><strong>Sommets</strong> : composants électroniques<br>
+                    <strong>Arêtes</strong> : connexions entre composants</p>
+                </div>
+                <div class="card">
+                    <h4>👥 Réseaux sociaux</h4>
+                    <p><strong>Sommets</strong> : utilisateurs<br>
+                    <strong>Arêtes</strong> : relations d'amitié ou de suivi</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOTATIONS -->
+        <section id="notations">
+            <h2>2. Notations Mathématiques</h2>
+
+            <h3>Notation des sommets et des arêtes</h3>
+
+            <div class="definition">
+                <p><strong>Exemple de graphe avec 4 sommets :</strong></p>
+                <p><span class="math">V = {A, B, C, D}</span></p>
+                <br>
+                <p><strong>Arêtes non orientées :</strong></p>
+                <p><span class="math">E = {{A,B}, {B,C}, {C,D}}</span></p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Les accolades {} indiquent qu'il n'y a pas d'ordre</p>
+                <br>
+                <p><strong>Arêtes orientées (arcs) :</strong></p>
+                <p><span class="math">E = {(A,B), (B,C), (C,D)}</span></p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Les parenthèses () indiquent un ordre : de A vers B</p>
+            </div>
+
+            <h3>Graphes pondérés</h3>
+
+            <p>Chaque arête peut avoir un <strong>poids</strong>, représentant une distance, un coût ou un temps.</p>
+
+            <div class="exemple">
+                <p><span class="math">E = {(A,B,5), (B,C,2), (C,D,8)}</span></p>
+                <p>Ici, la distance entre A et B est <strong>5</strong>.</p>
+            </div>
+
+            <div class="graph-visual">
+                <svg width="500" height="200" viewBox="0 0 500 200">
+                    <!-- Arêtes avec poids -->
+                    <line x1="80" y1="100" x2="200" y2="100" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="200" y1="100" x2="320" y2="100" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="320" y1="100" x2="440" y2="100" stroke="#3282b8" stroke-width="3"/>
+                    
+                    <!-- Poids -->
+                    <rect x="125" y="70" width="40" height="30" fill="white" stroke="#3282b8" stroke-width="2" rx="5"/>
+                    <text x="145" y="90" text-anchor="middle" fill="#0f4c75" font-weight="bold" font-size="16">5</text>
+                    
+                    <rect x="245" y="70" width="40" height="30" fill="white" stroke="#3282b8" stroke-width="2" rx="5"/>
+                    <text x="265" y="90" text-anchor="middle" fill="#0f4c75" font-weight="bold" font-size="16">2</text>
+                    
+                    <rect x="365" y="70" width="40" height="30" fill="white" stroke="#3282b8" stroke-width="2" rx="5"/>
+                    <text x="385" y="90" text-anchor="middle" fill="#0f4c75" font-weight="bold" font-size="16">8</text>
+                    
+                    <!-- Sommets -->
+                    <circle cx="80" cy="100" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="200" cy="100" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="320" cy="100" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="440" cy="100" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    
+                    <text x="80" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="18">A</text>
+                    <text x="200" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="18">B</text>
+                    <text x="320" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="18">C</text>
+                    <text x="440" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="18">D</text>
+                </svg>
+                <p style="margin-top: 1rem; color: #64748b;"><em>Graphe pondéré : les nombres indiquent les poids des arêtes</em></p>
+            </div>
+
+            <div class="note">
+                Quand il n'y a pas de poids numériques mais des étiquettes (labels), on parle de <strong>graphe étiqueté</strong>.
+            </div>
+        </section>
+
+        <!-- APPLICATIONS -->
+        <section id="applications">
+            <h2>3. Applications Pratiques</h2>
+
+            <p>Les graphes sont omniprésents en informatique et dans de nombreux domaines :</p>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h4>🌐 Réseaux sociaux</h4>
+                    <p><strong>Sommets</strong> : utilisateurs</p>
+                    <p><strong>Arêtes</strong> : relations d'amitié ou de suivi</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #64748b;">Facebook, Instagram, Twitter utilisent des graphes pour représenter les connexions entre utilisateurs.</p>
+                </div>
+
+                <div class="card">
+                    <h4>🗺️ Cartographie et planification</h4>
+                    <p><strong>Sommets</strong> : villes ou intersections</p>
+                    <p><strong>Arêtes</strong> : routes entre les villes</p>
+                    <p><strong>Poids</strong> : distance ou temps de trajet</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #64748b;">GPS et applications comme Google Maps utilisent des algorithmes sur les graphes.</p>
+                </div>
+
+                <div class="card">
+                    <h4>⚡ Circuits électroniques</h4>
+                    <p><strong>Sommets</strong> : composants électroniques</p>
+                    <p><strong>Arêtes</strong> : connexions entre composants</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #64748b;">Conception de circuits imprimés (PCB).</p>
+                </div>
+
+                <div class="card">
+                    <h4>🚇 Réseaux de transport</h4>
+                    <p><strong>Sommets</strong> : stations de métro ou de bus</p>
+                    <p><strong>Arêtes</strong> : lignes entre les stations</p>
+                    <p><strong>Poids</strong> : temps ou distance entre deux stations</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #64748b;">Optimisation des trajets dans les transports en commun.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TYPES DE GRAPHES -->
+        <section id="types">
+            <h2>4. Types de Graphes</h2>
+
+            <h3>4.1 - Graphe non orienté</h3>
+
+            <div class="definition">
+                <p>Les arêtes n'ont <strong>pas de direction</strong>. Si A est relié à B, alors B est aussi relié à A.</p>
+                <p><strong>Exemple</strong> : une relation d'amitié dans un réseau social.</p>
+            </div>
+
+            <div class="graph-visual">
+                <svg width="500" height="300" viewBox="0 0 500 300">
+                    <!-- Arêtes -->
+                    <line x1="100" y1="100" x2="250" y2="100" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="100" y1="100" x2="175" y2="220" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="250" y1="100" x2="325" y2="220" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="175" y1="220" x2="325" y2="220" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="250" y1="100" x2="325" y2="220" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="100" y1="100" x2="325" y2="220" stroke="#3282b8" stroke-width="3"/>
+                    
+                    <!-- Sommets -->
+                    <circle cx="100" cy="100" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="250" cy="100" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="175" cy="220" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="325" cy="220" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    
+                    <text x="100" y="108" text-anchor="middle" fill="white" font-weight="bold" font-size="20">A</text>
+                    <text x="250" y="108" text-anchor="middle" fill="white" font-weight="bold" font-size="20">B</text>
+                    <text x="175" y="228" text-anchor="middle" fill="white" font-weight="bold" font-size="20">C</text>
+                    <text x="325" y="228" text-anchor="middle" fill="white" font-weight="bold" font-size="20">D</text>
+                </svg>
+            </div>
+
+            <h4>🔗 Vocabulaire pour graphes non orientés</h4>
+
+            <table>
+                <tr>
+                    <th>Terme</th>
+                    <th>Définition</th>
+                    <th>Exemple</th>
+                </tr>
+                <tr>
+                    <td><strong>Arêtes adjacentes</strong></td>
+                    <td>Deux arêtes qui ont un sommet commun</td>
+                    <td>A-D et B-D partagent le sommet D</td>
+                </tr>
+                <tr>
+                    <td><strong>Sommets adjacents</strong></td>
+                    <td>Deux sommets reliés par une arête</td>
+                    <td>A et D sont adjacents</td>
+                </tr>
+                <tr>
+                    <td><strong>Degré d'un sommet</strong></td>
+                    <td>Nombre d'arêtes connectées à un sommet</td>
+                    <td>d°(D) = 3, d°(A) = 2</td>
+                </tr>
+                <tr>
+                    <td><strong>Chaîne</strong></td>
+                    <td>Suite de sommets consécutifs reliés</td>
+                    <td>ADBCD</td>
+                </tr>
+                <tr>
+                    <td><strong>Chaîne élémentaire</strong></td>
+                    <td>Chaîne où les sommets ne sont pas répétés</td>
+                    <td>ADBC</td>
+                </tr>
+                <tr>
+                    <td><strong>Cycle</strong></td>
+                    <td>Chaîne dont le sommet de départ = sommet d'arrivée</td>
+                    <td>ADBCA</td>
+                </tr>
+            </table>
+
+            <h4>📊 Propriétés des graphes non orientés</h4>
+
+            <div class="definition">
+                <p><strong>Graphe connexe :</strong> Il existe une chaîne entre toute paire de sommets.</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h4 style="color: #10b981;">✅ Graphe connexe</h4>
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <line x1="50" y1="50" x2="150" y2="50" stroke="#3282b8" stroke-width="2"/>
+                        <line x1="50" y1="50" x2="100" y2="120" stroke="#3282b8" stroke-width="2"/>
+                        <line x1="150" y1="50" x2="100" y2="120" stroke="#3282b8" stroke-width="2"/>
+                        <circle cx="50" cy="50" r="15" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                        <circle cx="150" cy="50" r="15" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                        <circle cx="100" cy="120" r="15" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                    </svg>
+                    <p style="margin-top: 1rem; font-size: 0.9rem;">Tous les sommets sont accessibles</p>
+                </div>
+
+                <div class="card">
+                    <h4 style="color: #ef4444;">❌ Graphe non connexe</h4>
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <line x1="40" y1="75" x2="80" y2="75" stroke="#3282b8" stroke-width="2"/>
+                        <line x1="120" y1="75" x2="160" y2="75" stroke="#3282b8" stroke-width="2"/>
+                        <circle cx="40" cy="75" r="15" fill="#ef4444" stroke="#dc2626" stroke-width="2"/>
+                        <circle cx="80" cy="75" r="15" fill="#ef4444" stroke="#dc2626" stroke-width="2"/>
+                        <circle cx="120" cy="75" r="15" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                        <circle cx="160" cy="75" r="15" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                    </svg>
+                    <p style="margin-top: 1rem; font-size: 0.9rem;">Deux composantes séparées</p>
+                </div>
+            </div>
+
+            <div class="definition">
+                <p><strong>Graphe complet :</strong> Chacun des sommets est relié à <strong>tous</strong> les autres sommets.</p>
+            </div>
+
+            <div class="graph-visual">
+                <svg width="300" height="300" viewBox="0 0 300 300">
+                    <!-- Centre du pentagone : (150, 150), rayon : 80 -->
+                    <!-- Arêtes - toutes les combinaisons -->
+                    <line x1="150" y1="70" x2="238" y2="116" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="150" y1="70" x2="214" y2="210" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="150" y1="70" x2="86" y2="210" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="150" y1="70" x2="62" y2="116" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="238" y1="116" x2="214" y2="210" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="238" y1="116" x2="86" y2="210" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="238" y1="116" x2="62" y2="116" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="214" y1="210" x2="86" y2="210" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="214" y1="210" x2="62" y2="116" stroke="#3282b8" stroke-width="2"/>
+                    <line x1="86" y1="210" x2="62" y2="116" stroke="#3282b8" stroke-width="2"/>
+                    
+                    <!-- Sommets -->
+                    <circle cx="150" cy="70" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                    <circle cx="238" cy="116" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                    <circle cx="214" cy="210" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                    <circle cx="86" cy="210" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                    <circle cx="62" cy="116" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                </svg>
+                <p style="margin-top: 1rem; color: #64748b;"><em>Graphe complet à 5 sommets - Chaque sommet est relié à tous les autres</em></p>
+            </div>
+
+            <h3>4.2 - Graphe orienté (ou digraphe)</h3>
+
+            <div class="definition">
+                <p>Les arêtes ont une <strong>direction</strong> (on les appelle des <strong>arcs</strong>).</p>
+                <p>Si A est relié à B, cela ne signifie pas que B est relié à A.</p>
+                <p><strong>Exemple</strong> : un suivi sur Instagram (si A suit B, cela ne signifie pas que B suit A).</p>
+            </div>
+
+            <div class="graph-visual">
+                <svg width="500" height="300" viewBox="0 0 500 300">
+                    <!-- Arcs avec flèches -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <polygon points="0 0, 10 3, 0 6" fill="#3282b8" />
+                        </marker>
+                    </defs>
+                    
+                    <line x1="120" y1="100" x2="210" y2="100" stroke="#3282b8" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <line x1="250" y1="120" x2="160" y2="190" stroke="#3282b8" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <line x1="120" y1="210" x2="185" y2="130" stroke="#3282b8" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <line x1="250" y1="100" x2="345" y2="185" stroke="#3282b8" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <line x1="380" y1="210" x2="270" y2="125" stroke="#3282b8" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <line x1="160" y1="210" x2="345" y2="210" stroke="#3282b8" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Sommets -->
+                    <circle cx="100" cy="100" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="250" cy="100" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="120" cy="210" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="380" cy="210" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    
+                    <text x="100" y="108" text-anchor="middle" fill="white" font-weight="bold" font-size="20">A</text>
+                    <text x="250" y="108" text-anchor="middle" fill="white" font-weight="bold" font-size="20">B</text>
+                    <text x="120" y="218" text-anchor="middle" fill="white" font-weight="bold" font-size="20">C</text>
+                    <text x="380" y="218" text-anchor="middle" fill="white" font-weight="bold" font-size="20">E</text>
+                    
+                    <!-- Labels -->
+                    <text x="160" y="85" fill="#64748b" font-size="14">A → B</text>
+                </svg>
+            </div>
+
+            <h4>🔗 Vocabulaire pour graphes orientés</h4>
+
+            <table>
+                <tr>
+                    <th>Terme</th>
+                    <th>Définition</th>
+                    <th>Exemple</th>
+                </tr>
+                <tr>
+                    <td><strong>Prédécesseur</strong></td>
+                    <td>Sommet d'où part un arc</td>
+                    <td>Si A → B, alors A est prédécesseur de B</td>
+                </tr>
+                <tr>
+                    <td><strong>Successeur</strong></td>
+                    <td>Sommet où arrive un arc</td>
+                    <td>Si A → B, alors B est successeur de A</td>
+                </tr>
+                <tr>
+                    <td><strong>Degré d'un sommet</strong></td>
+                    <td>Nombre d'arcs qui arrivent ou partent du sommet</td>
+                    <td>d°(A) = 3 si 2 arcs partent et 1 arrive</td>
+                </tr>
+                <tr>
+                    <td><strong>Chemin</strong></td>
+                    <td>Sommets reliés entre eux dans le bon sens</td>
+                    <td>BCDED, BCAEDE</td>
+                </tr>
+                <tr>
+                    <td><strong>Chemin élémentaire</strong></td>
+                    <td>Chemin sans répétition de sommets</td>
+                    <td>BCDE</td>
+                </tr>
+                <tr>
+                    <td><strong>Circuit</strong></td>
+                    <td>Chemin dont le sommet de départ = sommet d'arrivée</td>
+                    <td>BCDEB</td>
+                </tr>
+            </table>
+
+            <h3>4.3 - Graphes pondérés vs non pondérés</h3>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h4>Graphe pondéré</h4>
+                    <p>Les arêtes ont un <strong>poids</strong>, représentant une information comme une distance, un coût ou un temps.</p>
+                    <svg width="250" height="120" viewBox="0 0 250 120" style="margin-top: 1rem;">
+                        <line x1="50" y1="60" x2="200" y2="60" stroke="#3282b8" stroke-width="2"/>
+                        <rect x="110" y="40" width="35" height="25" fill="white" stroke="#3282b8" stroke-width="2" rx="4"/>
+                        <text x="127" y="58" text-anchor="middle" fill="#0f4c75" font-weight="bold">42</text>
+                        <circle cx="50" cy="60" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                        <circle cx="200" cy="60" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                        <text x="50" y="66" text-anchor="middle" fill="white" font-weight="bold">A</text>
+                        <text x="200" y="66" text-anchor="middle" fill="white" font-weight="bold">B</text>
+                    </svg>
+                </div>
+
+                <div class="card">
+                    <h4>Graphe non pondéré</h4>
+                    <p>Les arêtes ne portent <strong>aucune information supplémentaire</strong>.</p>
+                    <svg width="250" height="120" viewBox="0 0 250 120" style="margin-top: 1rem;">
+                        <line x1="50" y1="60" x2="200" y2="60" stroke="#3282b8" stroke-width="2"/>
+                        <circle cx="50" cy="60" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                        <circle cx="200" cy="60" r="20" fill="#0f4c75" stroke="#1a1a2e" stroke-width="2"/>
+                        <text x="50" y="66" text-anchor="middle" fill="white" font-weight="bold">A</text>
+                        <text x="200" y="66" text-anchor="middle" fill="white" font-weight="bold">B</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- REPRÉSENTATIONS -->
+        <section id="representations">
+            <h2>5. Représentations en Python</h2>
+
+            <p>Pour manipuler des graphes en programmation, il existe plusieurs façons de les représenter en mémoire.</p>
+
+            <h3>5.1 - Liste d'adjacence (dictionnaire)</h3>
+
+            <div class="definition">
+                <p><strong>Liste d'adjacence :</strong> Dictionnaire où chaque sommet pointe vers la liste de ses voisins.</p>
+            </div>
+
+            <div class="exemple">
+                <p>Pour un graphe : A—B, A—C, B—D, C—D</p>
+                <pre style="background: var(--secondary); color: #a5f3fc; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-top: 1rem;">graphe = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D'],
+    'C': ['A', 'D'],
+    'D': ['B', 'C']
+}</pre>
+            </div>
+
+            <div class="note">
+                <strong>Avantages :</strong>
+                <ul>
+                    <li>Efficace en mémoire pour les graphes peu denses</li>
+                    <li>Parcours rapide des voisins d'un sommet</li>
+                </ul>
+            </div>
+
+            <h3>5.2 - Matrice d'adjacence</h3>
+
+            <div class="definition">
+                <p><strong>Matrice d'adjacence :</strong> Tableau 2D où M[i][j] = 1 si une arête existe entre le sommet i et le sommet j, 0 sinon.</p>
+            </div>
+
+            <div class="exemple">
+                <p>Pour le même graphe :</p>
+                <pre style="background: var(--secondary); color: #a5f3fc; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-top: 1rem;">    A  B  C  D
+A [ 0  1  1  0 ]
+B [ 1  0  0  1 ]
+C [ 1  0  0  1 ]
+D [ 0  1  1  0 ]</pre>
+            </div>
+
+            <div class="note">
+                <strong>Avantages :</strong>
+                <ul>
+                    <li>Vérification rapide de l'existence d'une arête : O(1)</li>
+                    <li>Simple à implémenter</li>
+                </ul>
+                <strong>Inconvénients :</strong>
+                <ul>
+                    <li>Consomme beaucoup de mémoire : O(n²)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- PARCOURS -->
+        <section id="parcours">
+            <h2>6. Algorithmes de Parcours</h2>
+
+            <p>Les algorithmes de parcours permettent de visiter tous les sommets d'un graphe de manière systématique.</p>
+
+            <h3>6.1 - Parcours en Largeur (BFS)</h3>
+
+            <div class="definition">
+                <p><strong>BFS (Breadth-First Search) :</strong> Explorer les sommets niveau par niveau, en commençant par les voisins directs.</p>
+                <p><strong>Structure utilisée :</strong> File (FIFO)</p>
+            </div>
+
+            <h3>6.2 - Parcours en Profondeur (DFS)</h3>
+
+            <div class="definition">
+                <p><strong>DFS (Depth-First Search) :</strong> Explorer un chemin le plus loin possible avant de revenir en arrière.</p>
+                <p><strong>Structure utilisée :</strong> Pile (LIFO) ou récursivité</p>
+            </div>
+
+            <div class="note">
+                Ces algorithmes seront détaillés dans le TP Python avec des implémentations complètes.
+            </div>
+        </section>
+
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #3282b820 0%, #0f4c7520 100%); border-radius: 10px;">
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">📚 Passez maintenant aux exercices pour mettre en pratique vos connaissances !</p>
+            <a href="2_exercices_graphes.html" style="display: inline-block; background: var(--highlight); color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 1rem;">✏️ Aller aux Exercices</a>
+        </div>
+    </main>
+</body>
+</html>

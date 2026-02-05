@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP Python - Les Graphes - NSI Terminale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f4c75;
+            --highlight: #3282b8;
+            --bg: #f8f9fa;
+            --text: #2d3436;
+            --sidebar-bg: #0f172a;
+            --card-bg: #ffffff;
+            --code-bg: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--highlight);
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .nav-menu {
+            margin-top: 2rem;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(50, 130, 184, 0.1);
+            color: white;
+            border-left-color: var(--highlight);
+        }
+
+        .nav-link.active {
+            background: rgba(50, 130, 184, 0.2);
+            color: white;
+            border-left-color: var(--highlight);
+            font-weight: 600;
+        }
+
+        .nav-link.page-link {
+            background: rgba(50, 130, 184, 0.15);
+            margin: 0.5rem 1rem;
+            border-radius: 8px;
+            border-left: none;
+            font-weight: 500;
+        }
+
+        .nav-link.page-link:hover {
+            background: rgba(50, 130, 184, 0.3);
+        }
+
+        .nav-link.page-link.active {
+            background: var(--highlight);
+            color: white;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 3rem;
+            max-width: 1400px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-banner {
+            background: linear-gradient(135deg, var(--highlight) 0%, var(--accent) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(50, 152, 219, 0.2);
+        }
+
+        section {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #10b981;
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid #10b981;
+        }
+
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #10b981;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        h4 {
+            color: var(--highlight);
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .partie {
+            background: linear-gradient(135deg, #10b98110 0%, #05966908 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border: 3px solid #10b981;
+        }
+
+        .partie-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .partie-number {
+            background: #10b981;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .partie-title {
+            font-size: 1.6rem;
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .duree, .difficulte {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .duree {
+            background: #f39c12;
+            color: white;
+        }
+
+        .facile { background: #27ae60; color: white; }
+        .moyen { background: #f39c12; color: white; }
+        .difficile { background: #e74c3c; color: white; }
+
+        .objectif {
+            background: linear-gradient(135deg, #3282b820 0%, #0f4c7520 100%);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .objectif strong {
+            color: var(--highlight);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .consigne {
+            background: linear-gradient(135deg, #f59e0b20 0%, #d9770620 100%);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .consigne::before {
+            content: '📝 À faire : ';
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        .aide {
+            background: linear-gradient(135deg, #10b98120 0%, #05966920 100%);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #10b981;
+        }
+
+        .aide::before {
+            content: '💡 Aide : ';
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        .question {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 3px solid var(--highlight);
+        }
+
+        code {
+            background: var(--code-bg);
+            color: #a5f3fc;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .comment { color: #64748b; font-style: italic; }
+        .keyword { color: #f472b6; }
+        .string { color: #34d399; }
+        .function { color: #60a5fa; }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin: 1rem 0;
+        }
+
+        li {
+            margin: 0.5rem 0;
+            line-height: 1.7;
+        }
+
+        .exercice-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h1>🕸️ Les Graphes</h1>
+            <p>NSI Terminale</p>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="1_cours_graphes.html" class="nav-link page-link">📖 Cours</a>
+                <a href="2_exercices_graphes.html" class="nav-link page-link">✏️ Exercices</a>
+                <a href="3_tp_python_graphes.html" class="nav-link page-link active">🖥️ TP Python</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Parties du TP</div>
+                <a href="#partie1" class="nav-link">Partie 1 - Code à comprendre</a>
+                <a href="#partie2" class="nav-link">Partie 2 - Code à compléter</a>
+                <a href="#partie3" class="nav-link">Partie 3 - Fonctions à créer</a>
+                <a href="#bonus" class="nav-link">Exercices bonus</a>
+                <a href="#rendu" class="nav-link">Rendu du TP</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header>
+            <h1>🖥️ TP Python - Les Graphes</h1>
+            <p>Travaux Pratiques - Implémentation et algorithmes (1h30)</p>
+        </header>
+
+        <div class="info-banner">
+            ⏱️ Durée : 1h30 | 📁 Fichier à créer : <strong>tp_graphes.py</strong> | 💾 À rendre en fin de séance
+        </div>
+
+        <!-- INTRODUCTION -->
+        <section>
+            <h2>📋 Objectifs du TP</h2>
+            
+            <p>Dans ce TP, vous allez progressivement construire une bibliothèque Python pour manipuler des graphes.</p>
+
+            <div class="objectif">
+                <strong>🎯 Vous allez :</strong>
+                <ol style="margin-left: 2rem; margin-top: 0.5rem;">
+                    <li><strong>Comprendre</strong> du code existant (analyse et questions)</li>
+                    <li><strong>Compléter</strong> des fonctions partiellement écrites</li>
+                    <li><strong>Créer</strong> vos propres fonctions pour résoudre des problèmes</li>
+                </ol>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #10b98120 0%, #05966920 100%); padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem;">
+                <h4 style="color: #10b981; margin-bottom: 1rem;">💡 Compétences travaillées</h4>
+                <ul style="list-style: none; margin-left: 0;">
+                    <li style="margin: 0.5rem 0;">✅ Implémenter des structures de données (dictionnaires, ensembles)</li>
+                    <li style="margin: 0.5rem 0;">✅ Utiliser des algorithmes de parcours (BFS, DFS)</li>
+                    <li style="margin: 0.5rem 0;">✅ Manipuler des files et des piles</li>
+                    <li style="margin: 0.5rem 0;">✅ Résoudre des problèmes algorithmiques</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- PARTIE 1 -->
+        <div class="partie" id="partie1">
+            <div class="partie-header">
+                <div class="partie-number">1</div>
+                <div>
+                    <div class="partie-title">Code à Comprendre</div>
+                    <span class="duree">⏱️ 20 min</span>
+                    <span class="difficulte facile">★ Facile</span>
+                </div>
+            </div>
+
+            <div class="objectif">
+                <strong>Objectif :</strong> Analyser et comprendre du code existant pour manipuler des graphes.
+            </div>
+
+            <h3>1.1 - Création d'un graphe</h3>
+
+            <p>Étudiez attentivement le code suivant qui permet de créer et manipuler un graphe :</p>
+
+            <pre><code><span class="comment"># Création d'un graphe vide avec liste d'adjacence</span>
+<span class="keyword">def</span> <span class="function">creer_graphe</span>():
+    <span class="string">"""Crée un graphe vide représenté par un dictionnaire."""</span>
+    <span class="keyword">return</span> {}
+
+
+<span class="comment"># Ajout d'un sommet au graphe</span>
+<span class="keyword">def</span> <span class="function">ajouter_sommet</span>(graphe, sommet):
+    <span class="string">"""Ajoute un sommet au graphe s'il n'existe pas déjà."""</span>
+    <span class="keyword">if</span> sommet <span class="keyword">not in</span> graphe:
+        graphe[sommet] = []
+
+
+<span class="comment"># Ajout d'une arête dans un graphe non orienté</span>
+<span class="keyword">def</span> <span class="function">ajouter_arete</span>(graphe, sommet1, sommet2):
+    <span class="string">"""Ajoute une arête entre sommet1 et sommet2 (graphe non orienté)."""</span>
+    <span class="comment"># On s'assure que les sommets existent</span>
+    ajouter_sommet(graphe, sommet1)
+    ajouter_sommet(graphe, sommet2)
+    
+    <span class="comment"># On ajoute l'arête dans les deux sens (non orienté)</span>
+    <span class="keyword">if</span> sommet2 <span class="keyword">not in</span> graphe[sommet1]:
+        graphe[sommet1].append(sommet2)
+    <span class="keyword">if</span> sommet1 <span class="keyword">not in</span> graphe[sommet2]:
+        graphe[sommet2].append(sommet1)
+
+
+<span class="comment"># Affichage du graphe</span>
+<span class="keyword">def</span> <span class="function">afficher_graphe</span>(graphe):
+    <span class="string">"""Affiche le graphe de manière lisible."""</span>
+    <span class="keyword">print</span>(<span class="string">"Graphe :"</span>)
+    <span class="keyword">for</span> sommet <span class="keyword">in</span> graphe:
+        voisins = <span class="string">", "</span>.join(str(v) <span class="keyword">for</span> v <span class="keyword">in</span> graphe[sommet])
+        <span class="keyword">print</span>(<span class="string">f"  {sommet} → [{voisins}]"</span>)
+
+
+<span class="comment"># Test du code</span>
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    g = creer_graphe()
+    ajouter_arete(g, <span class="string">'A'</span>, <span class="string">'B'</span>)
+    ajouter_arete(g, <span class="string">'A'</span>, <span class="string">'C'</span>)
+    ajouter_arete(g, <span class="string">'B'</span>, <span class="string">'D'</span>)
+    ajouter_arete(g, <span class="string">'C'</span>, <span class="string">'D'</span>)
+    
+    afficher_graphe(g)</code></pre>
+
+            <div class="exercice-box">
+                <h4>Questions de compréhension (sur feuille) :</h4>
+                
+                <div class="question">
+                    <strong>Q1.1 :</strong> Quel est le type de données Python utilisé pour représenter le graphe ? Pourquoi ce choix est-il pertinent ?
+                </div>
+                
+                <div class="question">
+                    <strong>Q1.2 :</strong> Dans la fonction <code>ajouter_arete</code>, pourquoi ajoute-t-on l'arête dans les deux sens (lignes avec append) ?
+                </div>
+                
+                <div class="question">
+                    <strong>Q1.3 :</strong> Que se passe-t-il si on essaie d'ajouter deux fois la même arête ? Le code gère-t-il bien ce cas ?
+                </div>
+                
+                <div class="question">
+                    <strong>Q1.4 :</strong> Dessinez le graphe créé par le code de test. Combien y a-t-il de sommets et d'arêtes ?
+                </div>
+            </div>
+
+            <div class="consigne">
+                Recopiez tout ce code dans votre fichier <code>tp_graphes.py</code> et testez-le. Répondez aux questions sur une feuille séparée.
+            </div>
+
+            <h3>1.2 - Parcours en largeur (BFS)</h3>
+
+            <p>Étudiez maintenant ce code qui implémente un parcours en largeur :</p>
+
+            <pre><code><span class="keyword">from</span> collections <span class="keyword">import</span> deque
+
+<span class="keyword">def</span> <span class="function">parcours_largeur</span>(graphe, depart):
+    <span class="string">"""Parcours en largeur (BFS) à partir d'un sommet de départ."""</span>
+    <span class="keyword">if</span> depart <span class="keyword">not in</span> graphe:
+        <span class="keyword">return</span> []
+    
+    visites = <span class="keyword">set</span>()          <span class="comment"># Ensemble des sommets déjà visités</span>
+    file = deque([depart])   <span class="comment"># File d'attente (FIFO)</span>
+    ordre_visite = []        <span class="comment"># Pour mémoriser l'ordre de visite</span>
+    
+    visites.add(depart)
+    
+    <span class="keyword">while</span> file:
+        sommet = file.popleft()  <span class="comment"># On retire le premier élément</span>
+        ordre_visite.append(sommet)
+        
+        <span class="comment"># On ajoute les voisins non visités</span>
+        <span class="keyword">for</span> voisin <span class="keyword">in</span> graphe[sommet]:
+            <span class="keyword">if</span> voisin <span class="keyword">not in</span> visites:
+                visites.add(voisin)
+                file.append(voisin)
+    
+    <span class="keyword">return</span> ordre_visite</code></pre>
+
+            <div class="exercice-box">
+                <h4>Questions de compréhension :</h4>
+                
+                <div class="question">
+                    <strong>Q1.5 :</strong> Pourquoi utilise-t-on un <code>set()</code> pour <code>visites</code> plutôt qu'une liste ?
+                </div>
+                
+                <div class="question">
+                    <strong>Q1.6 :</strong> Quelle est la différence entre <code>deque</code> et une liste classique ? Pourquoi utiliser <code>deque</code> ici ?
+                </div>
+                
+                <div class="question">
+                    <strong>Q1.7 :</strong> Testez ce code avec le graphe de la partie 1.1. Quel est l'ordre de visite depuis 'A' ?
+                </div>
+            </div>
+
+            <div class="consigne">
+                Ajoutez ce code à votre fichier et testez-le avec différents graphes.
+            </div>
+        </div>
+
+        <!-- PARTIE 2 -->
+        <div class="partie" id="partie2">
+            <div class="partie-header">
+                <div class="partie-number">2</div>
+                <div>
+                    <div class="partie-title">Code à Compléter</div>
+                    <span class="duree">⏱️ 35 min</span>
+                    <span class="difficulte moyen">★★ Moyen</span>
+                </div>
+            </div>
+
+            <div class="objectif">
+                <strong>Objectif :</strong> Compléter des fonctions partiellement écrites en suivant les indications.
+            </div>
+
+            <h3>2.1 - Parcours en profondeur (DFS)</h3>
+
+            <p>Complétez la fonction suivante qui réalise un parcours en profondeur récursif :</p>
+
+            <pre><code><span class="keyword">def</span> <span class="function">parcours_profondeur</span>(graphe, depart, visites=<span class="keyword">None</span>):
+    <span class="string">"""Parcours en profondeur (DFS) récursif."""</span>
+    <span class="keyword">if</span> visites <span class="keyword">is None</span>:
+        visites = <span class="keyword">set</span>()
+    
+    <span class="keyword">if</span> depart <span class="keyword">not in</span> graphe:
+        <span class="keyword">return</span> []
+    
+    <span class="comment"># À COMPLÉTER : Marquer le sommet comme visité</span>
+    <span class="comment"># ...</span>
+    
+    ordre_visite = [depart]
+    
+    <span class="comment"># À COMPLÉTER : Pour chaque voisin du sommet actuel</span>
+    <span class="comment">#   - Si le voisin n'a pas été visité</span>
+    <span class="comment">#   - Faire un appel récursif sur ce voisin</span>
+    <span class="comment">#   - Ajouter les sommets visités à ordre_visite</span>
+    <span class="keyword">for</span> voisin <span class="keyword">in</span> graphe[depart]:
+        <span class="keyword">if</span> <span class="comment">... :  # À COMPLÉTER</span>
+            resultat = <span class="comment">...  # À COMPLÉTER : appel récursif</span>
+            ordre_visite.extend(resultat)
+    
+    <span class="keyword">return</span> ordre_visite</code></pre>
+
+            <div class="aide">
+                <strong>Indices :</strong>
+                <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                    <li>Pour marquer comme visité : <code>visites.add(depart)</code></li>
+                    <li>Pour tester si visité : <code>voisin not in visites</code></li>
+                    <li>L'appel récursif : <code>parcours_profondeur(graphe, voisin, visites)</code></li>
+                </ul>
+            </div>
+
+            <h3>2.2 - Degré d'un sommet</h3>
+
+            <pre><code><span class="keyword">def</span> <span class="function">degre_sommet</span>(graphe, sommet):
+    <span class="string">"""Calcule le degré d'un sommet (nombre de voisins)."""</span>
+    <span class="comment"># À COMPLÉTER : Vérifier si le sommet existe</span>
+    <span class="keyword">if</span> <span class="comment">... :  # À COMPLÉTER</span>
+        <span class="keyword">return</span> -1
+    
+    <span class="comment"># À COMPLÉTER : Retourner le nombre de voisins</span>
+    <span class="keyword">return</span> <span class="comment">...  # À COMPLÉTER</span></code></pre>
+
+            <div class="aide">
+                Le degré = nombre d'éléments dans la liste des voisins. Utilisez <code>len()</code>.
+            </div>
+
+            <h3>2.3 - Sommets isolés</h3>
+
+            <pre><code><span class="keyword">def</span> <span class="function">sommets_isoles</span>(graphe):
+    <span class="string">"""Trouve tous les sommets isolés (sans voisins) du graphe."""</span>
+    isoles = []
+    
+    <span class="comment"># À COMPLÉTER : Parcourir tous les sommets du graphe</span>
+    <span class="comment">#   - Si le sommet n'a aucun voisin, l'ajouter à isoles</span>
+    <span class="keyword">for</span> sommet <span class="keyword">in</span> <span class="comment">... :  # À COMPLÉTER</span>
+        <span class="keyword">if</span> <span class="comment">... :  # À COMPLÉTER : condition pour sommet isolé</span>
+            isoles.append(sommet)
+    
+    <span class="keyword">return</span> isoles</code></pre>
+
+            <h3>2.4 - Existence d'une arête</h3>
+
+            <pre><code><span class="keyword">def</span> <span class="function">existe_arete</span>(graphe, sommet1, sommet2):
+    <span class="string">"""Vérifie si une arête existe entre deux sommets."""</span>
+    <span class="comment"># À COMPLÉTER : Vérifier que les deux sommets existent</span>
+    <span class="keyword">if</span> <span class="comment">... :  # À COMPLÉTER</span>
+        <span class="keyword">return</span> <span class="keyword">False</span>
+    
+    <span class="comment"># À COMPLÉTER : Vérifier si sommet2 est dans les voisins de sommet1</span>
+    <span class="keyword">return</span> <span class="comment">...  # À COMPLÉTER</span></code></pre>
+
+            <div class="consigne">
+                Complétez toutes les fonctions de cette partie. Testez chacune avec des exemples simples avant de passer à la suite.
+            </div>
+
+            <h3>Tests pour la Partie 2</h3>
+
+            <pre><code><span class="comment"># Tests à effectuer</span>
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    g = creer_graphe()
+    ajouter_arete(g, <span class="string">'A'</span>, <span class="string">'B'</span>)
+    ajouter_arete(g, <span class="string">'A'</span>, <span class="string">'C'</span>)
+    ajouter_arete(g, <span class="string">'B'</span>, <span class="string">'D'</span>)
+    ajouter_sommet(g, <span class="string">'Z'</span>)  <span class="comment"># Sommet isolé</span>
+    
+    <span class="keyword">print</span>(<span class="string">"\n=== Tests Partie 2 ==="</span>)
+    <span class="keyword">print</span>(<span class="string">"Parcours profondeur depuis A:"</span>, parcours_profondeur(g, <span class="string">'A'</span>))
+    <span class="keyword">print</span>(<span class="string">"Degré de A:"</span>, degre_sommet(g, <span class="string">'A'</span>))  <span class="comment"># Doit afficher 2</span>
+    <span class="keyword">print</span>(<span class="string">"Degré de Z:"</span>, degre_sommet(g, <span class="string">'Z'</span>))  <span class="comment"># Doit afficher 0</span>
+    <span class="keyword">print</span>(<span class="string">"Sommets isolés:"</span>, sommets_isoles(g))  <span class="comment"># Doit afficher ['Z']</span>
+    <span class="keyword">print</span>(<span class="string">"A-B existe ?"</span>, existe_arete(g, <span class="string">'A'</span>, <span class="string">'B'</span>))  <span class="comment"># True</span>
+    <span class="keyword">print</span>(<span class="string">"A-D existe ?"</span>, existe_arete(g, <span class="string">'A'</span>, <span class="string">'D'</span>))  <span class="comment"># False</span></code></pre>
+        </div>
+
+        <!-- PARTIE 3 -->
+        <div class="partie" id="partie3">
+            <div class="partie-header">
+                <div class="partie-number">3</div>
+                <div>
+                    <div class="partie-title">Fonctions à Créer</div>
+                    <span class="duree">⏱️ 35 min</span>
+                    <span class="difficulte difficile">★★★ Difficile</span>
+                </div>
+            </div>
+
+            <div class="objectif">
+                <strong>Objectif :</strong> Créer vos propres fonctions pour résoudre des problèmes sur les graphes.
+            </div>
+
+            <h3>3.1 - Connexité du graphe ⭐⭐</h3>
+
+            <div class="exercice-box">
+                <p><strong>Problème :</strong> Un graphe est connexe si tous les sommets sont accessibles depuis n'importe quel sommet.</p>
+                
+                <div class="consigne">
+                    Écrivez une fonction <code>est_connexe(graphe)</code> qui retourne <code>True</code> si le graphe est connexe, <code>False</code> sinon.
+                </div>
+
+                <div class="aide">
+                    <strong>Algorithme :</strong>
+                    <ol style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Si le graphe est vide, il est connexe</li>
+                        <li>Choisir un sommet de départ (le premier)</li>
+                        <li>Faire un parcours (BFS ou DFS) depuis ce sommet</li>
+                        <li>Le graphe est connexe si on a visité tous les sommets</li>
+                    </ol>
+                </div>
+
+                <p><strong>Exemples de tests :</strong></p>
+                <pre><code><span class="comment"># Graphe connexe : A—B—C</span>
+g1 = creer_graphe()
+ajouter_arete(g1, <span class="string">'A'</span>, <span class="string">'B'</span>)
+ajouter_arete(g1, <span class="string">'B'</span>, <span class="string">'C'</span>)
+<span class="keyword">print</span>(est_connexe(g1))  <span class="comment"># Doit afficher True</span>
+
+<span class="comment"># Graphe non connexe : A—B   C—D</span>
+g2 = creer_graphe()
+ajouter_arete(g2, <span class="string">'A'</span>, <span class="string">'B'</span>)
+ajouter_arete(g2, <span class="string">'C'</span>, <span class="string">'D'</span>)
+<span class="keyword">print</span>(est_connexe(g2))  <span class="comment"># Doit afficher False</span></code></pre>
+            </div>
+
+            <h3>3.2 - Nombre de composantes connexes ⭐⭐</h3>
+
+            <div class="exercice-box">
+                <p><strong>Problème :</strong> Une composante connexe est un sous-ensemble de sommets tous reliés entre eux.</p>
+                
+                <div class="consigne">
+                    Écrivez une fonction <code>nombre_composantes(graphe)</code> qui retourne le nombre de composantes connexes.
+                </div>
+
+                <div class="aide">
+                    <strong>Algorithme :</strong>
+                    <ol style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Initialiser un ensemble de sommets non visités</li>
+                        <li>Initialiser un compteur de composantes à 0</li>
+                        <li>Tant qu'il reste des sommets non visités :
+                            <ul style="margin-left: 2rem;">
+                                <li>Choisir un sommet non visité</li>
+                                <li>Faire un parcours depuis ce sommet</li>
+                                <li>Marquer tous les sommets atteints comme visités</li>
+                                <li>Incrémenter le compteur</li>
+                            </ul>
+                        </li>
+                        <li>Retourner le compteur</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>3.3 - Distance entre deux sommets ⭐⭐⭐</h3>
+
+            <div class="exercice-box">
+                <p><strong>Problème :</strong> Calculer la distance minimale (nombre d'arêtes) entre deux sommets.</p>
+                
+                <div class="consigne">
+                    Écrivez une fonction <code>distance(graphe, depart, arrivee)</code> qui retourne la distance minimale entre deux sommets, ou <code>-1</code> s'ils ne sont pas connectés.
+                </div>
+
+                <div class="aide">
+                    <strong>Algorithme (BFS modifié) :</strong>
+                    <ol style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Utiliser une file avec des couples (sommet, distance)</li>
+                        <li>Commencer avec (depart, 0)</li>
+                        <li>Pour chaque sommet visité :
+                            <ul style="margin-left: 2rem;">
+                                <li>Si c'est l'arrivée, retourner la distance</li>
+                                <li>Sinon, ajouter les voisins avec distance+1</li>
+                            </ul>
+                        </li>
+                        <li>Si la file est vide, retourner -1</li>
+                    </ol>
+                </div>
+
+                <p><strong>Exemple :</strong></p>
+                <pre><code><span class="comment"># A—B—C—D</span>
+g = creer_graphe()
+ajouter_arete(g, <span class="string">'A'</span>, <span class="string">'B'</span>)
+ajouter_arete(g, <span class="string">'B'</span>, <span class="string">'C'</span>)
+ajouter_arete(g, <span class="string">'C'</span>, <span class="string">'D'</span>)
+
+<span class="keyword">print</span>(distance(g, <span class="string">'A'</span>, <span class="string">'D'</span>))  <span class="comment"># Doit afficher 3</span>
+<span class="keyword">print</span>(distance(g, <span class="string">'A'</span>, <span class="string">'B'</span>))  <span class="comment"># Doit afficher 1</span></code></pre>
+            </div>
+
+            <h3>3.4 - Chemin entre deux sommets ⭐⭐⭐</h3>
+
+            <div class="exercice-box">
+                <p><strong>Problème :</strong> Trouver un chemin (liste de sommets) entre deux sommets.</p>
+                
+                <div class="consigne">
+                    Écrivez une fonction <code>trouver_chemin(graphe, depart, arrivee)</code> qui retourne une liste représentant un chemin entre deux sommets, ou <code>None</code> si aucun chemin n'existe.
+                </div>
+
+                <div class="aide">
+                    <strong>Algorithme (BFS avec mémorisation des chemins) :</strong>
+                    <ol style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Utiliser une file avec des couples (sommet, chemin)</li>
+                        <li>Commencer avec (depart, [depart])</li>
+                        <li>Pour chaque sommet visité :
+                            <ul style="margin-left: 2rem;">
+                                <li>Si c'est l'arrivée, retourner le chemin</li>
+                                <li>Sinon, pour chaque voisin non visité, ajouter (voisin, chemin + [voisin])</li>
+                            </ul>
+                        </li>
+                        <li>Si la file est vide, retourner None</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- BONUS -->
+        <section id="bonus">
+            <h2>🌟 Exercices Bonus</h2>
+
+            <div class="exercice-box">
+                <h3>Bonus 1 - Graphe orienté ⭐⭐</h3>
+                <p>Modifiez la fonction <code>ajouter_arete</code> pour créer une version <code>ajouter_arc</code> qui gère des graphes orientés (arête unidirectionnelle).</p>
+            </div>
+
+            <div class="exercice-box">
+                <h3>Bonus 2 - Détection de cycle ⭐⭐⭐</h3>
+                <p>Écrivez une fonction <code>contient_cycle(graphe)</code> qui détecte si un graphe contient un cycle.</p>
+                <div class="aide">
+                    Utilisez un DFS avec suivi des sommets en cours de visite.
+                </div>
+            </div>
+
+            <div class="exercice-box">
+                <h3>Bonus 3 - Graphe complet ⭐⭐</h3>
+                <p>Un graphe complet est un graphe où tous les sommets sont reliés entre eux. Écrivez une fonction <code>est_complet(graphe)</code>.</p>
+            </div>
+        </section>
+
+        <!-- RENDU -->
+        <section id="rendu" style="background: linear-gradient(135deg, #10b98120 0%, #05966920 100%);">
+            <h2>✅ Récapitulatif et Rendu</h2>
+            
+            <h3>À la fin du TP, vous devez avoir :</h3>
+            <ol style="margin-left: 2rem;">
+                <li>✏️ Un fichier <code>tp_graphes.py</code> avec toutes les fonctions</li>
+                <li>📝 Les réponses aux questions de compréhension (Partie 1)</li>
+                <li>✅ Toutes les fonctions de la Partie 2 complétées et testées</li>
+                <li>🎯 Au moins 2 fonctions de la Partie 3 créées et testées</li>
+            </ol>
+
+            <h3>Barème indicatif :</h3>
+            <table>
+                <tr>
+                    <th>Partie</th>
+                    <th>Points</th>
+                </tr>
+                <tr>
+                    <td>Partie 1 - Questions de compréhension</td>
+                    <td>4 points</td>
+                </tr>
+                <tr>
+                    <td>Partie 2 - Code à compléter (4 fonctions)</td>
+                    <td>8 points</td>
+                </tr>
+                <tr>
+                    <td>Partie 3 - Fonctions à créer</td>
+                    <td>8 points</td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <th>20 points</th>
+                </tr>
+            </table>
+
+            <div style="background: white; padding: 1.5rem; border-radius: 10px; margin-top: 2rem; border: 2px solid #10b981;">
+                <h4 style="color: #10b981; margin-bottom: 1rem;">💾 Comment rendre votre travail :</h4>
+                <ol style="margin-left: 2rem;">
+                    <li>Enregistrez votre fichier <code>tp_graphes.py</code></li>
+                    <li>Vérifiez que votre code s'exécute sans erreur</li>
+                    <li>Ajoutez des commentaires pour expliquer votre démarche</li>
+                    <li>Déposez sur l'ENT ou envoyez par mail avant la fin de la séance</li>
+                </ol>
+            </div>
+        </section>
+
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #3282b820 0%, #0f4c7520 100%); border-radius: 10px;">
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">Bon courage ! 🚀</p>
+            <p style="color: #64748b;">N'hésitez pas à demander de l'aide si nécessaire</p>
+        </div>
+    </main>
+</body>
+</html>

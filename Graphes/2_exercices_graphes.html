@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercices - Les Graphes - NSI Terminale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f4c75;
+            --highlight: #3282b8;
+            --bg: #f8f9fa;
+            --text: #2d3436;
+            --sidebar-bg: #0f172a;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--highlight);
+        }
+
+        .sidebar-header p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .nav-menu {
+            margin-top: 2rem;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(50, 130, 184, 0.1);
+            color: white;
+            border-left-color: var(--highlight);
+        }
+
+        .nav-link.active {
+            background: rgba(50, 130, 184, 0.2);
+            color: white;
+            border-left-color: var(--highlight);
+            font-weight: 600;
+        }
+
+        .nav-link.page-link {
+            background: rgba(50, 130, 184, 0.15);
+            margin: 0.5rem 1rem;
+            border-radius: 8px;
+            border-left: none;
+            font-weight: 500;
+        }
+
+        .nav-link.page-link:hover {
+            background: rgba(50, 130, 184, 0.3);
+        }
+
+        .nav-link.page-link.active {
+            background: var(--highlight);
+            color: white;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 3rem;
+            max-width: 1200px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.2);
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-banner {
+            background: linear-gradient(135deg, var(--highlight) 0%, var(--accent) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(50, 152, 219, 0.2);
+        }
+
+        section {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #e74c3c;
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid #e74c3c;
+        }
+
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #e74c3c;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .exercice {
+            background: linear-gradient(135deg, #e74c3c10 0%, #c0392b08 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border: 2px solid #e74c3c;
+        }
+
+        .exercice-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .exercice-number {
+            background: #e74c3c;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .exercice-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #e74c3c;
+        }
+
+        .exercice-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .duree, .difficulte {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .duree {
+            background: #f39c12;
+            color: white;
+        }
+
+        .facile { background: #27ae60; color: white; }
+        .moyen { background: #f39c12; color: white; }
+        .difficile { background: #e74c3c; color: white; }
+
+        .question {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 3px solid var(--highlight);
+        }
+
+        .question strong {
+            color: var(--highlight);
+        }
+
+        .aide {
+            background: linear-gradient(135deg, #27ae6020 0%, #16a08520 100%);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #27ae60;
+        }
+
+        .aide::before {
+            content: '💡 Aide : ';
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        .graph-visual {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-radius: 10px;
+        }
+
+        code {
+            background: var(--secondary);
+            color: #a5f3fc;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: var(--secondary);
+            color: #a5f3fc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin: 1rem 0;
+        }
+
+        li {
+            margin: 0.5rem 0;
+            line-height: 1.7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .dm-section {
+            background: linear-gradient(135deg, #8b5cf620 0%, #7c3aed20 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 3px solid #8b5cf6;
+            margin: 2rem 0;
+        }
+
+        .dm-header {
+            background: #8b5cf6;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h1>🕸️ Les Graphes</h1>
+            <p>NSI Terminale</p>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="1_cours_graphes.html" class="nav-link page-link">📖 Cours</a>
+                <a href="2_exercices_graphes.html" class="nav-link page-link active">✏️ Exercices</a>
+                <a href="3_tp_python_graphes.html" class="nav-link page-link">🖥️ TP Python</a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Exercices</div>
+                <a href="#ex1" class="nav-link">Exercice 1 - Représentation</a>
+                <a href="#ex2" class="nav-link">Exercice 2 - Vocabulaire</a>
+                <a href="#ex3" class="nav-link">Exercice 3 - Parcours</a>
+                <a href="#ex4" class="nav-link">Exercice 4 - Connexité</a>
+                <a href="#dm" class="nav-link">Travail Maison</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header>
+            <h1>✏️ Exercices - Les Graphes</h1>
+            <p>Séance d'exercices (50 minutes) + Travail à la maison</p>
+        </header>
+
+        <div class="info-banner">
+            ⏱️ Durée : 50 minutes | 📝 Sur feuille ou cahier | 💬 Travail individuel ou en binôme
+        </div>
+
+        <!-- EXERCICE 1 -->
+        <div class="exercice" id="ex1">
+            <div class="exercice-header">
+                <div class="exercice-number">1</div>
+                <div>
+                    <div class="exercice-title">Représentation d'un graphe</div>
+                    <div class="exercice-meta">
+                        <span class="duree">⏱️ 10 min</span>
+                        <span class="difficulte facile">★ Facile</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>Soit le graphe <strong>non orienté</strong> suivant :</p>
+            <ul>
+                <li><strong>Sommets :</strong> A, B, C, D, E</li>
+                <li><strong>Arêtes :</strong> A-B, A-C, B-D, C-D, C-E, D-E</li>
+            </ul>
+
+            <div class="question">
+                <strong>a)</strong> Dessinez ce graphe sur votre feuille.
+            </div>
+
+            <div class="question">
+                <strong>b)</strong> Écrivez sa matrice d'adjacence.
+            </div>
+
+            <div class="aide">
+                Pour la matrice, créez un tableau 5×5 où M[i][j] = 1 si les sommets i et j sont reliés, 0 sinon.
+            </div>
+
+            <div class="question">
+                <strong>c)</strong> Écrivez sa liste d'adjacence sous forme de dictionnaire Python.
+            </div>
+
+            <div class="aide">
+                Exemple de format : <code>graphe = {'A': ['B', 'C'], ...}</code>
+            </div>
+
+            <div class="question">
+                <strong>d)</strong> Calculez le degré de chaque sommet.
+            </div>
+        </div>
+
+        <!-- EXERCICE 2 -->
+        <div class="exercice" id="ex2">
+            <div class="exercice-header">
+                <div class="exercice-number">2</div>
+                <div>
+                    <div class="exercice-title">Vocabulaire des graphes</div>
+                    <div class="exercice-meta">
+                        <span class="duree">⏱️ 10 min</span>
+                        <span class="difficulte facile">★ Facile</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>Considérez le graphe suivant :</p>
+
+            <div class="graph-visual">
+                <svg width="450" height="250" viewBox="0 0 450 250">
+                    <!-- Arêtes -->
+                    <line x1="100" y1="80" x2="200" y2="80" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="100" y1="80" x2="150" y2="180" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="200" y1="80" x2="250" y2="180" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="150" y1="180" x2="250" y2="180" stroke="#3282b8" stroke-width="3"/>
+                    <line x1="250" y1="180" x2="350" y2="130" stroke="#3282b8" stroke-width="3"/>
+                    
+                    <!-- Sommets -->
+                    <circle cx="100" cy="80" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="200" cy="80" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="150" cy="180" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="250" cy="180" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    <circle cx="350" cy="130" r="25" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                    
+                    <text x="100" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="18">A</text>
+                    <text x="200" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="18">B</text>
+                    <text x="150" y="185" text-anchor="middle" fill="white" font-weight="bold" font-size="18">C</text>
+                    <text x="250" y="185" text-anchor="middle" fill="white" font-weight="bold" font-size="18">D</text>
+                    <text x="350" y="135" text-anchor="middle" fill="white" font-weight="bold" font-size="18">E</text>
+                </svg>
+            </div>
+
+            <div class="question">
+                <strong>a)</strong> Donnez un exemple de <strong>chaîne</strong> de A vers E.
+            </div>
+
+            <div class="question">
+                <strong>b)</strong> Donnez un exemple de <strong>chaîne élémentaire</strong> de A vers E.
+            </div>
+
+            <div class="question">
+                <strong>c)</strong> Donnez un exemple de <strong>cycle</strong> dans ce graphe.
+            </div>
+
+            <div class="question">
+                <strong>d)</strong> Ce graphe est-il <strong>connexe</strong> ? Justifiez votre réponse.
+            </div>
+
+            <div class="question">
+                <strong>e)</strong> Ce graphe est-il <strong>complet</strong> ? Justifiez votre réponse.
+            </div>
+        </div>
+
+        <!-- EXERCICE 3 -->
+        <div class="exercice" id="ex3">
+            <div class="exercice-header">
+                <div class="exercice-number">3</div>
+                <div>
+                    <div class="exercice-title">Parcours de graphes</div>
+                    <div class="exercice-meta">
+                        <span class="duree">⏱️ 15 min</span>
+                        <span class="difficulte moyen">★★ Moyen</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>On considère le graphe suivant représenté par sa liste d'adjacence :</p>
+
+            <pre>graphe = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F'],
+    'D': ['B'],
+    'E': ['B', 'F'],
+    'F': ['C', 'E']
+}</pre>
+
+            <div class="question">
+                <strong>a)</strong> Dessinez ce graphe.
+            </div>
+
+            <div class="question">
+                <strong>b)</strong> Donnez l'ordre de visite des sommets avec un <strong>parcours en largeur (BFS)</strong> depuis A.
+            </div>
+
+            <div class="aide">
+                BFS : on visite d'abord tous les voisins directs (niveau 1), puis les voisins des voisins (niveau 2), etc.
+            </div>
+
+            <div class="question">
+                <strong>c)</strong> Donnez l'ordre de visite des sommets avec un <strong>parcours en profondeur (DFS)</strong> depuis A.
+            </div>
+
+            <div class="aide">
+                DFS : on va le plus loin possible dans une direction avant de revenir en arrière.
+            </div>
+
+            <div class="question">
+                <strong>d)</strong> Quelle est la <strong>distance minimale</strong> (nombre d'arêtes) entre A et F ?
+            </div>
+        </div>
+
+        <!-- EXERCICE 4 -->
+        <div class="exercice" id="ex4">
+            <div class="exercice-header">
+                <div class="exercice-number">4</div>
+                <div>
+                    <div class="exercice-title">Connexité et applications</div>
+                    <div class="exercice-meta">
+                        <span class="duree">⏱️ 15 min</span>
+                        <span class="difficulte moyen">★★ Moyen</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <strong>a)</strong> Dessinez un graphe <strong>non connexe</strong> à 6 sommets avec exactement 2 composantes connexes.
+            </div>
+
+            <div class="question">
+                <strong>b)</strong> Soit le graphe suivant représenté par sa matrice d'adjacence :
+            </div>
+
+            <table style="width: auto; margin: 1rem auto;">
+                <tr>
+                    <th></th>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th>D</th>
+                </tr>
+                <tr>
+                    <th>A</th>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <th>B</th>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <th>C</th>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <th>D</th>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                </tr>
+            </table>
+
+            <p style="margin-top: 1rem;">Ce graphe est-il connexe ? Justifiez.</p>
+
+            <div class="question">
+                <strong>c)</strong> <strong>Application - Réseau social :</strong>
+                <p style="margin-top: 0.5rem;">Dans un réseau social, on modélise les utilisateurs par un graphe où :</p>
+                <ul>
+                    <li>Chaque sommet = un utilisateur</li>
+                    <li>Une arête entre deux sommets = ils sont amis</li>
+                </ul>
+                <p style="margin-top: 0.5rem;">Alice a 250 amis. Quel est le degré du sommet "Alice" ?</p>
+            </div>
+
+            <div class="question">
+                <strong>d)</strong> On veut savoir si deux personnes sont "amies indirectes" (il existe une chaîne d'amis entre elles). Quel algorithme de parcours utiliseriez-vous ? Justifiez votre choix.
+            </div>
+        </div>
+
+        <!-- TRAVAIL MAISON -->
+        <section id="dm">
+            <div class="dm-section">
+                <div class="dm-header">
+                    🏠 TRAVAIL À LA MAISON - À rendre pour la prochaine séance
+                </div>
+
+                <h3>DM 1 - Graphe orienté (20 min)</h3>
+
+                <p>On considère le graphe <strong>orienté</strong> suivant :</p>
+                <ul>
+                    <li><strong>Sommets :</strong> 1, 2, 3, 4, 5</li>
+                    <li><strong>Arcs :</strong> 1→2, 1→3, 2→4, 3→4, 4→5, 5→2</li>
+                </ul>
+
+                <div class="question">
+                    <strong>a)</strong> Dessinez ce graphe orienté (utilisez des flèches pour indiquer la direction).
+                </div>
+
+                <div class="question">
+                    <strong>b)</strong> Écrivez sa matrice d'adjacence.
+                </div>
+
+                <div class="aide">
+                    Pour un graphe orienté : M[i][j] = 1 s'il existe un arc de i vers j.
+                </div>
+
+                <div class="question">
+                    <strong>c)</strong> Pour chaque sommet, indiquez ses <strong>prédécesseurs</strong> et ses <strong>successeurs</strong>.
+                </div>
+
+                <div class="question">
+                    <strong>d)</strong> Ce graphe contient-il un <strong>circuit</strong> ? Si oui, lequel ?
+                </div>
+
+                <div class="question">
+                    <strong>e)</strong> Peut-on atteindre le sommet 5 depuis le sommet 1 ? Donnez un chemin si c'est possible.
+                </div>
+
+                <h3 style="margin-top: 2rem;">DM 2 - Application au GPS (15 min)</h3>
+
+                <p>Un GPS utilise un graphe pondéré pour modéliser un réseau routier :</p>
+
+                <div class="graph-visual">
+                    <svg width="500" height="300" viewBox="0 0 500 300">
+                        <!-- Arêtes avec poids -->
+                        <line x1="80" y1="150" x2="180" y2="80" stroke="#3282b8" stroke-width="3"/>
+                        <line x1="180" y1="80" x2="320" y2="80" stroke="#3282b8" stroke-width="3"/>
+                        <line x1="320" y1="80" x2="420" y2="150" stroke="#3282b8" stroke-width="3"/>
+                        <line x1="80" y1="150" x2="180" y2="220" stroke="#3282b8" stroke-width="3"/>
+                        <line x1="180" y1="220" x2="320" y2="220" stroke="#3282b8" stroke-width="3"/>
+                        <line x1="320" y1="220" x2="420" y2="150" stroke="#3282b8" stroke-width="3"/>
+                        <line x1="180" y1="80" x2="180" y2="220" stroke="#3282b8" stroke-width="3"/>
+                        <line x1="320" y1="80" x2="320" y2="220" stroke="#3282b8" stroke-width="3"/>
+                        
+                        <!-- Poids -->
+                        <rect x="115" y="100" width="40" height="25" fill="white" stroke="#e74c3c" stroke-width="2" rx="4"/>
+                        <text x="135" y="117" text-anchor="middle" fill="#e74c3c" font-weight="bold">5</text>
+                        
+                        <rect x="235" y="65" width="40" height="25" fill="white" stroke="#e74c3c" stroke-width="2" rx="4"/>
+                        <text x="255" y="82" text-anchor="middle" fill="#e74c3c" font-weight="bold">8</text>
+                        
+                        <rect x="355" y="100" width="40" height="25" fill="white" stroke="#e74c3c" stroke-width="2" rx="4"/>
+                        <text x="375" y="117" text-anchor="middle" fill="#e74c3c" font-weight="bold">6</text>
+                        
+                        <rect x="115" y="185" width="40" height="25" fill="white" stroke="#e74c3c" stroke-width="2" rx="4"/>
+                        <text x="135" y="202" text-anchor="middle" fill="#e74c3c" font-weight="bold">7</text>
+                        
+                        <rect x="235" y="210" width="40" height="25" fill="white" stroke="#e74c3c" stroke-width="2" rx="4"/>
+                        <text x="255" y="227" text-anchor="middle" fill="#e74c3c" font-weight="bold">4</text>
+                        
+                        <rect x="355" y="185" width="40" height="25" fill="white" stroke="#e74c3c" stroke-width="2" rx="4"/>
+                        <text x="375" y="202" text-anchor="middle" fill="#e74c3c" font-weight="bold">9</text>
+                        
+                        <rect x="165" y="140" width="40" height="25" fill="white" stroke="#e74c3c" stroke-width="2" rx="4"/>
+                        <text x="185" y="157" text-anchor="middle" fill="#e74c3c" font-weight="bold">3</text>
+                        
+                        <rect x="305" y="140" width="40" height="25" fill="white" stroke="#e74c3c" stroke-width="2" rx="4"/>
+                        <text x="325" y="157" text-anchor="middle" fill="#e74c3c" font-weight="bold">2</text>
+                        
+                        <!-- Sommets -->
+                        <circle cx="80" cy="150" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                        <circle cx="180" cy="80" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                        <circle cx="320" cy="80" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                        <circle cx="420" cy="150" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                        <circle cx="180" cy="220" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                        <circle cx="320" cy="220" r="30" fill="#0f4c75" stroke="#1a1a2e" stroke-width="3"/>
+                        
+                        <text x="80" y="157" text-anchor="middle" fill="white" font-weight="bold" font-size="20">A</text>
+                        <text x="180" y="87" text-anchor="middle" fill="white" font-weight="bold" font-size="20">B</text>
+                        <text x="320" y="87" text-anchor="middle" fill="white" font-weight="bold" font-size="20">C</text>
+                        <text x="420" y="157" text-anchor="middle" fill="white" font-weight="bold" font-size="20">D</text>
+                        <text x="180" y="227" text-anchor="middle" fill="white" font-weight="bold" font-size="20">E</text>
+                        <text x="320" y="227" text-anchor="middle" fill="white" font-weight="bold" font-size="20">F</text>
+                    </svg>
+                    <p style="margin-top: 1rem; color: #64748b;"><em>Les nombres indiquent les distances en km</em></p>
+                </div>
+
+                <div class="question">
+                    <strong>a)</strong> Donnez tous les chemins possibles pour aller de A à D.
+                </div>
+
+                <div class="question">
+                    <strong>b)</strong> Calculez la distance totale de chaque chemin.
+                </div>
+
+                <div class="question">
+                    <strong>c)</strong> Quel est le chemin le plus court de A à D ? Quelle est sa longueur ?
+                </div>
+
+                <div class="aide">
+                    Il existe plusieurs chemins : passant par le haut (B-C), par le bas (E-F), ou mixtes. Calculez la somme des poids pour chaque chemin.
+                </div>
+
+                <h3 style="margin-top: 2rem;">DM 3 - Programmation (Bonus - 15 min)</h3>
+
+                <p>Écrivez une fonction Python <code>nombre_aretes(graphe)</code> qui compte le nombre d'arêtes dans un graphe non orienté représenté par une liste d'adjacence.</p>
+
+                <pre>def nombre_aretes(graphe):
+    """
+    Compte le nombre d'arêtes dans un graphe non orienté
+    
+    :param graphe: dict, liste d'adjacence
+    :return: int, nombre d'arêtes
+    """
+    # Votre code ici
+    pass
+
+
+# Test
+g = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C', 'D'],
+    'C': ['A', 'B'],
+    'D': ['B']
+}
+print(nombre_aretes(g))  # Doit afficher 4</pre>
+
+                <div class="aide">
+                    <strong>Attention :</strong> Dans un graphe non orienté, chaque arête est comptée deux fois (une fois pour chaque sommet). Pensez à diviser par 2 !
+                </div>
+
+                <div style="background: white; padding: 1.5rem; border-radius: 10px; margin-top: 2rem; border: 2px solid #8b5cf6;">
+                    <h4 style="color: #8b5cf6; margin-bottom: 1rem;">📤 Modalités de rendu</h4>
+                    <ul style="list-style: none; margin-left: 0;">
+                        <li style="margin: 0.5rem 0;">✅ Rédigez vos réponses sur feuille ou fichier numérique</li>
+                        <li style="margin: 0.5rem 0;">✅ Soignez vos schémas (utilisez une règle)</li>
+                        <li style="margin: 0.5rem 0;">✅ Justifiez toutes vos réponses</li>
+                        <li style="margin: 0.5rem 0;">✅ Pour le code Python : testez-le avant de rendre</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #3282b820 0%, #0f4c7520 100%); border-radius: 10px;">
+            <p style="font-size: 1.2rem; margin-bottom: 1rem;">🖥️ Prêt(e) pour le TP Python ?</p>
+            <a href="3_tp_python_graphes.html" style="display: inline-block; background: var(--highlight); color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 1rem;">Aller au TP Python</a>
+        </div>
+    </main>
+</body>
+</html>
