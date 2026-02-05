@@ -1,1 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NSI - Graphes Interactif</title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { display:flex; min-height:100vh; background:#f0f0f0; }
+    nav.sidebar {
+        width:220px; background:#222; color:#fff; padding:20px; flex-shrink:0; position:fixed; height:100%;
+    }
+    nav.sidebar h2 { text-align:center; margin-bottom:20px; }
+    nav.sidebar a {
+        display:flex; align-items:center; gap:8px;
+        color:#fff; text-decoration:none; padding:12px; margin-bottom:5px; border-radius:8px;
+        transition:0.3s;
+    }
+    nav.sidebar a:hover { background:#444; }
+    main { margin-left:240px; padding:30px; flex-grow:1; overflow-y:auto; }
+    section { display:none; padding:25px; border-radius:15px; margin-bottom:25px; opacity:0; transform:translateY(20px); transition:0.5s; }
+    section.active { display:block; opacity:1; transform:translateY(0); }
+    .cours { background:#fff8c6; }
+    .python { background:#d8f8d8; font-family:monospace; }
+    .exercices { background:#cce0ff; }
+    .tp { background:#ffe5cc; }
+    h1,h2,h3 { margin-bottom:15px; }
+    pre { background:#e0e0e0; padding:10px; border-radius:5px; overflow-x:auto; }
+    @media (max-width:768px) {
+        body { flex-direction:column; }
+        nav.sidebar { width:100%; height:auto; display:flex; justify-content:space-around; }
+        main { margin-left:0; }
+    }
+</style>
+</head>
+<body>
+<nav class="sidebar">
+    <h2>📚 Menu NSI</h2>
+    <a href="#" onclick="showSection('cours')">📖 Cours</a>
+    <a href="#" onclick="showSection('python')">🐍 Python</a>
+    <a href="#" onclick="showSection('exercices')">✏️ Exercices</a>
+    <a href="#" onclick="showSection('tp')">🛠️ TP</a>
+</nav>
+
+<main>
+    <section id="cours" class="cours active">
+        <h1>Introduction aux graphes</h1>
+        <p>Un graphe est une structure composée de <b>sommets</b> et d'<b>arêtes</b> reliant certains sommets. Ils permettent de modéliser de nombreux problèmes en informatique.</p>
+        <ul>
+            <li>Exemples : réseaux sociaux, routes, circuits électriques...</li>
+            <li>Types : orienté ou non orienté</li>
+        </ul>
+    </section>
+
+    <section id="python" class="python">
+        <h1>Code Python : Manipulation de graphes</h1>
+        <pre>
+# Exemple simple : création d'un graphe
+graphe = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D'],
+    'C': ['A', 'D'],
+    'D': ['B', 'C']
+}
+print(graphe)
+        </pre>
+    </section>
+
+    <section id="exercices" class="exercices">
+        <h1>Exercices</h1>
+        <ul>
+            <li>1. Dessinez un graphe avec 5 sommets et 6 arêtes.</li>
+            <li>2. Écrivez un code Python pour ajouter un sommet et une arête.</li>
+        </ul>
+    </section>
+
+    <section id="tp" class="tp">
+        <h1>TP : Petit projet sur les graphes</h1>
+        <p>Objectif : Créer un programme qui représente un graphe et calcule le plus court chemin entre deux sommets. Le programme doit :</p>
+        <ul>
+            <li>Ajouter des sommets et des arêtes</li>
+            <li>Afficher le graphe</li>
+            <li>Calculer le chemin le plus court (algorithme de Dijkstra par exemple)</li>
+        </ul>
+    </section>
+</main>
+
+<script>
+function showSection(id){
+    const sections = document.querySelectorAll('main section');
+    sections.forEach(sec => sec.classList.remove('active'));
+    const selected = document.getElementById(id);
+    selected.classList.add('active');
+}
+</script>
+</body>
+</html>
 
