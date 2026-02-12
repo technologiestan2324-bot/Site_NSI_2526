@@ -1,0 +1,789 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Méthodes de Base en Python (POO) (implémentation)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="25f7c358-4be9-8130-aeb0-cd4c1e57cd53" class="page mono"><header><img class="page-cover-image" src="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/DALLE_2025-01-20_11.59.32_-_A_digital_illustration_of_a_binary_tree_in_Python_code_with_vibrant_turquoise_blue_and_golden_yellow_colors._The_binary_tree_structure_should_be_clea.webp" style="object-position:center 50%"/><h1 class="page-title" dir="auto">Méthodes de Base en Python (POO) (implémentation)</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><h2 id="25f7c358-4be9-81af-b1df-d75fccf0c1bb" class=""><strong><span style="border-bottom:0.05em solid">1. Arbres binaires: </span></strong><span style="border-bottom:0.05em solid">Méthodes de Base en Python</span></h2></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-816e-868f-ea63fafa6620" class=""><mark class="highlight-blue">A. Création d&#x27;un Nœud</mark></h3></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-814d-8b18-d1c9263bba4b" class=""><strong>Classe </strong><code><strong>Noeud</strong></code></h3></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-81cf-ad95-e0dd75740400" class="bulleted-list"><li style="list-style-type:disc"><strong>Description</strong> : Un nœud contient une valeur (<code>valeur</code>), un lien vers son enfant gauche (<code>gauche</code>), et un lien vers son enfant droit (<code>droit</code>).</li></ul></div><div style="display:contents" dir="auto"><div id="25f7c358-4be9-81e1-aec2-ff7396cee47f" class="column-list"><div style="display:contents" dir="auto"><div id="25f7c358-4be9-81ac-96bb-d470608becc9" style="width:43.75%" class="column"><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-81c5-ac61-e63c2c31d837" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">class Noeud:
+    def __init__(self, valeur):
+        self.valeur = valeur
+        self.gauche = None
+        self.droit = None</code></pre></div></div></div><div style="display:contents" dir="auto"><div id="25f7c358-4be9-818e-b64f-f96227c72b3e" style="width:56.25%" class="column"><div style="display:contents" dir="auto"><p id="25f7c358-4be9-8167-ab7d-ec6e17fb08db" class="">
+</p></div><div style="display:contents" dir="ltr"><figure id="25f7c358-4be9-8199-a35f-eb1170879c54" class="image"><a href="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/notion1.jpg"><img style="width:384px" src="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/notion1.jpg"/></a></figure></div></div></div></div></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81b0-8388-c5c823bffb2e" class=""><strong>Exemple d&#x27;utilisation</strong></h3></div><div style="display:contents" dir="auto"><div id="25f7c358-4be9-81a4-85f0-f24ad55fb503" class="column-list"><div style="display:contents" dir="auto"><div id="25f7c358-4be9-81d3-9902-de5bbb977ad4" style="width:50%" class="column"><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-81dd-80d8-e0cfdeb85472" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all"># Création d&#x27;un nœud racine
+racine = Noeud(10)
+# Ajout d&#x27;enfants
+racine.gauche = Noeud(5)
+racine.droit = Noeud(15)</code></pre></div></div></div><div style="display:contents" dir="auto"><div id="25f7c358-4be9-8112-b136-d3fa4bf27cdd" style="width:50%" class="column"><div style="display:contents" dir="ltr"><figure id="25f7c358-4be9-81b9-964e-fef045508456" class="image"><a href="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/notion2.jpg"><img style="width:480px" src="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/notion2.jpg"/></a></figure></div></div></div></div></div><div style="display:contents" dir="auto"><hr id="25f7c358-4be9-81ac-9e25-d76b010a3419"/></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8142-b9d4-e05f73d820e0" class=""><mark class="highlight-blue"><strong>B. Insertion dans un Arbre Binaire de Recherche (ABR)</strong></mark></h3></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-812d-b27b-da477831aa6a" class=""><strong>Fonction </strong><code><strong>inserer</strong></code></h3></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-81bc-ac4a-eb2fbc2d0b92" class="bulleted-list"><li style="list-style-type:disc"><strong>Description</strong> : Insère une valeur dans un ABR tout en conservant la propriété des ABR.</li></ul></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-812c-9e09-d2e0fb0e202b" class="bulleted-list"><li style="list-style-type:disc"><strong>Algorithme ou pseudocode : </strong><br/></li></ul></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-815c-931a-d7b0b7d89eaa" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Fonction inserer(noeud, valeur):
+    Si noeud est NULL :
+        Retourner noeud(valeur)  // Crée un nouveau nœud contenant la valeur
+    Sinon :
+        Si valeur &lt; noeud.valeur :
+            noeud.gauche ← inserer(noeud.gauche, valeur)
+        Sinon si valeur &gt; noeud.valeur :
+            noeud.droite ← inserer(noeud.droite, valeur)
+        Sinon :
+            // La valeur est déjà dans l&#x27;arbre, ne rien faire
+            Retourner noeud
+    Fin Si
+    Retourner noeud</code></pre></div><div style="display:contents" dir="ltr"><figure id="25f7c358-4be9-81a6-b5fc-df7f1fec0754" class="image"><a href="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/notion3.jpg"><img style="width:480px" src="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/notion3.jpg"/></a></figure></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81ef-aa4e-f7ad37d8b627" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8125-9c76-faea34711a81" class=""><mark class="highlight-blue"><mark class="highlight-blue_background"><strong>Exercice 1 :</strong></mark></mark></h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-8187-b6ae-e06ccdfc5f4e" class=""><mark class="highlight-blue">Écrivez une fonction insérer pour implémenter cette algorithme </mark><mark class="highlight-blue"><strong>(voir le TD sur Capytale ,le code de l’activité est sur Teams)</strong></mark></p></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81cd-a4da-d4c80a37449b" class=""><mark class="highlight-teal"><strong>inserer(racine, valeur)</strong></mark></p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8129-9b70-ef6553b17ebb" class=""><strong>Exemple d&#x27;utilisation</strong></h3></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-81c7-ab27-cd9e630a0dd0" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">racine = None
+racine = inserer(racine, 10)
+racine = inserer(racine, 5)
+racine = inserer(racine, 15)
+racine = inserer(racine, 3)
+racine = inserer(racine, 7)</code></pre></div><div style="display:contents" dir="ltr"><figure id="25f7c358-4be9-810b-91b3-f7eddb900c57" class="image"><a href="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/image.png"><img style="width:384px" src="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/image.png"/></a></figure></div><div style="display:contents" dir="auto"><h2 id="25f7c358-4be9-819b-94a5-e4297150a7bf" class=""><strong><span style="border-bottom:0.05em solid">2. Parcours d&#x27;un Arbre Binaire</span></strong></h2></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8170-8158-d1466ad5b6ea" class=""><strong>Parcours Préfixe (Pré-ordre)</strong><mark class="highlight-teal">R</mark><mark class="highlight-teal"><strong>-G-D</strong></mark></h3></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-81d2-8ce9-d90d6c2bd870" class="bulleted-list"><li style="list-style-type:disc"><strong>Description</strong> : Visite la racine, puis le sous-arbre gauche, puis le sous-arbre droit.</li></ul></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81da-9c98-cbcd16fad524" class=""><strong>Algorithme en pseudo-code :</strong></h3></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-812d-9e6b-d8bb26268da8" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Parcours prefixe(nœud):
+    Si nœud n&#x27;est pas vide :
+        
+        Traiter(nœud)               # Traiter la racine R
+        Parcours_prefixe(nœud.gauche)  # Visiter le sous-arbre gauche G
+        Parcours_prefixe(nœud.droit)  # Visiter le sous-arbre droit D</code></pre></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81c9-af86-fd90ec0ec825" class=""><mark class="highlight-blue"><mark class="highlight-blue_background">Exercice 2</mark></mark></h3></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81e8-8be6-cc6819b07893" class=""><mark class="highlight-blue">Fonction Parcours préfixe en python:(récursivité)</mark></h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-812a-bef8-e800c58f6890" class=""><mark class="highlight-blue">Écrire une fonction parcours_prefixe pour implémenter l’algorithme ci-dessus </mark><mark class="highlight-blue"><strong>(voir le TD sur Capytale ,le code de l’activité est sur Teams)</strong></mark></p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81e8-a915-da8277cde871" class=""><strong>Exemple d&#x27;utilisation</strong></h3></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-8130-af7f-eb7d93e74e2c" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">parcours_prefixe(racine)  # Sortie : 10 5 3 7 15</code></pre></div><div style="display:contents" dir="auto"><hr id="25f7c358-4be9-8165-812d-e86b63f04562"/></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8149-a86a-f387d54b2160" class=""><mark class="highlight-blue"><mark class="highlight-blue_background">Exercice 3</mark></mark><mark class="highlight-blue"><mark class="highlight-blue_background"><strong> </strong></mark></mark><strong>:</strong></h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-8192-bddf-d60f7edeb239" class=""><mark class="highlight-blue">Écrire les pseudocodes des parcours et les implémenter en python et les ajouter à votre programme de départ (voir le TD sur Capytale ,le code de l’activité est sur Teams): </mark></p></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-81b9-ac93-d5be185585e8" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-blue">Infixe</mark></li></ul></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-81f8-a015-ff1bd2461af8" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-blue">Postfixe (ou suffixe) </mark></li></ul></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-815b-ac74-e91b00eb55ad" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-blue">En largeur</mark></li></ul></div><div style="display:contents" dir="auto"><hr id="25f7c358-4be9-8122-80c3-c1ae1c3ee990"/></div><div style="display:contents" dir="ltr"><figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="25f7c358-4be9-81fc-8805-cbfe38204ee5"><div style="font-size:1.5em"><span class="icon">📄</span></div><div style="width:100%"><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-814e-868c-ec0b25d5b495" class=""><mark class="highlight-default">Implémenter les parcours en profondeur avec une PILE</mark></h3></div><div style="display:contents" dir="ltr"><figure id="25f7c358-4be9-81b4-b375-c8ba699445e3" class="link-to-page"><a href="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/Parcours%20Infixe%20avec%20pile%2025f7c3584be981b4b375c8ba699445e3.html">Parcours Infixe avec pile </a></figure></div><div style="display:contents" dir="ltr"><figure id="25f7c358-4be9-816e-a867-f7b0823e1eb3" class="link-to-page"><a href="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/Parcours%20pr%C3%A9fixe%20avec%20pile%2025f7c3584be9816ea867f7b0823e1eb3.html">Parcours préfixe avec pile</a></figure></div><div style="display:contents" dir="ltr"><figure id="25f7c358-4be9-8107-bac8-ff86cc1a3d1f" class="link-to-page"><a href="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/Parcours%20postfixe%20ou%20suffixe%20avec%20une%20pile%2025f7c3584be98107bac8ff86cc1a3d1f.html">Parcours postfixe ou suffixe avec une pile</a></figure></div></div></figure></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8197-84c2-c2f83a38c7e0" class="">/p</h3></div><div style="display:contents" dir="auto"><h2 id="25f7c358-4be9-8123-8aa0-cb9dcf73805e" class=""><strong><span style="border-bottom:0.05em solid">3. Recherche dans un ABR</span></strong></h2></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8144-bcb9-ce8406842eae" class=""><strong>Fonction </strong><code><strong>rechercher</strong></code></h3></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-813a-bd33-c1b282d9703a" class="bulleted-list"><li style="list-style-type:disc"><strong>Description</strong> : Recherche une valeur dans un ABR.</li></ul></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8134-803c-c1b5e427f304" class="">Pseudocode pour la recherche dans un ABR (récursif)</h3></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-8129-9265-c05d3dfd466c" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Fonction rechercher(noeud, valeur):
+    Si noeud est NULL :
+        Retourner FAUX  // La valeur n&#x27;est pas dans l&#x27;arbre
+    Si noeud.valeur = valeur :
+        Retourner VRAI  // La valeur est trouvée
+    Si valeur &lt; noeud.valeur :
+        Retourner rechercher(noeud.gauche, valeur)
+    Sinon :
+        Retourner rechercher(noeud.droite, valeur)</code></pre></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8193-8c3c-f5b4638633e7" class="">Pseudocode pour la recherche dans un ABR (itératif)</h3></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-811a-96a3-c9e5957f5092" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">Fonction rechercher(noeud, valeur):
+    Tant que noeud n&#x27;est pas NULL :
+        Si noeud.valeur = valeur :
+            Retourner VRAI  // La valeur est trouvée
+        Sinon si valeur &lt; noeud.valeur :
+            noeud ← noeud.gauche
+        Sinon :
+            noeud ← noeud.droite
+    Fin Tant que
+    Retourner FAUX  // La valeur n&#x27;est pas dans l&#x27;arbre</code></pre></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-810e-b0c1-fb7915bcbc62" class=""><mark class="highlight-blue"><mark class="highlight-blue_background"><strong>Exercice 4 :</strong></mark></mark></h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-8113-b8d8-c6890817178e" class=""><mark class="highlight-blue">Écrivez une fonction rechercher pour implémenter les deux algorithmes (voir le TD sur Capytale ,le code de l’activité est sur Teams)</mark></p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8133-a74e-ea17463601ae" class=""><strong>Exemple d&#x27;utilisation (utiliser des assert)</strong></h3></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-81bf-9e01-e2c1d7d1c210" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">print(rechercher(racine, 7))  # Sortie : True
+print(rechercher(racine, 12)) # Sortie : False</code></pre></div><div style="display:contents" dir="auto"><hr id="25f7c358-4be9-8111-9403-d3878c7595c4"/></div><div style="display:contents" dir="auto"><h2 id="25f7c358-4be9-8147-b2dc-c95cd7cfc901" class=""><strong><span style="border-bottom:0.05em solid">4. Calcul de la hauteur d&#x27;un Arbre</span></strong></h2></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81a8-8f5d-e12c4ba445e2" class=""><strong>Fonction </strong><code><strong>hauteur</strong></code></h3></div><div style="display:contents" dir="auto"><ul id="25f7c358-4be9-81cf-a5eb-dd126b68ef7e" class="bulleted-list"><li style="list-style-type:disc"><strong>Description</strong> : Calcule la hauteur de l&#x27;arbre (longueur du chemin le plus long de la racine à une feuille).</li></ul></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81a1-928c-fa681b2d6ea2" class="">Pseudocode du calcul de la hauteur d’un arbre</h3></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-8177-9a79-c15120b8ec26" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">def hauteur(racine):
+    if racine is None:
+        return 0
+    else:
+        hauteur_gauche = hauteur(racine.gauche)
+        hauteur_droit = hauteur(racine.droit)
+        return max(hauteur_gauche, hauteur_droit) + 1</code></pre></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81aa-a3a4-da649e15c16c" class=""><mark class="highlight-blue"><mark class="highlight-blue_background"><strong>Exercice 5 :</strong></mark></mark></h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81c5-99b4-fabe480fd4c5" class=""><mark class="highlight-blue">Écrivez une fonction rechercher pour implémenter cette algorithme (voir le TD sur Capytale ,le code de l’activité est sur Teams)</mark></p></div><div style="display:contents" dir="auto"><hr id="25f7c358-4be9-81ca-b682-f66f31a3e92c"/></div><div style="display:contents" dir="auto"><h2 id="25f7c358-4be9-813c-b4b2-c81e383badb8" class=""><strong><span style="border-bottom:0.05em solid">5. TD3 Arbre Binaire (simple)</span></strong></h2></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81aa-8dbc-f72bad3eef66" class="">Écrire l’algorithme ou le pseudo code avant d’implémenter</p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8176-8532-f66f4693547f" class="">Exercice 1 : Création d&#x27;un Arbre</h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-813c-8005-ea210b8310b8" class="">Créez un arbre binaire avec la structure suivante :</p></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-8128-945f-d2982f9a18b7" class="">
+</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-8168-87ee-e08f451c8281" class="code code-wrap"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">      20
+     /  \
+    10   30
+   / \
+  5   15</code></pre></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8184-8d70-c56889e06ccb" class="">Exercice 2 : hauteur(noeud)</h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-813b-b3d6-c4712fecd30b" class="">Écrivez une fonction hauteur(noeud)</p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-813d-ae0c-cd8bce2a5fcf" class="">Exercice 3 : Parcours Préfixe</h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81de-bf96-d05c949a5ee8" class="">Écrivez une fonction pour parcourir l&#x27;arbre en préfixe et afficher les valeurs.</p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81ab-9d6a-daabb189fd5d" class="">Exercice 4 : Recherche dans un ABR</h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-813b-82ba-dbb927798672" class="">Écrivez une fonction pour rechercher une valeur dans un ABR.</p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8161-9a8c-d6f9932968d9" class="">Exercice 5 : Calcul de la Hauteur</h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-816d-ba43-e0a795962733" class="">Écrivez une fonction pour calculer la hauteur d&#x27;un arbre.</p></div><div style="display:contents" dir="auto"><hr id="25f7c358-4be9-8132-8b23-e6a5225547b0"/></div><div style="display:contents" dir="auto"><h2 id="25f7c358-4be9-8199-9e65-c8235acd80d0" class="">6. Exercices Intermédiaires</h2></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8128-bd0f-c0e27b217204" class="">Exercice 5 : Vérification d&#x27;un ABR</h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81a9-a009-c4a9c954897d" class="">Écrivez une fonction pour vérifier si un arbre est un ABR.</p></div><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-81cd-9aa9-e29c467647ec" class="">Exercice 6 : Suppression dans un ABR</h3></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-817b-9786-c459136138c5" class="">Écrivez une fonction pour supprimer un nœud dans un ABR.</p></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81db-b2dc-e1aebfe2ad32" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="25f7c358-4be9-814e-a8fb-df2e80c190bf"/></div><div style="display:contents" dir="auto"><div id="25f7c358-4be9-816f-8564-c1b2e44c3c87" class="column-list"><div style="display:contents" dir="auto"><div id="25f7c358-4be9-81b4-b16f-ee221aae81fb" style="width:62.5%" class="column"><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81a9-8b88-e8835c81fe31" class="">
+</p></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-819d-a89f-fd89c1394027" class="">
+</p></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81b8-83d1-ff4d5ee24a35" class="">
+</p></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-817c-84fc-dcc80d9918e0" class="">
+</p></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81b0-a55f-efa8f930c765" class="">
+</p></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-81ab-9c68-d9d350229b56" class="">???+ question</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="25f7c358-4be9-8140-8e4d-c452155af619" class="code code-wrap"><code class="language-Markdown" style="white-space:pre-wrap;word-break:break-all">!!! note inline &quot;Note à gauche&quot;
+
+Texte de la note indenté
+
+Le texte non indenté se place à droite de la note.
+
+Il est en dehors de l&#x27;admonition.
+
+Il doit être assez long</code></pre></div></div></div><div style="display:contents" dir="auto"><div id="25f7c358-4be9-816a-846b-cb2cfcbd9d7e" style="width:37.5%" class="column"><div style="display:contents" dir="ltr"><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="25f7c358-4be9-8106-946d-d099240c5855"><div style="font-size:1.5em"><span class="icon">🏋🏼</span></div><div style="width:100%"><div style="display:contents" dir="auto"><h3 id="25f7c358-4be9-8176-a908-f3206025edab" class=""><mark class="highlight-red"><mark class="highlight-default_background"><strong>Page suivante</strong></mark></mark></h3></div><div style="display:contents" dir="ltr"><figure id="25f7c358-4be9-8132-bf58-fcbd89378475" class="link-to-page"><a href="M%C3%A9thodes%20de%20Base%20en%20Python%20(POO)%20(impl%C3%A9mentation)/7%20Fiches%20de%20R%C3%A9vision%2025f7c3584be98132bf58fcbd89378475.html">7. Fiches de Révision</a></figure></div></div></figure></div><div style="display:contents" dir="auto"><p id="25f7c358-4be9-8113-b49a-f5f3851e50b1" class="">
+</p></div></div></div></div></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
