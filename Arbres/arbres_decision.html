@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbres de Décision – NSI Terminale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --light: #f8fafc;
+            --code-bg: #1e293b;
+        }
+
+        /* ═══════════ BOUTON PDF ═══════════ */
+        #pdf-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #fff;
+            border: none;
+            padding: .9rem 1.7rem;
+            border-radius: 50px;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 28px rgba(245,158,11,.4);
+            transition: all .25s;
+        }
+        #pdf-fab:hover { transform: translateY(-4px); box-shadow: 0 14px 38px rgba(245,158,11,.6); }
+        #pdf-fab svg { width:20px; height:20px; }
+
+        /* Styles d'impression */
+        @media print {
+            #pdf-fab, button, .interactive { display: none !important; }
+            body { background: #fff !important; font-size: 11pt; }
+            header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+            .section { page-break-inside: avoid; box-shadow: none !important; }
+            pre { background: #f5f5f5 !important; color: #000 !important; }
+            @page { size: A4; margin: 18mm 15mm; }
+        }
+
+        /* ═══════════ LAYOUT GÉNÉRAL ═══════════ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--light);
+            line-height: 1.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🌲';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.05;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) rotate(-10deg); }
+            50% { transform: translate(-50%, -55%) rotate(-5deg); }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: white;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.4);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.95);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            margin: 2rem 0;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 1px solid #475569;
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #60a5fa;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #93c5fd;
+            margin: 2rem 0 1rem;
+        }
+
+        h4 {
+            font-size: 1.4rem;
+            color: #bfdbfe;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 5px solid var(--accent);
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 5px solid var(--success);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--danger);
+        }
+
+        .tree-diagram {
+            background: #0f172a;
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 2px solid #475569;
+            margin: 2rem 0;
+            font-family: 'Fira Code', monospace;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: #334155;
+            color: #fbbf24;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #e2e8f0;
+            padding: 2rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 2px solid #475569;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .interactive {
+            background: linear-gradient(135deg, #155e75 0%, #0e7490 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 3px solid #0891b2;
+        }
+
+        button.demo-btn {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(245,158,11,0.4);
+        }
+
+        button.demo-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245,158,11,0.6);
+        }
+
+        .output {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            min-height: 100px;
+            border: 2px solid #475569;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #475569;
+        }
+
+        tr:hover {
+            background: rgba(96,165,250,0.1);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-top: 1rem;
+        }
+
+        li {
+            margin: 0.8rem 0;
+        }
+
+        .formula {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+        }
+
+        .highlight {
+            background: rgba(245,158,11,0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #fbbf24;
+        }
+
+        strong {
+            color: #93c5fd;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .section { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bouton PDF -->
+    <button id="pdf-fab" onclick="window.print()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+        </svg>
+        PDF
+    </button>
+
+    <header>
+        <h1>🌲 Les Arbres de Décision</h1>
+        <p class="subtitle">Intelligence Artificielle & Machine Learning – NSI Terminale</p>
+    </header>
+
+    <div class="container">
+
+        <!-- ══════════════ SECTION 1 : INTRODUCTION ══════════════ -->
+        <div class="section">
+            <h2>1. Introduction aux Arbres de Décision</h2>
+
+            <div class="concept-box">
+                <h3>🎯 Qu'est-ce qu'un arbre de décision ?</h3>
+                <p>Un <strong>arbre de décision</strong> est un modèle d'apprentissage automatique utilisé pour la <span class="highlight">classification</span> et la <span class="highlight">régression</span>. Il représente graphiquement une série de décisions sous forme d'arbre où :</p>
+                <ul>
+                    <li><strong>Nœuds internes</strong> : tests sur les attributs (conditions)</li>
+                    <li><strong>Branches</strong> : résultats possibles des tests</li>
+                    <li><strong>Feuilles</strong> : décisions finales (classes ou valeurs)</li>
+                </ul>
+            </div>
+
+            <h3>Exemple simple : Décider de sortir ou non</h3>
+            <div class="tree-diagram">
+                <pre>
+                    Météo ?
+                   /       \
+               Soleil     Pluie
+                 |          |
+              SORTIR    Température ?
+                         /       \
+                      < 5°C     ≥ 5°C
+                        |         |
+                   RESTER    Vent fort ?
+                             /       \
+                          OUI        NON
+                           |          |
+                       RESTER      SORTIR
+                </pre>
+            </div>
+
+            <div class="example-box">
+                <h4>💡 Avantages</h4>
+                <ul>
+                    <li>✅ <strong>Interprétable</strong> : facile à comprendre et visualiser</li>
+                    <li>✅ <strong>Peu de prétraitement</strong> : pas besoin de normalisation</li>
+                    <li>✅ <strong>Multi-classes</strong> : gère plusieurs catégories</li>
+                    <li>✅ <strong>Variables mixtes</strong> : numériques et catégorielles</li>
+                </ul>
+
+                <h4 style="margin-top: 1.5rem;">⚠️ Inconvénients</h4>
+                <ul>
+                    <li>❌ <strong>Surapprentissage</strong> : risque élevé sans élagage</li>
+                    <li>❌ <strong>Instabilité</strong> : sensible aux variations des données</li>
+                    <li>❌ <strong>Biais</strong> : favorise les attributs avec beaucoup de valeurs</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ══════════════ SECTION 2 : CONSTRUCTION ══════════════ -->
+        <div class="section">
+            <h2>2. Construction d'un Arbre de Décision</h2>
+
+            <h3>Algorithmes principaux</h3>
+            <div class="concept-box">
+                <ul>
+                    <li><strong>ID3</strong> (Iterative Dichotomiser 3) : utilise le gain d'information basé sur l'entropie</li>
+                    <li><strong>C4.5</strong> : amélioration d'ID3, gère les valeurs continues et manquantes</li>
+                    <li><strong>CART</strong> (Classification And Regression Trees) : utilise l'indice de Gini</li>
+                </ul>
+            </div>
+
+            <h3>📊 Entropie et Gain d'Information</h3>
+
+            <h4>1. Entropie (mesure de désordre)</h4>
+            <div class="formula">
+                H(S) = -Σ pᵢ · log₂(pᵢ)
+            </div>
+            <p style="margin-left: 2rem;">où pᵢ est la proportion de la classe i dans l'ensemble S</p>
+
+            <div class="example-box">
+                <h4>Exemple de calcul d'entropie</h4>
+                <p>Dataset : 9 exemples "Oui", 5 exemples "Non"</p>
+                <p>p(Oui) = 9/14,  p(Non) = 5/14</p>
+                <div class="formula">
+                    H(S) = -(9/14)·log₂(9/14) - (5/14)·log₂(5/14)
+                    <br>H(S) ≈ 0.940
+                </div>
+                <p style="margin-top: 1rem; color: #fbbf24;">➜ Entropie proche de 1 = beaucoup de désordre (mélange équilibré)</p>
+                <p style="color: #fbbf24;">➜ Entropie proche de 0 = peu de désordre (classe dominante)</p>
+            </div>
+
+            <h4>2. Gain d'Information</h4>
+            <div class="formula">
+                Gain(S, A) = H(S) - Σ (|Sᵥ| / |S|) · H(Sᵥ)
+            </div>
+            <p style="margin-left: 2rem;">où A est un attribut, Sᵥ sont les sous-ensembles créés par les valeurs v de A</p>
+
+            <div class="warning-box">
+                <strong>🎯 Principe :</strong> On choisit l'attribut qui maximise le gain d'information (qui réduit le plus l'entropie).
+            </div>
+
+            <h3>📐 Indice de Gini (utilisé par CART)</h3>
+            <div class="formula">
+                Gini(S) = 1 - Σ pᵢ²
+            </div>
+
+            <div class="example-box">
+                <h4>Exemple de calcul de Gini</h4>
+                <p>Dataset : 9 "Oui", 5 "Non"</p>
+                <div class="formula">
+                    Gini(S) = 1 - [(9/14)² + (5/14)²]
+                    <br>Gini(S) ≈ 0.459
+                </div>
+                <p style="margin-top: 1rem; color: #fbbf24;">➜ Gini = 0 → pureté totale (une seule classe)</p>
+                <p style="color: #fbbf24;">➜ Gini = 0.5 → impureté maximale (classes équilibrées pour 2 classes)</p>
+            </div>
+        </div>
+
+        <!-- ══════════════ SECTION 3 : EXEMPLE COMPLET ══════════════ -->
+        <div class="section">
+            <h2>3. Exemple Complet : Prédire l'Achat d'un Ordinateur</h2>
+
+            <h3>Dataset d'entraînement</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Âge</th>
+                        <th>Revenus</th>
+                        <th>Étudiant</th>
+                        <th>Crédit</th>
+                        <th>Achète ?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Jeune</td><td>Élevé</td><td>Non</td><td>Bon</td><td>Non</td></tr>
+                    <tr><td>Jeune</td><td>Élevé</td><td>Non</td><td>Excellent</td><td>Non</td></tr>
+                    <tr><td>Moyen</td><td>Élevé</td><td>Non</td><td>Bon</td><td>Oui</td></tr>
+                    <tr><td>Senior</td><td>Moyen</td><td>Non</td><td>Bon</td><td>Oui</td></tr>
+                    <tr><td>Senior</td><td>Faible</td><td>Oui</td><td>Bon</td><td>Oui</td></tr>
+                    <tr><td>Senior</td><td>Faible</td><td>Oui</td><td>Excellent</td><td>Non</td></tr>
+                    <tr><td>Moyen</td><td>Faible</td><td>Oui</td><td>Excellent</td><td>Oui</td></tr>
+                    <tr><td>Jeune</td><td>Moyen</td><td>Non</td><td>Bon</td><td>Non</td></tr>
+                    <tr><td>Jeune</td><td>Faible</td><td>Oui</td><td>Bon</td><td>Oui</td></tr>
+                    <tr><td>Senior</td><td>Moyen</td><td>Oui</td><td>Bon</td><td>Oui</td></tr>
+                    <tr><td>Jeune</td><td>Moyen</td><td>Oui</td><td>Excellent</td><td>Oui</td></tr>
+                    <tr><td>Moyen</td><td>Moyen</td><td>Non</td><td>Excellent</td><td>Oui</td></tr>
+                    <tr><td>Moyen</td><td>Élevé</td><td>Oui</td><td>Bon</td><td>Oui</td></tr>
+                    <tr><td>Senior</td><td>Moyen</td><td>Non</td><td>Excellent</td><td>Non</td></tr>
+                </tbody>
+            </table>
+
+            <div class="concept-box">
+                <h4>Étape 1 : Calcul de l'entropie initiale</h4>
+                <p>Total : 14 exemples → 9 "Oui", 5 "Non"</p>
+                <div class="formula">
+                    H(S) = -(9/14)log₂(9/14) - (5/14)log₂(5/14) ≈ 0.940
+                </div>
+            </div>
+
+            <div class="concept-box">
+                <h4>Étape 2 : Calcul du gain pour chaque attribut</h4>
+                <p><strong>Exemple avec l'attribut "Âge"</strong></p>
+                <ul>
+                    <li>Jeune (5) : 2 Oui, 3 Non → H = 0.971</li>
+                    <li>Moyen (4) : 4 Oui, 0 Non → H = 0</li>
+                    <li>Senior (5) : 3 Oui, 2 Non → H = 0.971</li>
+                </ul>
+                <div class="formula">
+                    Gain(Âge) = 0.940 - [(5/14)×0.971 + (4/14)×0 + (5/14)×0.971]
+                    <br>Gain(Âge) ≈ 0.246
+                </div>
+
+                <p style="margin-top: 1.5rem;"><strong>Après calcul de tous les gains :</strong></p>
+                <ul>
+                    <li>Gain(Âge) ≈ 0.246</li>
+                    <li>Gain(Revenus) ≈ 0.029</li>
+                    <li>Gain(Étudiant) ≈ 0.151</li>
+                    <li>Gain(Crédit) ≈ 0.048</li>
+                </ul>
+
+                <p style="margin-top: 1rem; color: #fbbf24;">➜ <strong>On choisit "Âge"</strong> comme racine (gain maximal)</p>
+            </div>
+
+            <h3>Arbre de décision résultant</h3>
+            <div class="tree-diagram">
+                <pre>
+                        Âge ?
+                    /     |     \
+                Jeune  Moyen  Senior
+                  |      |       |
+              Étudiant? OUI  Crédit ?
+               /    \         /     \
+             OUI   NON      Bon  Excellent
+              |     |        |       |
+             OUI   NON      OUI     NON
+                </pre>
+            </div>
+        </div>
+
+        <!-- ══════════════ SECTION 4 : IMPLÉMENTATION PYTHON ══════════════ -->
+        <div class="section">
+            <h2>4. Implémentation en Python</h2>
+
+            <h3>Code simple avec sklearn</h3>
+            <pre><code class="python">from sklearn.tree import DecisionTreeClassifier
+from sklearn.preprocessing import LabelEncoder
+import pandas as pd
+
+# Données d'exemple
+data = {
+    'Âge': ['Jeune', 'Jeune', 'Moyen', 'Senior', 'Senior', 'Senior',
+            'Moyen', 'Jeune', 'Jeune', 'Senior', 'Jeune', 'Moyen',
+            'Moyen', 'Senior'],
+    'Revenus': ['Élevé', 'Élevé', 'Élevé', 'Moyen', 'Faible', 'Faible',
+                'Faible', 'Moyen', 'Faible', 'Moyen', 'Moyen', 'Moyen',
+                'Élevé', 'Moyen'],
+    'Étudiant': ['Non', 'Non', 'Non', 'Non', 'Oui', 'Oui',
+                 'Oui', 'Non', 'Oui', 'Oui', 'Oui', 'Non',
+                 'Oui', 'Non'],
+    'Crédit': ['Bon', 'Excellent', 'Bon', 'Bon', 'Bon', 'Excellent',
+               'Excellent', 'Bon', 'Bon', 'Bon', 'Excellent', 'Excellent',
+               'Bon', 'Excellent'],
+    'Achète': ['Non', 'Non', 'Oui', 'Oui', 'Oui', 'Non',
+               'Oui', 'Non', 'Oui', 'Oui', 'Oui', 'Oui',
+               'Oui', 'Non']
+}
+
+df = pd.DataFrame(data)
+
+# Encoder les variables catégorielles
+le = LabelEncoder()
+for col in df.columns:
+    df[col] = le.fit_transform(df[col])
+
+# Séparer features et target
+X = df.drop('Achète', axis=1)
+y = df['Achète']
+
+# Créer et entraîner l'arbre
+clf = DecisionTreeClassifier(criterion='entropy', max_depth=3)
+clf.fit(X, y)
+
+# Prédiction
+nouveau = [[1, 1, 0, 0]]  # Moyen, Élevé, Non, Bon
+prediction = clf.predict(nouveau)
+print(f"Prédiction : {'Oui' if prediction[0] == 1 else 'Non'}")
+
+# Importance des features
+for i, importance in enumerate(clf.feature_importances_):
+    print(f"{X.columns[i]}: {importance:.3f}")</code></pre>
+
+            <h3>Implémentation from scratch</h3>
+            <pre><code class="python">import numpy as np
+from collections import Counter
+
+class NoeudDecision:
+    def __init__(self, feature=None, seuil=None, gauche=None, droite=None, valeur=None):
+        self.feature = feature      # Index de l'attribut à tester
+        self.seuil = seuil          # Valeur seuil pour la division
+        self.gauche = gauche        # Sous-arbre gauche
+        self.droite = droite        # Sous-arbre droite
+        self.valeur = valeur        # Valeur de prédiction (feuille)
+
+class ArbreDecision:
+    def __init__(self, max_profondeur=10, min_echantillons=2):
+        self.max_profondeur = max_profondeur
+        self.min_echantillons = min_echantillons
+        self.racine = None
+    
+    def entropie(self, y):
+        """Calcule l'entropie d'un ensemble"""
+        compteur = Counter(y)
+        entropie = 0
+        for count in compteur.values():
+            p = count / len(y)
+            if p > 0:
+                entropie -= p * np.log2(p)
+        return entropie
+    
+    def gain_information(self, X_colonne, y, seuil):
+        """Calcule le gain d'information pour une division"""
+        # Division
+        masque_gauche = X_colonne <= seuil
+        masque_droite = ~masque_gauche
+        
+        if sum(masque_gauche) == 0 or sum(masque_droite) == 0:
+            return 0
+        
+        # Entropie avant division
+        entropie_parent = self.entropie(y)
+        
+        # Entropie après division
+        n = len(y)
+        n_gauche, n_droite = sum(masque_gauche), sum(masque_droite)
+        e_gauche = self.entropie(y[masque_gauche])
+        e_droite = self.entropie(y[masque_droite])
+        entropie_enfants = (n_gauche/n) * e_gauche + (n_droite/n) * e_droite
+        
+        return entropie_parent - entropie_enfants
+    
+    def meilleure_division(self, X, y):
+        """Trouve la meilleure division possible"""
+        meilleur_gain = -1
+        meilleur_feature = None
+        meilleur_seuil = None
+        
+        for feature_idx in range(X.shape[1]):
+            valeurs = np.unique(X[:, feature_idx])
+            
+            for seuil in valeurs:
+                gain = self.gain_information(X[:, feature_idx], y, seuil)
+                
+                if gain > meilleur_gain:
+                    meilleur_gain = gain
+                    meilleur_feature = feature_idx
+                    meilleur_seuil = seuil
+        
+        return meilleur_feature, meilleur_seuil
+    
+    def construire_arbre(self, X, y, profondeur=0):
+        """Construit l'arbre récursivement"""
+        n_echantillons, n_features = X.shape
+        n_classes = len(np.unique(y))
+        
+        # Conditions d'arrêt
+        if (profondeur >= self.max_profondeur or 
+            n_classes == 1 or 
+            n_echantillons < self.min_echantillons):
+            valeur_feuille = Counter(y).most_common(1)[0][0]
+            return NoeudDecision(valeur=valeur_feuille)
+        
+        # Trouver la meilleure division
+        meilleur_feature, meilleur_seuil = self.meilleure_division(X, y)
+        
+        if meilleur_feature is None:
+            valeur_feuille = Counter(y).most_common(1)[0][0]
+            return NoeudDecision(valeur=valeur_feuille)
+        
+        # Diviser les données
+        masque_gauche = X[:, meilleur_feature] <= meilleur_seuil
+        masque_droite = ~masque_gauche
+        
+        # Construire récursivement
+        gauche = self.construire_arbre(X[masque_gauche], y[masque_gauche], profondeur + 1)
+        droite = self.construire_arbre(X[masque_droite], y[masque_droite], profondeur + 1)
+        
+        return NoeudDecision(meilleur_feature, meilleur_seuil, gauche, droite)
+    
+    def fit(self, X, y):
+        """Entraîne l'arbre"""
+        self.racine = self.construire_arbre(X, y)
+    
+    def predire_un(self, x, noeud):
+        """Prédit la classe d'un échantillon"""
+        if noeud.valeur is not None:
+            return noeud.valeur
+        
+        if x[noeud.feature] <= noeud.seuil:
+            return self.predire_un(x, noeud.gauche)
+        return self.predire_un(x, noeud.droite)
+    
+    def predict(self, X):
+        """Prédit les classes de plusieurs échantillons"""
+        return np.array([self.predire_un(x, self.racine) for x in X])
+
+
+# Utilisation
+if __name__ == "__main__":
+    # Données d'exemple (Iris simplifié)
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    
+    iris = load_iris()
+    X_train, X_test, y_train, y_test = train_test_split(
+        iris.data, iris.target, test_size=0.2, random_state=42
+    )
+    
+    # Entraîner notre arbre
+    arbre = ArbreDecision(max_profondeur=5)
+    arbre.fit(X_train, y_train)
+    
+    # Prédictions
+    predictions = arbre.predict(X_test)
+    
+    # Précision
+    precision = np.mean(predictions == y_test)
+    print(f"Précision : {precision:.2%}")</code></pre>
+        </div>
+
+        <!-- ══════════════ SECTION 5 : DÉMONSTRATION INTERACTIVE ══════════════ -->
+        <div class="section">
+            <h2>5. Démonstration Interactive</h2>
+
+            <div class="interactive">
+                <h3>🎮 Testez l'arbre de décision</h3>
+                <p>Cliquez sur le bouton pour voir une simulation de construction d'arbre de décision avec visualisation.</p>
+                <button class="demo-btn" onclick="demonstrationArbre()">Lancer la démonstration</button>
+                <div class="output" id="demo-output"></div>
+            </div>
+
+            <div class="interactive">
+                <h3>📊 Calcul d'Entropie Interactive</h3>
+                <p>Calculez l'entropie pour différentes distributions de classes.</p>
+                <button class="demo-btn" onclick="calculerEntropie()">Calculer l'entropie</button>
+                <div class="output" id="entropy-output"></div>
+            </div>
+        </div>
+
+        <!-- ══════════════ SECTION 6 : APPLICATIONS ══════════════ -->
+        <div class="section">
+            <h2>6. Applications Réelles</h2>
+
+            <div class="example-box">
+                <h3>🏥 Médecine</h3>
+                <ul>
+                    <li>Diagnostic de maladies basé sur les symptômes</li>
+                    <li>Prédiction de risques médicaux</li>
+                    <li>Décisions de traitement personnalisées</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>💰 Finance</h3>
+                <ul>
+                    <li>Évaluation du risque de crédit</li>
+                    <li>Détection de fraude bancaire</li>
+                    <li>Prédiction de défaut de paiement</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>🛍️ Marketing</h3>
+                <ul>
+                    <li>Segmentation de clients</li>
+                    <li>Prédiction d'achat</li>
+                    <li>Recommandations personnalisées</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>🌿 Sciences</h3>
+                <ul>
+                    <li>Classification d'espèces biologiques</li>
+                    <li>Prédiction météorologique</li>
+                    <li>Analyse de données géologiques</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ══════════════ SECTION 7 : ÉLAGAGE ══════════════ -->
+        <div class="section">
+            <h2>7. Élagage d'Arbres (Pruning)</h2>
+
+            <div class="warning-box">
+                <h3>⚠️ Problème du surapprentissage</h3>
+                <p>Un arbre trop profond mémorise les données d'entraînement au lieu d'apprendre les patterns généraux → mauvaises performances sur nouvelles données.</p>
+            </div>
+
+            <h3>Techniques d'élagage</h3>
+
+            <div class="concept-box">
+                <h4>1. Pré-élagage (Pre-pruning)</h4>
+                <p>Arrêter la croissance de l'arbre avant qu'il ne soit complet :</p>
+                <ul>
+                    <li><code>max_depth</code> : profondeur maximale</li>
+                    <li><code>min_samples_split</code> : minimum d'échantillons pour diviser</li>
+                    <li><code>min_samples_leaf</code> : minimum d'échantillons par feuille</li>
+                    <li><code>max_leaf_nodes</code> : nombre maximal de feuilles</li>
+                </ul>
+            </div>
+
+            <div class="concept-box">
+                <h4>2. Post-élagage (Post-pruning)</h4>
+                <p>Construire l'arbre complet puis supprimer les branches qui n'améliorent pas la performance :</p>
+                <ul>
+                    <li><strong>Reduced Error Pruning</strong> : supprimer les nœuds qui ne dégradent pas la validation</li>
+                    <li><strong>Cost Complexity Pruning</strong> : équilibrer complexité et erreur</li>
+                </ul>
+            </div>
+
+            <pre><code class="python"># Exemple de pré-élagage avec sklearn
+from sklearn.tree import DecisionTreeClassifier
+
+clf = DecisionTreeClassifier(
+    max_depth=5,              # Profondeur max : 5
+    min_samples_split=10,     # Min 10 échantillons pour diviser
+    min_samples_leaf=5,       # Min 5 échantillons par feuille
+    max_leaf_nodes=20         # Max 20 feuilles
+)
+
+clf.fit(X_train, y_train)</code></pre>
+        </div>
+
+        <!-- ══════════════ SECTION 8 : POINTS CLÉS ══════════════ -->
+        <div class="section">
+            <h2>8. Points Clés à Retenir</h2>
+
+            <div class="concept-box">
+                <h3>✅ Résumé</h3>
+                <ul>
+                    <li>Les arbres de décision sont des modèles <strong>supervisés</strong> pour classification et régression</li>
+                    <li>Construction basée sur le <strong>gain d'information</strong> (entropie) ou <strong>indice de Gini</strong></li>
+                    <li>Très <strong>interprétables</strong> mais risque de <strong>surapprentissage</strong></li>
+                    <li>L'<strong>élagage</strong> est essentiel pour de bonnes performances</li>
+                    <li>Base des <strong>forêts aléatoires</strong> (Random Forests) et du <strong>boosting</strong></li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>🔑 Formules essentielles</h3>
+                <div class="formula" style="background: #0f172a; margin: 1rem 0;">
+                    <strong>Entropie :</strong> H(S) = -Σ pᵢ·log₂(pᵢ)
+                </div>
+                <div class="formula" style="background: #0f172a; margin: 1rem 0;">
+                    <strong>Gain :</strong> Gain(S,A) = H(S) - Σ (|Sᵥ|/|S|)·H(Sᵥ)
+                </div>
+                <div class="formula" style="background: #0f172a; margin: 1rem 0;">
+                    <strong>Gini :</strong> Gini(S) = 1 - Σ pᵢ²
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function demonstrationArbre() {
+            const output = document.getElementById('demo-output');
+            
+            output.innerHTML = `
+<strong style="color: #60a5fa;">═══ CONSTRUCTION D'UN ARBRE DE DÉCISION ═══</strong>
+
+<strong style="color: #fbbf24;">Dataset :</strong> 14 clients potentiels
+
+<strong style="color: #fbbf24;">Étape 1 :</strong> Calcul de l'entropie initiale
+  • 9 "Oui", 5 "Non"
+  • H(S) = -(9/14)·log₂(9/14) - (5/14)·log₂(5/14)
+  • <strong style="color: #10b981;">H(S) = 0.940</strong>
+
+<strong style="color: #fbbf24;">Étape 2 :</strong> Calcul des gains pour chaque attribut
+  • Gain(Âge) = <strong style="color: #10b981;">0.246</strong>  ← Maximum !
+  • Gain(Revenus) = 0.029
+  • Gain(Étudiant) = 0.151
+  • Gain(Crédit) = 0.048
+
+<strong style="color: #fbbf24;">Étape 3 :</strong> Construction de l'arbre
+  <strong style="color: #60a5fa;">Racine :</strong> Âge (meilleur gain)
+
+                Âge ?
+            /     |     \\
+        Jeune  Moyen  Senior
+          |      |      |
+      Étudiant? OUI  Crédit?
+       /    \\        /    \\
+     OUI   NON     Bon  Excellent
+      |     |       |      |
+     OUI   NON     OUI    NON
+
+<strong style="color: #10b981;">✓ Arbre construit avec succès !</strong>
+<strong style="color: #93c5fd;">Profondeur : 3 niveaux</strong>
+<strong style="color: #93c5fd;">Précision estimée : 85.7%</strong>
+            `;
+        }
+
+        function calculerEntropie() {
+            const output = document.getElementById('entropy-output');
+            
+            // Simulation de différents cas
+            const cas = [
+                { desc: "Parfaitement pur (10 Oui, 0 Non)", oui: 10, non: 0, h: 0 },
+                { desc: "Équilibré (5 Oui, 5 Non)", oui: 5, non: 5, h: 1.0 },
+                { desc: "Légèrement déséquilibré (7 Oui, 3 Non)", oui: 7, non: 3, h: 0.881 },
+                { desc: "Très déséquilibré (9 Oui, 1 Non)", oui: 9, non: 1, h: 0.469 }
+            ];
+
+            let html = '<strong style="color: #60a5fa;">═══ CALCUL D\'ENTROPIE ═══</strong>\n\n';
+            
+            cas.forEach((c, i) => {
+                html += `<strong style="color: #fbbf24;">Cas ${i+1} :</strong> ${c.desc}\n`;
+                html += `  Données : ${c.oui} Oui, ${c.non} Non\n`;
+                
+                if (c.h === 0) {
+                    html += `  <strong style="color: #10b981;">H = 0.000</strong> (pureté totale)\n\n`;
+                } else {
+                    const pOui = c.oui / (c.oui + c.non);
+                    const pNon = c.non / (c.oui + c.non);
+                    html += `  p(Oui) = ${pOui.toFixed(3)}, p(Non) = ${pNon.toFixed(3)}\n`;
+                    html += `  H = -(${pOui.toFixed(2)})·log₂(${pOui.toFixed(2)}) - (${pNon.toFixed(2)})·log₂(${pNon.toFixed(2)})\n`;
+                    html += `  <strong style="color: #10b981;">H = ${c.h.toFixed(3)}</strong>\n\n`;
+                }
+            });
+
+            html += '<strong style="color: #93c5fd;">Interprétation :</strong>\n';
+            html += '  • H = 0   → Classe pure (pas de désordre)\n';
+            html += '  • H = 1   → Désordre maximal (classes équilibrées)\n';
+            html += '  • 0 < H < 1 → Désordre intermédiaire';
+
+            output.innerHTML = html;
+        }
+    </script>
+
+</body>
+</html>
