@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parcours d'arbres binaires · NSI Terminale</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&display=swap');
+
+:root {
+  --bg:        #f7f5f0;
+  --bg2:       #ffffff;
+  --bg3:       #f0ede6;
+  --bg4:       #e8e4db;
+  --border:    #d8d3c8;
+  --border2:   #c4bfb2;
+  --text:      #1a1714;
+  --text2:     #5a5650;
+  --text3:     #9a958c;
+  --mono:      'JetBrains Mono', monospace;
+  --display:   'Fraunces', serif;
+
+  /* Traversal accent colors */
+  --pre-h:  #b84d00;   --pre-l:  #fff0e6;  --pre-b: #f2784b;  --pre-t: #7a2e00;
+  --in-h:   #0060a8;   --in-l:   #e6f2ff;  --in-b:  #4a9de0;  --in-t:  #003870;
+  --post-h: #006840;   --post-l: #e6f7ee;  --post-b:#3dbc7e;  --post-t:#004428;
+  --bfs-h:  #6040c0;   --bfs-l:  #f0ecff;  --bfs-b: #9b7ee8;  --bfs-t: #3a2480;
+
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--display);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ── HEADER ─────────────────────────── */
+header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 28px 40px 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-bottom: 10px;
+}
+h1 {
+  font-size: clamp(20px, 3.5vw, 32px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--text);
+  line-height: 1.15;
+}
+h1 em { font-style: italic; color: var(--pre-h); }
+.subtitle {
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text3);
+  max-width: 460px;
+  line-height: 1.7;
+}
+
+/* traversal chips in header */
+.trav-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.trav-chip {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1.5px solid;
+  cursor: pointer;
+  transition: all .18s;
+  user-select: none;
+}
+.trav-chip[data-t="pre"]  { color: var(--pre-h);  background: var(--pre-l);  border-color: var(--pre-b);  }
+.trav-chip[data-t="in"]   { color: var(--in-h);   background: var(--in-l);   border-color: var(--in-b);  }
+.trav-chip[data-t="post"] { color: var(--post-h); background: var(--post-l); border-color: var(--post-b);}
+.trav-chip[data-t="bfs"]  { color: var(--bfs-h);  background: var(--bfs-l);  border-color: var(--bfs-b); }
+.trav-chip.active { filter: brightness(.88); box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
+.trav-chip:hover  { filter: brightness(.93); }
+
+/* ── GENERATOR SECTION ──────────────── */
+.gen-bar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.gen-bar label { font-family: var(--mono); font-size: 12px; color: var(--text2); white-space: nowrap; }
+.gen-bar input[type=number], .gen-bar input[type=text] {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  width: 64px;
+  outline: none;
+  transition: border-color .15s;
+}
+.gen-bar input:focus { border-color: var(--border2); }
+.gen-bar input[type=text] { width: 240px; }
+.gen-sep { width:1px; height:20px; background:var(--border); flex-shrink:0; }
+
+.btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  border: 1.5px solid;
+  transition: all .15s;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(.97); }
+.btn-ghost {
+  background: transparent;
+  border-color: var(--border2);
+  color: var(--text2);
+}
+.btn-ghost:hover { background: var(--bg3); }
+.btn-accent {
+  background: var(--bg3);
+  border-color: var(--border2);
+  color: var(--text);
+}
+.btn-accent:hover { background: var(--bg4); }
+.btn-go {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg2);
+}
+.btn-go:hover { opacity: .85; }
+.btn-go:disabled { opacity: .35; cursor: default; transform: none; }
+.btn-trav {
+  border-color: currentColor;
+  transition: all .15s;
+}
+.btn-trav:disabled { opacity: .3; cursor: default; transform: none; }
+
+/* ── MAIN ───────────────────────────── */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 24px 40px;
+  align-items: start;
+}
+@media (max-width: 800px) {
+  .main { grid-template-columns: 1fr; padding: 14px 14px; }
+  header { padding: 20px 14px 16px; }
+  .gen-bar { padding: 12px 14px; }
+}
+
+/* ── CARDS ──────────────────────────── */
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+.card-tight { padding: 10px 12px; }
+
+/* ── TREE SVG ───────────────────────── */
+#tree-svg { width: 100%; display: block; }
+.tree-node circle {
+  transition: fill .3s, stroke .3s, stroke-width .3s;
+  fill: var(--bg2);
+  stroke: var(--border2);
+  stroke-width: 1.5;
+}
+.tree-node text {
+  fill: var(--text2);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--mono);
+  dominant-baseline: central;
+  text-anchor: middle;
+  pointer-events: none;
+}
+.tree-edge {
+  stroke: var(--border2);
+  stroke-width: 1.5;
+  fill: none;
+  transition: stroke .3s, stroke-width .3s;
+}
+.tree-node.visited circle  { fill: var(--node-l,#e6f2ff); stroke: var(--node-b,#4a9de0); stroke-width: 2; }
+.tree-node.visited text    { fill: var(--node-t,#003870); }
+.tree-node.current circle  { fill: var(--node-act-l,#fff0e6); stroke: var(--node-act,#f2784b); stroke-width: 2.5; }
+.tree-node.current text    { fill: var(--node-act-t,#7a2e00); }
+.tree-edge.visited         { stroke: var(--node-b,#4a9de0); stroke-width: 2; }
+
+/* ── CODE ───────────────────────────── */
+.code-block {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.9;
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  overflow-x: auto;
+}
+.code-line {
+  display: block;
+  padding: 0 6px;
+  border-radius: 4px;
+  color: var(--text2);
+  white-space: pre;
+  transition: background .2s, color .2s;
+  border-left: 2px solid transparent;
+}
+.code-line.active { background: var(--node-act-l,#fff0e6); color: var(--node-act-t,#7a2e00); border-left-color: var(--node-act,#f2784b); }
+.kw  { color: #7040b0; }
+.fn  { color: #0055a0; }
+.cm  { color: var(--text3); font-style: italic; }
+.ln  { color: var(--border2); user-select: none; margin-right: 10px; font-size: 10.5px; }
+
+/* ── QUEUE / STACK / SOL ────────────── */
+.structure-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-height: 46px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--mono);
+}
+.struct-label { font-size: 10px; color: var(--text3); letter-spacing: .05em; margin-right: 4px; flex-shrink:0; }
+.s-item {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  border: 1.5px solid var(--border2);
+  background: var(--bg2);
+  color: var(--text);
+  transition: all .25s;
+}
+.s-item.head { background: var(--node-act-l,#fff0e6); border-color: var(--node-act,#f2784b); color: var(--node-act-t,#7a2e00); }
+.s-item.none-v { color: var(--text3); font-size: 10px; border-style: dashed; }
+.s-arrow { color: var(--text3); font-size: 11px; }
+.s-empty { font-size: 11px; color: var(--text3); }
+
+.sol-wrap {
+  display: flex; gap: 5px; flex-wrap: wrap;
+  min-height: 42px; padding: 6px 10px;
+  align-items: center;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+}
+.sol-chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 34px; height: 34px; padding: 0 6px;
+  border-radius: 7px;
+  font-size: 13px; font-weight: 600;
+  font-family: var(--mono);
+  background: var(--node-l,#e6f2ff);
+  border: 1.5px solid var(--node-b,#4a9de0);
+  color: var(--node-t,#003870);
+  animation: popIn .22s ease;
+}
+@keyframes popIn { from{transform:scale(.6);opacity:0} to{transform:scale(1);opacity:1} }
+
+/* ── STATUS ─────────────────────────── */
+.status {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text2);
+  margin-top: 10px;
+  min-height: 36px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--border2);
+  line-height: 1.6;
+  transition: border-color .2s;
+}
+.status.act  { border-left-color: var(--node-act,#f2784b); }
+.status.done { border-left-color: var(--post-b); }
+
+/* ── VARS ───────────────────────────── */
+.var-row {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 4px 0; border-bottom: 1px solid var(--border);
+  font-family: var(--mono); font-size: 12px;
+}
+.var-row:last-child { border-bottom: none; }
+.vn { color: var(--node-h,#b84d00); min-width: 70px; flex-shrink:0; font-weight:600; }
+.veq { color: var(--text3); }
+.vv { color: var(--text); word-break: break-all; }
+.vv.hl { color: var(--node-act,#f2784b); font-weight:600; }
+
+/* ── CONTROLS ───────────────────────── */
+.controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+
+/* ── LEGEND INFOBOX ─────────────────── */
+.infobox {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--text2);
+  padding: 12px 14px;
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.infobox span { font-weight:600; }
+
+/* traversal color theming via CSS vars on root */
+body[data-trav="pre"] {
+  --node-h:   var(--pre-h);  --node-l:  var(--pre-l);
+  --node-b:   var(--pre-b);  --node-t:  var(--pre-t);
+  --node-act: var(--pre-b);  --node-act-l: var(--pre-l); --node-act-t: var(--pre-t);
+}
+body[data-trav="in"] {
+  --node-h:   var(--in-h);   --node-l:  var(--in-l);
+  --node-b:   var(--in-b);   --node-t:  var(--in-t);
+  --node-act: var(--in-b);   --node-act-l: var(--in-l);  --node-act-t: var(--in-t);
+}
+body[data-trav="post"] {
+  --node-h:   var(--post-h); --node-l:  var(--post-l);
+  --node-b:   var(--post-b); --node-t:  var(--post-t);
+  --node-act: var(--post-b); --node-act-l: var(--post-l); --node-act-t: var(--post-t);
+}
+body[data-trav="bfs"] {
+  --node-h:   var(--bfs-h);  --node-l:  var(--bfs-l);
+  --node-b:   var(--bfs-b);  --node-t:  var(--bfs-t);
+  --node-act: var(--bfs-b);  --node-act-l: var(--bfs-l);  --node-act-t: var(--bfs-t);
+}
+
+/* highlight active trav chip */
+.trav-chip[data-t="pre"].active   { background: var(--pre-l);  color: var(--pre-h);  box-shadow:0 0 0 3px rgba(184,77,0,.18); }
+.trav-chip[data-t="in"].active    { background: var(--in-l);   color: var(--in-h);   box-shadow:0 0 0 3px rgba(0,96,168,.18); }
+.trav-chip[data-t="post"].active  { background: var(--post-l); color: var(--post-h); box-shadow:0 0 0 3px rgba(0,104,64,.18); }
+.trav-chip[data-t="bfs"].active   { background: var(--bfs-l);  color: var(--bfs-h);  box-shadow:0 0 0 3px rgba(96,64,192,.18); }
+
+footer {
+  margin-top: 30px;
+  padding: 0 40px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  text-align: center;
+}
+</style>
+</head>
+<body data-trav="pre">
+
+<!-- ── HEADER ─────────────────────────── -->
+<header>
+  <div>
+    <div class="badge">NSI · Terminale · Algorithmique des arbres</div>
+    <h1>Parcours d'<em>arbres</em> binaires</h1>
+    <p class="subtitle">Génère un arbre, choisis un parcours, avance pas à pas.</p>
+    <div class="trav-chips">
+      <div class="trav-chip active" data-t="pre"  onclick="selectTrav('pre')">Préfixe (DFS)</div>
+      <div class="trav-chip"       data-t="in"   onclick="selectTrav('in')">Infixe (DFS)</div>
+      <div class="trav-chip"       data-t="post" onclick="selectTrav('post')">Postfixe (DFS)</div>
+      <div class="trav-chip"       data-t="bfs"  onclick="selectTrav('bfs')">Largeur (BFS)</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── GENERATOR BAR ──────────────────── -->
+<div class="gen-bar">
+  <label>Nœuds :</label>
+  <input type="number" id="gen-size" min="1" max="15" value="7">
+
+  <label>Valeurs max :</label>
+  <input type="number" id="gen-max" min="1" max="99" value="15">
+
+  <button class="btn btn-accent" onclick="generateRandom()">⟳ Aléatoire</button>
+
+  <div class="gen-sep"></div>
+
+  <label>Manuel :</label>
+  <input type="text" id="manual-input" placeholder="8, 4, 5, 2, 1, null, 3" title="Valeurs niveau par niveau (null = vide)">
+  <button class="btn btn-ghost" onclick="buildManual()">Construire</button>
+
+  <div class="gen-sep"></div>
+
+  <button class="btn btn-go" id="btn-next" onclick="nextStep()">Étape ▶</button>
+  <button class="btn btn-ghost" onclick="resetViz()">↺ Reset</button>
+</div>
+
+<!-- ── MAIN GRID ──────────────────────── -->
+<div class="main">
+
+  <!-- LEFT col -->
+  <div>
+    <div class="section-label">Arbre binaire</div>
+    <div class="card card-tight">
+      <svg id="tree-svg" viewBox="0 0 320 220">
+        <g id="edges"></g>
+        <g id="nodes-g"></g>
+      </svg>
+    </div>
+
+    <div class="status" id="status-msg">Génère un arbre puis choisis un parcours.</div>
+
+    <div class="controls">
+      <button class="btn btn-go" id="btn-next2" onclick="nextStep()">Étape suivante ▶</button>
+      <button class="btn btn-ghost" onclick="resetViz()">↺ Réinitialiser</button>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="section-label" id="struct-label">File (FIFO)</div>
+      <div class="structure-wrap" id="struct-display">
+        <span class="s-empty">(vide)</span>
+      </div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div class="section-label">Résultat</div>
+      <div class="sol-wrap" id="sol-display">
+        <span class="s-empty">(vide)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT col -->
+  <div>
+    <div class="section-label" id="code-label">Code Python · Préfixe</div>
+    <div class="code-block" id="code-block">
+      <span class="code-line"><span class="ln"> </span><span class="cm"># Sélectionne un parcours pour voir le code.</span></span>
+    </div>
+
+    <div style="margin-top:14px">
+      <div class="section-label">Variables</div>
+      <div class="card" id="vars-panel">
+        <div class="var-row"><span class="vn" id="v-lbl-a">a</span><span class="veq">=</span><span class="vv" id="v-a">—</span></div>
+        <div class="var-row"><span class="vn" id="v-lbl-struct">file</span><span class="veq">=</span><span class="vv" id="v-struct">—</span></div>
+        <div class="var-row"><span class="vn">sol</span><span class="veq">=</span><span class="vv" id="v-sol">—</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:4px">
+      <div class="section-label">À retenir</div>
+      <div class="infobox" id="infobox">
+        Choisis un parcours ci-dessus pour voir ses propriétés.
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Visualiseur de parcours d'arbres binaires · NSI Terminale · Usage pédagogique</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   TREE DATA STRUCTURE
+═══════════════════════════════════════════ */
+let treeNodes = [];   // array of {id, val, left, right, x, y}
+let treeRoot  = null; // id of root node
+const NS = 'http://www.w3.org/2000/svg';
+const R  = 18;
+
+/* ───── Build tree from level-order array ───── */
+function buildTree(vals) {
+  treeNodes = [];
+  if (!vals || vals.length === 0) return;
+  const clean = vals.map(v => v === null || v === 'null' || v === '' ? null : parseInt(v));
+  if (clean[0] === null) return;
+  // create node objects
+  const nodeArr = clean.map((v, i) => v === null ? null : {id: i, val: v, left: null, right: null, x:0, y:0});
+  // link children
+  for (let i = 0; i < nodeArr.length; i++) {
+    if (!nodeArr[i]) continue;
+    const li = 2*i+1, ri = 2*i+2;
+    if (li < nodeArr.length && nodeArr[li]) nodeArr[i].left  = nodeArr[li].id;
+    if (ri < nodeArr.length && nodeArr[ri]) nodeArr[i].right = nodeArr[ri].id;
+  }
+  treeNodes = nodeArr.filter(n => n !== null);
+  treeRoot  = treeNodes.length > 0 ? 0 : null;
+  layoutTree();
+  drawTree();
+  resetViz();
+}
+
+/* ───── Layout: compute x,y for each node ───── */
+function layoutTree() {
+  if (treeNodes.length === 0) return;
+  const byId = {};
+  treeNodes.forEach(n => byId[n.id] = n);
+  // measure tree depth
+  function depth(id) {
+    if (id === null || !byId[id]) return 0;
+    return 1 + Math.max(depth(byId[id].left), depth(byId[id].right));
+  }
+  const D = depth(0);
+  const W = 320, H = 220;
+  const levH = Math.min(60, (H - 30) / Math.max(D-1, 1));
+  // assign positions by level-order
+  const q = [{id:0, depth:0, minX:20, maxX:W-20}];
+  while (q.length) {
+    const {id, depth, minX, maxX} = q.shift();
+    const n = byId[id];
+    if (!n) continue;
+    n.x = (minX + maxX) / 2;
+    n.y = 24 + depth * levH;
+    const mid = (minX + maxX) / 2;
+    if (n.left  !== null) q.push({id: n.left,  depth: depth+1, minX, maxX: mid});
+    if (n.right !== null) q.push({id: n.right, depth: depth+1, minX: mid, maxX});
+  }
+}
+
+/* ───── Draw tree SVG ───── */
+function drawTree() {
+  const edgesG = document.getElementById('edges');
+  const nodesG = document.getElementById('nodes-g');
+  edgesG.innerHTML = '';
+  nodesG.innerHTML = '';
+  const byId = {};
+  treeNodes.forEach(n => byId[n.id] = n);
+  // edges
+  treeNodes.forEach(n => {
+    ['left','right'].forEach(s => {
+      if (n[s] === null || !byId[n[s]]) return;
+      const c = byId[n[s]];
+      const dx = c.x - n.x, dy = c.y - n.y, len = Math.hypot(dx, dy);
+      if (len === 0) return;
+      const el = document.createElementNS(NS, 'line');
+      el.setAttribute('x1', n.x + dx/len*R);
+      el.setAttribute('y1', n.y + dy/len*R);
+      el.setAttribute('x2', c.x - dx/len*R);
+      el.setAttribute('y2', c.y - dy/len*R);
+      el.setAttribute('class', 'tree-edge');
+      el.id = 'edge-' + n.id + '-' + n[s];
+      edgesG.appendChild(el);
+    });
+  });
+  // nodes
+  treeNodes.forEach(n => {
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'tree-node');
+    g.id = 'node-' + n.id;
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', n.x); c.setAttribute('cy', n.y); c.setAttribute('r', R);
+    const t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', n.x); t.setAttribute('y', n.y);
+    t.textContent = n.val;
+    g.appendChild(c); g.appendChild(t); nodesG.appendChild(g);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   GENERATORS
+═══════════════════════════════════════════ */
+function generateRandom() {
+  const size = Math.min(15, Math.max(1, parseInt(document.getElementById('gen-size').value)||7));
+  const maxV = Math.max(1, parseInt(document.getElementById('gen-max').value)||15);
+  const vals = [];
+  const usedMax = Math.min(maxV * 2, 99);
+  // fill level-order, random null gaps to make it "natural"
+  for (let i = 0; i < size; i++) {
+    const parent = Math.floor((i-1)/2);
+    if (i > 0 && vals[parent] === null) { vals.push(null); continue; }
+    if (i > 0 && Math.random() < 0.15) { vals.push(null); continue; }
+    vals.push(Math.floor(Math.random() * usedMax) + 1);
+  }
+  document.getElementById('manual-input').value = vals.map(v => v===null?'null':v).join(', ');
+  buildTree(vals);
+}
+
+function buildManual() {
+  const raw = document.getElementById('manual-input').value;
+  const vals = raw.split(',').map(s => s.trim()).filter(s => s !== '');
+  buildTree(vals);
+}
+
+/* ═══════════════════════════════════════════
+   TRAVERSAL ENGINE
+═══════════════════════════════════════════ */
+let currentTrav = 'pre';
+let steps = [];
+let stepIdx = -1;
+let visitedNodes = new Set();
+let visitedEdges = new Set();
+let curNode = null;
+
+const TRAVERSAL_INFO = {
+  pre: {
+    label: 'Préfixe (Pré-ordre)',
+    structLabel: 'Pile (LIFO)',
+    varA: 'nœud',
+    varStruct: 'pile',
+    infobox: [
+      '→ Ordre : <span>Racine → Gauche → Droite</span>',
+      '→ Utilise une <span>pile (LIFO)</span> ou la récursion.',
+      '→ Complexité : <span>O(n)</span> temps et espace.',
+      '→ Utilisé pour : copier un arbre, notation polonaise.',
+    ],
+    codes: [
+      ['0','<span class="kw">def</span> <span class="fn">prefixe</span>(arbre):'],
+      ['1','    pile = []'],
+      ['2','    pile.append(arbre)    <span class="cm"># empile la racine</span>'],
+      ['3','    sol = []'],
+      ['4','    <span class="kw">while</span> pile:'],
+      ['5','        a = pile.pop()    <span class="cm"># dépile le sommet</span>'],
+      ['6','        <span class="kw">if</span> a <span class="kw">is not</span> None:'],
+      ['7','            sol.append(a.data)'],
+      ['8','            pile.append(a.right)  <span class="cm"># droite en premier</span>'],
+      ['9','            pile.append(a.left)   <span class="cm"># gauche au sommet</span>'],
+      ['10','    <span class="kw">return</span> sol'],
+    ]
+  },
+  in: {
+    label: 'Infixe (In-ordre)',
+    structLabel: 'Pile (LIFO)',
+    varA: 'nœud',
+    varStruct: 'pile',
+    infobox: [
+      '→ Ordre : <span>Gauche → Racine → Droite</span>',
+      '→ Sur un ABR, donne les valeurs <span>triées</span>.',
+      '→ Complexité : <span>O(n)</span> temps et espace.',
+      '→ Utilisé pour : tri, vérifier ABR.',
+    ],
+    codes: [
+      ['0','<span class="kw">def</span> <span class="fn">infixe</span>(arbre):'],
+      ['1','    pile, a, sol = [], arbre, []'],
+      ['2','    <span class="kw">while</span> pile <span class="kw">or</span> a <span class="kw">is not</span> None:'],
+      ['3','        <span class="kw">if</span> a <span class="kw">is not</span> None:'],
+      ['4','            pile.append(a)'],
+      ['5','            a = a.left        <span class="cm"># aller à gauche</span>'],
+      ['6','        <span class="kw">else</span>:'],
+      ['7','            a = pile.pop()'],
+      ['8','            sol.append(a.data) <span class="cm"># visiter</span>'],
+      ['9','            a = a.right       <span class="cm"># aller à droite</span>'],
+      ['10','    <span class="kw">return</span> sol'],
+    ]
+  },
+  post: {
+    label: 'Postfixe (Post-ordre)',
+    structLabel: 'Pile (LIFO)',
+    varA: 'nœud',
+    varStruct: 'pile',
+    infobox: [
+      '→ Ordre : <span>Gauche → Droite → Racine</span>',
+      '→ Les enfants sont traités <span>avant</span> le parent.',
+      '→ Complexité : <span>O(n)</span> temps et espace.',
+      '→ Utilisé pour : supprimer un arbre, évaluer expressions.',
+    ],
+    codes: [
+      ['0','<span class="kw">def</span> <span class="fn">postfixe</span>(arbre):'],
+      ['1','    pile = []'],
+      ['2','    pile.append(arbre)'],
+      ['3','    sol = []'],
+      ['4','    <span class="kw">while</span> pile:'],
+      ['5','        a = pile.pop()'],
+      ['6','        <span class="kw">if</span> a <span class="kw">is not</span> None:'],
+      ['7','            sol.insert(0, a.data)  <span class="cm"># en tête</span>'],
+      ['8','            pile.append(a.left)'],
+      ['9','            pile.append(a.right)'],
+      ['10','    <span class="kw">return</span> sol'],
+    ]
+  },
+  bfs: {
+    label: 'Largeur (BFS)',
+    structLabel: 'File (FIFO)',
+    varA: 'nœud',
+    varStruct: 'file',
+    infobox: [
+      '→ Ordre : <span>niveau par niveau</span>, de gauche à droite.',
+      '→ Utilise une <span>file (FIFO)</span>.',
+      '→ Complexité : <span>O(n)</span> temps et espace.',
+      '→ Utilisé pour : plus court chemin, niveaux.',
+    ],
+    codes: [
+      ['0','<span class="kw">from</span> queue <span class="kw">import</span> Queue'],
+      ['1','<span class="kw">def</span> <span class="fn">BFS</span>(arbre):'],
+      ['2','    file = Queue()'],
+      ['3','    file.put(arbre)    <span class="cm"># enfile la racine</span>'],
+      ['4','    sol = []'],
+      ['5','    <span class="kw">while not</span> file.empty():'],
+      ['6','        a = file.get() <span class="cm"># défile la tête</span>'],
+      ['7','        <span class="kw">if</span> a <span class="kw">is not</span> None:'],
+      ['8','            sol.append(a.data)'],
+      ['9','            file.put(a.left)'],
+      ['10','           file.put(a.right)'],
+      ['11','    <span class="kw">return</span> sol'],
+    ]
+  }
+};
+
+/* ── Step builders ─────────────────────────── */
+
+function buildStepsPre(byId, rootId) {
+  const steps = [];
+  const stack = [], sol = [];
+  const push = (lines, msg, st, a, s, vN, vE, cls) =>
+    steps.push({lines, msg, stack:[...st], a, sol:[...s], visitNode:vN||null, visitEdge:vE||null, cls:cls||'info', isBFS:false});
+
+  push([0], 'Définition de la fonction prefixe.', [], null, []);
+  stack.push({id: rootId, isNull: false});
+  push([1,2], 'Création de la pile et empilement de la racine ('+byId[rootId].val+').', stack, null, []);
+  push([3], 'sol = []', stack, null, []);
+
+  const work = [{id: rootId, isNull: false}];
+  function loop() {
+    if (work.length === 0) {
+      push([4], 'La pile est vide → on sort de la boucle.', work, null, sol, null, null, 'done');
+      push([10], 'return sol → ['+sol.join(', ')+']', work, null, sol, null, null, 'done');
+      return;
+    }
+    push([4], 'La pile n\'est pas vide → on continue.', work, null, sol);
+    const item = work.pop();
+    push([5], 'a = pile.pop() → on dépile '+(item.isNull?'None':byId[item.id].val)+'.', work, item, sol, null, null, 'act');
+    if (!item.isNull) {
+      const n = byId[item.id];
+      push([6], 'a is not None ✓', work, item, sol);
+      sol.push(n.val);
+      push([7], 'sol.append('+n.val+') → sol = ['+sol.join(', ')+']', work, item, sol, item.id, null, 'act');
+      work.push(n.right === null ? {id:null, isNull:true} : {id:n.right, isNull:false});
+      push([8], 'pile.append(a.right) → empile '+(n.right===null?'None':byId[n.right].val)+'.', work, item, sol, null, n.right!==null?{from:item.id,to:n.right}:null);
+      work.push(n.left === null ? {id:null, isNull:true} : {id:n.left, isNull:false});
+      push([9], 'pile.append(a.left) → empile '+(n.left===null?'None':byId[n.left].val)+'.', work, item, sol, null, n.left!==null?{from:item.id,to:n.left}:null, 'act');
+    } else {
+      push([6], 'a est None → condition fausse, on ignore.', work, item, sol);
+    }
+    loop();
+  }
+  loop();
+  return steps;
+}
+
+function buildStepsIn(byId, rootId) {
+  const steps = [];
+  const sol = [];
+  const push = (lines, msg, st, a, s, vN, vE, cls) =>
+    steps.push({lines, msg, stack:[...st], a, sol:[...s], visitNode:vN||null, visitEdge:vE||null, cls:cls||'info', isBFS:false});
+
+  push([0], 'Définition. pile=[], a=racine, sol=[].', [], {id:rootId,isNull:false}, []);
+  const work = [];
+  let cur = {id: rootId, isNull: false};
+
+  function loop() {
+    if (work.length === 0 && (cur === null || cur.isNull)) {
+      push([2], 'pile vide ET a est None → on sort.', work, null, sol, null, null, 'done');
+      push([10], 'return sol → ['+sol.join(', ')+']', work, null, sol, null, null, 'done');
+      return;
+    }
+    push([2], 'pile ou a non vide → on continue.', work, cur, sol);
+    if (!cur.isNull && cur.id !== null) {
+      const n = byId[cur.id];
+      push([3], 'a is not None → on descend à gauche.', work, cur, sol);
+      work.push({id:cur.id, isNull:false});
+      push([4], 'pile.append('+n.val+') → sauvegarde le nœud.', work, cur, sol);
+      cur = n.left !== null ? {id:n.left, isNull:false} : {id:null, isNull:true};
+      push([5], 'a = a.left → '+(cur.isNull?'None':byId[cur.id].val)+'.', work, cur, sol, null, n.left!==null?{from:n.id,to:n.left}:null, 'act');
+    } else {
+      push([6], 'a est None → on dépile.', work, cur, sol);
+      const item = work.pop();
+      const n = byId[item.id];
+      cur = item;
+      push([7], 'a = pile.pop() → '+n.val+'.', work, cur, sol, null, null, 'act');
+      sol.push(n.val);
+      push([8], 'sol.append('+n.val+') → sol = ['+sol.join(', ')+']', work, cur, sol, item.id, null, 'act');
+      cur = n.right !== null ? {id:n.right, isNull:false} : {id:null, isNull:true};
+      push([9], 'a = a.right → '+(cur.isNull?'None':byId[cur.id].val)+'.', work, cur, sol, null, n.right!==null?{from:n.id,to:n.right}:null);
+    }
+    loop();
+  }
+  loop();
+  return steps;
+}
+
+function buildStepsPost(byId, rootId) {
+  const steps = [];
+  const stack = [], sol = [];
+  const push = (lines, msg, st, a, s, vN, vE, cls) =>
+    steps.push({lines, msg, stack:[...st], a, sol:[...s], visitNode:vN||null, visitEdge:vE||null, cls:cls||'info', isBFS:false});
+
+  push([0], 'Définition de la fonction postfixe.', [], null, []);
+  stack.push({id:rootId, isNull:false});
+  push([1,2], 'Pile créée, racine empilée.', stack, null, []);
+  push([3], 'sol = []', stack, null, []);
+
+  const work = [{id:rootId, isNull:false}];
+  function loop() {
+    if (work.length === 0) {
+      push([4], 'Pile vide → on sort.', work, null, sol, null, null, 'done');
+      push([10], 'return sol → ['+sol.join(', ')+']', work, null, sol, null, null, 'done');
+      return;
+    }
+    push([4], 'Pile non vide → on continue.', work, null, sol);
+    const item = work.pop();
+    push([5], 'a = pile.pop() → '+(item.isNull?'None':byId[item.id].val)+'.', work, item, sol, null, null, 'act');
+    if (!item.isNull) {
+      const n = byId[item.id];
+      push([6], 'a is not None ✓', work, item, sol);
+      sol.unshift(n.val);
+      push([7], 'sol.insert(0, '+n.val+') → sol = ['+sol.join(', ')+']', work, item, sol, item.id, null, 'act');
+      work.push(n.left  !== null ? {id:n.left,  isNull:false} : {id:null, isNull:true});
+      push([8], 'pile.append(a.left) → '+(n.left===null?'None':byId[n.left].val)+'.', work, item, sol, null, n.left!==null?{from:item.id,to:n.left}:null);
+      work.push(n.right !== null ? {id:n.right, isNull:false} : {id:null, isNull:true});
+      push([9], 'pile.append(a.right) → '+(n.right===null?'None':byId[n.right].val)+'.', work, item, sol, null, n.right!==null?{from:item.id,to:n.right}:null, 'act');
+    } else {
+      push([6], 'a est None → on ignore.', work, item, sol);
+    }
+    loop();
+  }
+  loop();
+  return steps;
+}
+
+function buildStepsBFS(byId, rootId) {
+  const steps = [];
+  const queue = [], sol = [];
+  const push = (lines, msg, q, a, s, vN, vE, cls) =>
+    steps.push({lines, msg, stack:[...q], a, sol:[...s], visitNode:vN||null, visitEdge:vE||null, cls:cls||'info', isBFS:true});
+
+  push([0,1], 'Import Queue, définition BFS.', [], null, []);
+  push([2], 'Création de la file vide.', [], null, []);
+  queue.push({id:rootId, isNull:false});
+  push([3], 'file.put(racine='+byId[rootId].val+').', queue, null, []);
+  push([4], 'sol = []', queue, null, []);
+
+  const work = [{id:rootId, isNull:false}];
+  function loop() {
+    if (!work.some(x => !x.isNull)) {
+      while (work.length) {
+        push([5], 'file non vide → on continue.', work, null, sol);
+        const it = work.shift();
+        push([6], 'a = file.get() → None.', work, it, sol);
+        push([7], 'a est None → condition fausse.', work, it, sol);
+      }
+      push([5], 'file vide → on sort.', work, null, sol, null, null, 'done');
+      push([11],'return sol → ['+sol.join(', ')+']', work, null, sol, null, null, 'done');
+      return;
+    }
+    push([5], 'file non vide → on entre dans la boucle.', work, null, sol);
+    const item = work.shift();
+    push([6], 'a = file.get() → '+(item.isNull?'None':byId[item.id].val)+'.', work, item, sol, null, null, 'act');
+    if (!item.isNull) {
+      const n = byId[item.id];
+      push([7], 'a is not None ✓', work, item, sol);
+      sol.push(n.val);
+      push([8], 'sol.append('+n.val+') → sol = ['+sol.join(', ')+']', work, item, sol, item.id, null, 'act');
+      work.push(n.left  !== null ? {id:n.left,  isNull:false} : {id:null, isNull:true});
+      push([9], 'file.put(a.left) → '+(n.left===null?'None':byId[n.left].val)+'.', work, item, sol, null, n.left!==null?{from:item.id,to:n.left}:null);
+      work.push(n.right !== null ? {id:n.right, isNull:false} : {id:null, isNull:true});
+      push([10],'file.put(a.right) → '+(n.right===null?'None':byId[n.right].val)+'.', work, item, sol, null, n.right!==null?{from:item.id,to:n.right}:null, 'act');
+    } else {
+      push([7], 'a est None → condition fausse.', work, item, sol);
+    }
+    loop();
+  }
+  loop();
+  return steps;
+}
+
+/* ═══════════════════════════════════════════
+   UI HELPERS
+═══════════════════════════════════════════ */
+function renderCode(trav) {
+  const info = TRAVERSAL_INFO[trav];
+  const codes = info.codes;
+  document.getElementById('code-label').textContent = 'Code Python · ' + info.label;
+  document.getElementById('code-block').innerHTML = codes.map(([ln, code]) =>
+    `<span class="code-line" data-line="${ln}"><span class="ln">${ln.padStart(2,' ')}</span>${code}</span>`
+  ).join('\n');
+}
+
+function highlightLines(lines) {
+  document.querySelectorAll('.code-line').forEach(el => {
+    el.classList.toggle('active', lines && lines.map(String).includes(el.dataset.line));
+  });
+}
+
+function renderStruct(items, isBFS) {
+  const el = document.getElementById('struct-display');
+  if (!items || items.length === 0) { el.innerHTML = '<span class="s-empty">(vide)</span>'; return; }
+  const label = isBFS ? 'FRONT →' : 'SOMMET →';
+  const arr = isBFS ? items : [...items].reverse();
+  el.innerHTML = '<span class="struct-label">'+label+'</span>' +
+    arr.map((item, i) => {
+      const lab = item.isNull ? 'None' : treeNodes.find(n=>n.id===item.id)?.val ?? '?';
+      const cls = i===0 ? 's-item head' : (item.isNull ? 's-item none-v' : 's-item');
+      return `<span class="${cls}">${lab}</span>${i<arr.length-1?'<span class="s-arrow">›</span>':''}`;
+    }).join('');
+}
+
+function renderSol(sol) {
+  const el = document.getElementById('sol-display');
+  if (!sol || sol.length === 0) { el.innerHTML = '<span class="s-empty">(vide)</span>'; return; }
+  el.innerHTML = sol.map(v => `<span class="sol-chip">${v}</span>`).join('');
+}
+
+function updateTree() {
+  treeNodes.forEach(n => {
+    const g = document.getElementById('node-'+n.id);
+    if (!g) return;
+    g.classList.remove('visited','current');
+    if (n.id === curNode) g.classList.add('current');
+    else if (visitedNodes.has(n.id)) g.classList.add('visited');
+  });
+  treeNodes.forEach(n => {
+    ['left','right'].forEach(s => {
+      if (n[s] === null) return;
+      const el = document.getElementById('edge-'+n.id+'-'+n[s]);
+      if (el) el.classList.toggle('visited', visitedEdges.has(n.id+'-'+n[s]));
+    });
+  });
+}
+
+function updateVars(step) {
+  const info = TRAVERSAL_INFO[currentTrav];
+  const aEl = document.getElementById('v-a');
+  const structEl = document.getElementById('v-struct');
+  const solEl = document.getElementById('v-sol');
+  document.getElementById('v-lbl-a').textContent = info.varA;
+  document.getElementById('v-lbl-struct').textContent = info.varStruct;
+
+  if (step.a === null) { aEl.textContent = '—'; aEl.className='vv'; }
+  else if (step.a.isNull) { aEl.textContent = 'None'; aEl.className='vv'; }
+  else {
+    const n = treeNodes.find(n=>n.id===step.a.id);
+    aEl.textContent = n ? 'Arbre('+n.val+')' : '—';
+    aEl.className = 'vv hl';
+  }
+
+  const items = step.isBFS ? step.stack : [...step.stack].reverse();
+  structEl.textContent = items.length ? '[' + items.map(x => x.isNull?'None':treeNodes.find(n=>n.id===x.id)?.val??'?').join(', ') + ']' : '[]';
+  solEl.textContent = step.sol.length ? '['+step.sol.join(', ')+']' : '[]';
+}
+
+function setStatus(msg, cls) {
+  const el = document.getElementById('status-msg');
+  el.textContent = msg;
+  el.className = 'status ' + (cls||'');
+}
+
+function applyStep(s) {
+  if (s.visitNode !== null) { visitedNodes.add(s.visitNode); curNode = s.visitNode; }
+  else curNode = null;
+  if (s.visitEdge) visitedEdges.add(s.visitEdge.from + '-' + s.visitEdge.to);
+  highlightLines(s.lines);
+  renderStruct(s.stack, s.isBFS);
+  renderSol(s.sol);
+  updateTree();
+  updateVars(s);
+  setStatus(s.msg, s.cls);
+  const done = stepIdx >= steps.length - 1;
+  document.getElementById('btn-next').disabled  = done;
+  document.getElementById('btn-next2').disabled = done;
+}
+
+/* ═══════════════════════════════════════════
+   TRAVERSAL SELECTION
+═══════════════════════════════════════════ */
+function selectTrav(t) {
+  currentTrav = t;
+  document.body.setAttribute('data-trav', t);
+  document.querySelectorAll('.trav-chip').forEach(c => c.classList.toggle('active', c.dataset.t === t));
+  const info = TRAVERSAL_INFO[t];
+  document.getElementById('struct-label').textContent = info.structLabel;
+  document.getElementById('infobox').innerHTML = info.infobox.join('<br>');
+  renderCode(t);
+  resetViz();
+  rebuildSteps();
+}
+
+function rebuildSteps() {
+  if (treeNodes.length === 0) return;
+  const byId = {};
+  treeNodes.forEach(n => byId[n.id] = n);
+  const root = treeNodes.find(n=>n.id===0);
+  if (!root) return;
+  switch (currentTrav) {
+    case 'pre':  steps = buildStepsPre(byId, 0); break;
+    case 'in':   steps = buildStepsIn(byId, 0); break;
+    case 'post': steps = buildStepsPost(byId, 0); break;
+    case 'bfs':  steps = buildStepsBFS(byId, 0); break;
+  }
+}
+
+function resetViz() {
+  stepIdx = -1;
+  visitedNodes = new Set();
+  visitedEdges = new Set();
+  curNode = null;
+  highlightLines([]);
+  renderStruct([], false);
+  renderSol([]);
+  updateTree();
+  document.getElementById('v-a').textContent = '—';
+  document.getElementById('v-a').className = 'vv';
+  document.getElementById('v-struct').textContent = '—';
+  document.getElementById('v-sol').textContent = '—';
+  setStatus('Appuie sur « Étape suivante » pour démarrer.');
+  document.getElementById('btn-next').disabled  = false;
+  document.getElementById('btn-next2').disabled = false;
+  rebuildSteps();
+}
+
+function nextStep() {
+  if (treeNodes.length === 0) { setStatus('⚠ Génère un arbre d\'abord !'); return; }
+  if (steps.length === 0) rebuildSteps();
+  stepIdx++;
+  if (stepIdx >= steps.length) { stepIdx = steps.length-1; return; }
+  applyStep(steps[stepIdx]);
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+selectTrav('pre');
+renderCode('pre');
+document.getElementById('infobox').innerHTML = TRAVERSAL_INFO['pre'].infobox.join('<br>');
+generateRandom();
+</script>
+</body>
+</html>
